@@ -50,7 +50,8 @@ body{
     linear-gradient(90deg, var(--grid) 1px, transparent 1px),
     var(--paper);
   background-size:22px 22px, 22px 22px, auto;
-  line-height:1.55;
+  font-size:17px;
+  line-height:1.62;
 }
 .mono{font-family:'IBM Plex Mono',monospace}
 
@@ -141,29 +142,29 @@ h1.screen-title{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:2px 
 /* 개념 카드 */
 .concept-tag{margin-bottom:10px}
 .concept-card{position:relative}
-.concept-card h2{font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
-.concept-card p{font-size:15.5px;line-height:1.75;color:var(--ink)}
+.concept-card h2{font-size:22px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
+.concept-card p{font-size:17.5px;line-height:1.8;color:var(--ink)}
 .figure{
   margin:14px 0 4px;background:var(--paper);border:1px solid var(--line);
   border-radius:10px;padding:14px;text-align:center;
 }
 .figure svg{max-width:100%;height:auto}
-.figure figcaption{font-size:12px;color:var(--ink-soft);margin-top:8px;line-height:1.5}
+.figure figcaption{font-size:13.5px;color:var(--ink-soft);margin-top:8px;line-height:1.5}
 .q-figure{margin:0 0 16px}
 .concept-card .example{
-  margin-top:14px;padding:12px 14px;background:var(--bluepen-soft);
+  margin-top:14px;padding:12px 14px;background:var(--bluepen-soft);font-size:15.5px;
   border-left:3px solid var(--bluepen);border-radius:0 10px 10px 0;
   font-size:14px;color:var(--ink);
 }
 .concept-card .example b{color:var(--bluepen)}
 
 /* 문제 */
-.q-text{font-size:17px;font-weight:600;line-height:1.6;margin-bottom:18px}
+.q-text{font-size:19px;font-weight:600;line-height:1.6;margin-bottom:18px}
 .q-level{margin-bottom:10px}
 .choice{
   display:block;width:100%;text-align:left;background:var(--card);
   border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;
-  font-family:inherit;font-size:15px;font-weight:500;color:var(--ink);
+  font-family:inherit;font-size:17px;font-weight:500;color:var(--ink);
   margin-bottom:10px;cursor:pointer;transition:border-color .12s;
 }
 .choice:not(:disabled):hover{border-color:var(--ink-faint)}
@@ -196,7 +197,7 @@ h1.screen-title{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:2px 
 /* 해설 */
 .explain{
   margin-top:16px;background:var(--card);border:1px dashed var(--redpen);
-  border-radius:12px;padding:14px 16px;font-size:14.5px;line-height:1.7;
+  border-radius:12px;padding:14px 16px;font-size:16px;line-height:1.75;
 }
 .explain .verdict{font-weight:700;margin-bottom:6px}
 .explain .verdict.ok{color:var(--redpen)}
@@ -488,13 +489,37 @@ function dueQuestions(){
    ============================================================ */
 let sess = null;
 
+function stageFillOrder(cur){
+  // 현재 단계 우선 → 쉬운 단계(아래) 먼저 → 그다음 어려운 단계(위)
+  const idx = STAGE_ORDER.indexOf(cur);
+  const order = [cur];
+  for(let i=idx-1;i>=0;i--) order.push(STAGE_ORDER[i]);   // 아래쪽(쉬움)
+  for(let i=idx+1;i<STAGE_ORDER.length;i++) order.push(STAGE_ORDER[i]); // 위쪽(어려움)
+  return order;
+}
 function buildSession(unitId){
   const stage = currentStage(unitId);
-  const pool = (QUESTIONS[unitId] || []).filter(q => q.stage === stage);
+  const allQ = QUESTIONS[unitId] || [];
+  const allC = CARDS[unitId] || [];
+  const order = stageFillOrder(stage);
   const due = shuffle(dueQuestions()).slice(0, SESSION_Q);   // 복습은 단계 무관
-  const fresh = pool.filter(q => !S.attempts[q.id] && !due.includes(q.id));
+
+  // 새 문제: 현재 단계부터 채우고, 모자라면 인접 단계로 보충
+  let fresh = [];
+  for(const st of order){
+    if(due.length + fresh.length >= SESSION_Q) break;
+    fresh = fresh.concat(allQ.filter(q => q.stage===st && !S.attempts[q.id] && !due.includes(q.id) && !fresh.includes(q)));
+  }
   const qIds = [...due, ...fresh.slice(0, Math.max(0, SESSION_Q - due.length)).map(q=>q.id)];
-  const cards = (CARDS[unitId]||[]).filter(c => c.stage === stage && !S.seenCards[c.id]).slice(0, SESSION_C);
+
+  // 카드도 같은 우선순위로 채움
+  let cards = [];
+  for(const st of order){
+    if(cards.length >= SESSION_C) break;
+    cards = cards.concat(allC.filter(c => c.stage===st && !S.seenCards[c.id]));
+  }
+  cards = cards.slice(0, SESSION_C);
+
   return { unitId, stage, cards, qIds, idx: 0, phase: cards.length ? 'card' : 'quiz', qIdx: 0, correct: 0, answered: false };
 }
 
@@ -574,10 +599,13 @@ function answerDiag(picked){
 function nextDiag(){ diag.idx++; diag.answered=false; renderDiag(); }
 
 function recommendStage(correct, total){
-  const pass = s => total[s] ? (correct[s]/total[s]) >= 0.6 : true;
-  if(!pass('ms')) return 'ms';
-  if(!pass('hs')) return 'hs';
-  return 'ug';   // ms·hs 통과 시 학부부터
+  // 한 단계를 '통과'하려면 그 단계 문항을 거의 다 맞혀야 한다 (보수적).
+  // 작은 표본에서 찍어서 올라가는 것을 막기 위해 80% 이상 + 틀린 문항 1개 이하.
+  const pass = s => { if(!total[s]) return true; return (correct[s]/total[s]) >= 0.8 && (total[s]-correct[s]) <= 1; };
+  if(!pass('ms')) return 'ms';           // 중등도 확실치 않으면 중등부터
+  if(!pass('hs')) return 'hs';           // 중등만 통과 → 고등부터
+  if(!pass('ug')) return 'hs';           // 중등·고등은 넘겼지만 학부에서 막히면 고등부터 탄탄히
+  return 'ug';                            // 세 단계 모두 확실히 통과해야 학부
 }
 function renderDiagResult(el){
   const rec = recommendStage(diag.correct, diag.total);
@@ -632,7 +660,7 @@ async function openStory(id){
       <span class="eyebrow">SCIENCE STORY · ${STAGE_LABEL[st.stage]||''}</span>
       <h2 style="font-size:22px;font-weight:700;letter-spacing:-.01em;margin:8px 0 16px">${esc(st.title)}</h2>
       ${st.fig?`<figure class="figure">${st.fig}${st.figcap?`<figcaption>${st.figcap}</figcaption>`:''}</figure>`:''}
-      <div style="font-size:15.5px;line-height:1.85;color:var(--ink)">${st.body}</div>
+      <div style="font-size:17.5px;line-height:1.9;color:var(--ink)">${st.body}</div>
       ${st.footer?`<p style="font-size:13px;color:var(--ink-faint);margin-top:18px;font-style:italic">${esc(st.footer)}</p>`:''}
     </div>
     <div class="sess-foot"><button class="btn btn-primary" onclick="closeStory()">닫기</button></div>`;
