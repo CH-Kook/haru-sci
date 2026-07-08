@@ -1,0 +1,130 @@
+{
+ "stories": [
+  {
+   "id": "stardust",
+   "title": "당신 몸의 원자는 별에서 왔다",
+   "subject": "chem",
+   "stage": "hs",
+   "teaser": "칼슘도 철도, 원래는 우주의 별 속에서 만들어졌다.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "chem-atom"
+    ],
+    "count": 1
+   }
+  },
+  {
+   "id": "empty-atom",
+   "title": "우리는 거의 텅 빈 존재다",
+   "subject": "chem",
+   "stage": "hs",
+   "teaser": "원자가 대부분 빈 공간이라면, 왜 벽을 통과하지 못할까?",
+   "unlock": {
+    "type": "topicsCompleted",
+    "scope": [
+     "chem-atom"
+    ],
+    "count": 1
+   }
+  },
+  {
+   "id": "coaster-secret",
+   "title": "롤러코스터가 절대 지키는 약속",
+   "subject": "physics",
+   "stage": "hs",
+   "teaser": "설계자가 첫 언덕을 가장 높게 지을 수밖에 없는 이유.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "phy-coaster"
+    ],
+    "count": 1
+   }
+  },
+  {
+   "id": "twin-paradox",
+   "title": "쌍둥이 역설: 우주여행 다녀오면 동생이 형이 된다",
+   "subject": "physics",
+   "stage": "hs",
+   "teaser": "빠르게 다녀온 쪽이 덜 늙는다. 상상이 아니라 계산되는 사실.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "phy-relativity"
+    ],
+    "count": 1
+   }
+  },
+  {
+   "id": "quantum-observe",
+   "title": "보는 순간 달라진다: 양자의 기묘함",
+   "subject": "physics",
+   "stage": "hs",
+   "teaser": "관측하기 전까지 전자는 '어디에 있다'가 아니라 '어디일 확률'이다.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "phy-quantum"
+    ],
+    "count": 1
+   }
+  },
+  {
+   "id": "arrow-of-time",
+   "title": "왜 커피는 저절로 뜨거워지지 않을까",
+   "subject": "physics",
+   "stage": "hs",
+   "teaser": "모든 물리 법칙은 시간을 거꾸로 돌려도 성립하는데, 딱 하나가 아니다.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "phy-entropy"
+    ],
+    "count": 1
+   }
+  },
+  {
+   "id": "sun-fuel",
+   "title": "태양은 매초 400만 톤씩 가벼워진다",
+   "subject": "physics",
+   "stage": "hs",
+   "teaser": "E=mc²이 하늘에서 벌어지는 현장.",
+   "unlock": {
+    "type": "correctInTopic",
+    "scope": [
+     "phy-emc2"
+    ],
+    "count": 3
+   }
+  },
+  {
+   "id": "why-sky-blue",
+   "title": "하늘은 파랗고 노을은 붉은 하나의 이유",
+   "subject": "physics",
+   "stage": "hs",
+   "teaser": "같은 현상의 낮과 저녁, 두 얼굴.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "phy-rainbow"
+    ],
+    "count": 1
+   }
+  },
+  {
+   "id": "chip-civilization",
+   "title": "모래 알갱이가 문명을 계산하게 되기까지",
+   "subject": "physics",
+   "stage": "hs",
+   "teaser": "반쯤만 통하는 이 물질이 왜 '산업의 쌀'이 되었나.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "phy-semicon"
+    ],
+    "count": 1
+   }
+  }
+ ]
+}

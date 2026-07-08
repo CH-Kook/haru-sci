@@ -1,0 +1,72 @@
+{
+ "subject": "bio",
+ "title": "생명과학 수준 진단",
+ "items": [
+  {
+   "id": "db_ms1",
+   "stage": "ms",
+   "type": "ox",
+   "q": "모든 생물은 세포로 이루어져 있다.",
+   "ex": "세포설의 핵심입니다.",
+   "answer": true
+  },
+  {
+   "id": "db_ms2",
+   "stage": "ms",
+   "type": "choice",
+   "q": "생명의 기본 단위는?",
+   "ex": "세포입니다.",
+   "choices": [
+    "원자",
+    "세포",
+    "분자",
+    "기관"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "db_hs1",
+   "stage": "hs",
+   "type": "choice",
+   "q": "유전 정보(DNA)를 보관하는 소기관은?",
+   "ex": "핵입니다.",
+   "choices": [
+    "미토콘드리아",
+    "핵",
+    "리보솜",
+    "세포막"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "db_hs2",
+   "stage": "hs",
+   "type": "ox",
+   "q": "세균(원핵세포)은 핵막에 싸인 핵을 가진다.",
+   "ex": "원핵세포는 핵막이 없습니다.",
+   "answer": false
+  },
+  {
+   "id": "db_ug1",
+   "stage": "ug",
+   "type": "choice",
+   "q": "단백질 합성에서 DNA의 유전정보를 mRNA로 옮기는 과정은?",
+   "ex": "전사(transcription)입니다.",
+   "choices": [
+    "번역",
+    "전사",
+    "복제",
+    "변이"
+   ],
+   "answer": 1
+  },
+  {
+   "id": "db_ug2",
+   "stage": "ug",
+   "type": "ox",
+   "q": "효소는 반응의 활성화 에너지를 낮춰 반응을 빠르게 한다.",
+   "ex": "맞습니다.",
+   "answer": true
+  }
+ ]
+}

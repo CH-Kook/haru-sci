@@ -1,0 +1,922 @@
+{
+ "domains": [
+  {
+   "id": "physics",
+   "name": "물리",
+   "color": "var(--d-physics)",
+   "desc": "운동·에너지·빛·전기"
+  },
+  {
+   "id": "chem",
+   "name": "화학",
+   "color": "var(--d-matter)",
+   "desc": "원자·반응·물질"
+  },
+  {
+   "id": "bio",
+   "name": "생명과학",
+   "color": "var(--d-life)",
+   "desc": "세포·유전·진화·인체"
+  },
+  {
+   "id": "earth",
+   "name": "지구과학",
+   "color": "var(--d-earth)",
+   "desc": "지구·대기·우주"
+  }
+ ],
+ "curriculum": {
+  "physics": [
+   {
+    "id": "p1-motion",
+    "title": "속도와 가속도: 빠르기의 과학",
+    "tags": [
+     "운동",
+     "일상"
+    ],
+    "level": 1,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-newton",
+    "title": "뉴턴의 세 가지 운동 법칙",
+    "tags": [
+     "힘",
+     "운동"
+    ],
+    "level": 1,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-inertia",
+    "title": "관성: 버스가 급정거하면 왜 쏠릴까",
+    "tags": [
+     "힘",
+     "일상"
+    ],
+    "level": 1,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-momentum",
+    "title": "운동량과 충격량: 에어백의 원리",
+    "tags": [
+     "힘",
+     "일상",
+     "안전"
+    ],
+    "level": 2,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-energy",
+    "title": "일과 에너지, 그리고 보존 법칙",
+    "tags": [
+     "에너지"
+    ],
+    "level": 2,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-coaster",
+    "title": "롤러코스터의 물리학",
+    "tags": [
+     "에너지",
+     "운동",
+     "일상"
+    ],
+    "level": 2,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-thermo",
+    "title": "열은 어디로 흐르나: 열역학 법칙",
+    "tags": [
+     "열",
+     "에너지"
+    ],
+    "level": 2,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-entropy",
+    "title": "엔트로피와 시간의 화살",
+    "tags": [
+     "열",
+     "에너지",
+     "우주"
+    ],
+    "level": 3,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-wave",
+    "title": "파동의 기본: 소리와 물결",
+    "tags": [
+     "파동"
+    ],
+    "level": 1,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-light",
+    "title": "빛의 정체: 반사·굴절·전반사",
+    "tags": [
+     "빛",
+     "파동"
+    ],
+    "level": 2,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-rainbow",
+    "title": "무지개와 프리즘: 빛의 분해",
+    "tags": [
+     "빛",
+     "일상"
+    ],
+    "level": 1,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-current",
+    "title": "전기는 어떻게 흐르는가",
+    "tags": [
+     "전기"
+    ],
+    "level": 1,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-induction",
+    "title": "전자기 유도: 발전소가 전기를 만드는 법",
+    "tags": [
+     "전기",
+     "자기",
+     "기술"
+    ],
+    "level": 2,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-microwave",
+    "title": "전자레인지가 음식을 데우는 원리",
+    "tags": [
+     "파동",
+     "일상",
+     "기술"
+    ],
+    "level": 2,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-relativity",
+    "title": "특수 상대성 이론: 시간은 왜 느려지나",
+    "tags": [
+     "우주",
+     "현대물리"
+    ],
+    "level": 3,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-emc2",
+    "title": "E=mc²: 질량과 에너지",
+    "tags": [
+     "에너지",
+     "현대물리",
+     "우주"
+    ],
+    "level": 3,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-quantum",
+    "title": "양자역학 첫걸음: 빛은 입자인가 파동인가",
+    "tags": [
+     "현대물리",
+     "빛"
+    ],
+    "level": 3,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "phy-semicon",
+    "title": "반도체는 왜 반쯤 도체인가",
+    "tags": [
+     "전기",
+     "물질",
+     "기술"
+    ],
+    "level": 2,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   }
+  ],
+  "chem": [
+   {
+    "id": "chem-atom",
+    "title": "원자의 구조: 세상은 무엇으로 되어 있나",
+    "tags": [
+     "원자",
+     "물질"
+    ],
+    "level": 1,
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
+   },
+   {
+    "id": "chem-periodic",
+    "title": "주기율표 읽는 법",
+    "tags": [
+     "원자",
+     "물질"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-mole",
+    "title": "몰(mol): 화학자의 숫자 세기",
+    "tags": [
+     "물질",
+     "반응"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-bond",
+    "title": "화학 결합: 원자들은 왜 붙는가",
+    "tags": [
+     "결합",
+     "물질"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-water",
+    "title": "물은 왜 특별한 물질인가",
+    "tags": [
+     "물",
+     "결합",
+     "일상"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-acid",
+    "title": "산과 염기: pH의 세계",
+    "tags": [
+     "반응",
+     "일상"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-redox",
+    "title": "산화와 환원: 녹슴과 연소",
+    "tags": [
+     "반응",
+     "일상"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-rate",
+    "title": "화학 반응 속도와 촉매",
+    "tags": [
+     "반응"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-equil",
+    "title": "화학 평형: 되돌아가는 반응",
+    "tags": [
+     "반응"
+    ],
+    "level": 3,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-enthalpy",
+    "title": "반응은 열을 내거나 흡수한다",
+    "tags": [
+     "반응",
+     "열",
+     "에너지"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-carbon",
+    "title": "탄소: 생명과 유기화학의 주인공",
+    "tags": [
+     "물질",
+     "생명"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-polymer",
+    "title": "플라스틱과 고분자",
+    "tags": [
+     "물질",
+     "기술",
+     "일상"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-battery",
+    "title": "배터리는 어떻게 전기를 저장하나",
+    "tags": [
+     "반응",
+     "전기",
+     "기술"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-solution",
+    "title": "용액과 농도: 섞임의 과학",
+    "tags": [
+     "물질",
+     "일상"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-gas",
+    "title": "기체의 법칙: 압력·부피·온도",
+    "tags": [
+     "물질",
+     "열"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-metal",
+    "title": "금속과 합금: 문명의 재료",
+    "tags": [
+     "물질",
+     "기술",
+     "역사"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "chem-dose",
+    "title": "독과 약: 용량이 결정한다",
+    "tags": [
+     "일상",
+     "인체"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   }
+  ],
+  "bio": [
+   {
+    "id": "bio-cell",
+    "title": "세포: 생명의 기본 단위",
+    "tags": [
+     "세포",
+     "생명"
+    ],
+    "level": 1,
+    "ready": true,
+    "stages": [
+     "hs"
+    ]
+   },
+   {
+    "id": "bio-dna",
+    "title": "DNA와 유전 정보",
+    "tags": [
+     "유전",
+     "세포"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-expression",
+    "title": "유전자는 어떻게 발현되는가",
+    "tags": [
+     "유전",
+     "세포"
+    ],
+    "level": 3,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-evolution",
+    "title": "진화: 다윈의 위대한 아이디어",
+    "tags": [
+     "진화",
+     "생명"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-evidence",
+    "title": "진화의 증거들",
+    "tags": [
+     "진화",
+     "역사"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-virus",
+    "title": "바이러스는 생물인가",
+    "tags": [
+     "생명",
+     "인체"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-immune",
+    "title": "면역: 몸의 방어 시스템",
+    "tags": [
+     "인체",
+     "생명"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-vaccine",
+    "title": "백신의 원리",
+    "tags": [
+     "인체",
+     "기술"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-brain",
+    "title": "뇌와 뉴런: 생각의 물질적 기반",
+    "tags": [
+     "뇌",
+     "인체"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-memory",
+    "title": "기억은 어디에 저장되나",
+    "tags": [
+     "뇌",
+     "인체"
+    ],
+    "level": 3,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-hormone",
+    "title": "호르몬과 항상성",
+    "tags": [
+     "인체"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-respiration",
+    "title": "세포 호흡: 우리가 숨 쉬는 이유",
+    "tags": [
+     "세포",
+     "에너지"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-photosynthesis",
+    "title": "광합성: 식물이 빛을 먹는 법",
+    "tags": [
+     "세포",
+     "에너지"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-mutation",
+    "title": "유전병과 돌연변이",
+    "tags": [
+     "유전",
+     "인체"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-crispr",
+    "title": "유전자 편집(CRISPR)",
+    "tags": [
+     "유전",
+     "기술"
+    ],
+    "level": 3,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-microbiome",
+    "title": "미생물과 우리 몸: 마이크로바이옴",
+    "tags": [
+     "생명",
+     "인체"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-ecosystem",
+    "title": "생태계: 먹이사슬과 에너지 흐름",
+    "tags": [
+     "생태",
+     "에너지"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-biodiversity",
+    "title": "생물 다양성은 왜 중요한가",
+    "tags": [
+     "생태",
+     "환경"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "bio-cancer",
+    "title": "암은 어떻게 생기나",
+    "tags": [
+     "인체",
+     "세포"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   }
+  ],
+  "earth": [
+   {
+    "id": "ear-plate",
+    "title": "판구조론: 대륙은 움직인다",
+    "tags": [
+     "지구",
+     "스케일"
+    ],
+    "level": 1,
+    "ready": true,
+    "stages": [
+     "hs"
+    ]
+   },
+   {
+    "id": "ear-quake",
+    "title": "지진은 왜 일어나나",
+    "tags": [
+     "지구",
+     "일상",
+     "안전"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-volcano",
+    "title": "화산의 과학",
+    "tags": [
+     "지구"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-rock",
+    "title": "암석과 광물: 돌의 일생",
+    "tags": [
+     "지구",
+     "물질"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-fossil",
+    "title": "지구의 역사와 화석",
+    "tags": [
+     "지구",
+     "역사",
+     "스케일"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-weather",
+    "title": "날씨는 어떻게 만들어지나",
+    "tags": [
+     "대기",
+     "일상"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-typhoon",
+    "title": "태풍의 탄생과 소멸",
+    "tags": [
+     "대기",
+     "일상"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-climate",
+    "title": "기후변화의 과학",
+    "tags": [
+     "대기",
+     "환경"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-ocean",
+    "title": "해류와 바다의 순환",
+    "tags": [
+     "물",
+     "지구"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-elnino",
+    "title": "엘니뇨와 라니냐",
+    "tags": [
+     "대기",
+     "물",
+     "환경"
+    ],
+    "level": 3,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-season",
+    "title": "계절은 왜 바뀌나",
+    "tags": [
+     "우주",
+     "지구",
+     "일상"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-tide",
+    "title": "달의 위상과 조석",
+    "tags": [
+     "우주",
+     "물",
+     "일상"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-solar",
+    "title": "태양계 여행",
+    "tags": [
+     "우주",
+     "스케일"
+    ],
+    "level": 1,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-star",
+    "title": "별의 일생",
+    "tags": [
+     "우주",
+     "별"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-galaxy",
+    "title": "우리 은하와 외부 은하",
+    "tags": [
+     "우주",
+     "별",
+     "스케일"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-bigbang",
+    "title": "빅뱅: 우주의 시작",
+    "tags": [
+     "우주",
+     "스케일",
+     "역사"
+    ],
+    "level": 3,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-blackhole",
+    "title": "블랙홀",
+    "tags": [
+     "우주",
+     "별"
+    ],
+    "level": 3,
+    "ready": false,
+    "stages": []
+   },
+   {
+    "id": "ear-exoplanet",
+    "title": "외계 행성과 생명체 탐사",
+    "tags": [
+     "우주",
+     "생명"
+    ],
+    "level": 2,
+    "ready": false,
+    "stages": []
+   }
+  ]
+ }
+}

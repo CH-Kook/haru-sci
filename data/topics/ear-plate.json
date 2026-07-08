@@ -1,0 +1,170 @@
+{
+ "cards": [
+  {
+   "id": "ep1",
+   "title": "대륙은 움직인다",
+   "body": "100여 년 전 베게너는 대륙들이 한때 하나로 붙어 있었다는 대륙이동설을 내놓았습니다. 아프리카와 남아메리카 해안선이 퍼즐처럼 맞고, 같은 화석이 바다 건너 양쪽에서 나오는 게 근거였죠. 하지만 대륙을 움직이는 힘을 설명하지 못해 처음엔 외면당했습니다.",
+   "example": "<b>초대륙</b> 그가 상상한, 모든 대륙이 붙어 있던 하나의 땅을 \"판게아\"라 부릅니다.",
+   "stage": "hs"
+  },
+  {
+   "id": "ep2",
+   "title": "지구의 속은 층층이",
+   "body": "지구 내부는 양파처럼 층을 이룹니다. 가장 바깥의 얇은 지각, 그 아래 두꺼운 맨틀, 가장 안쪽의 핵으로 나뉩니다. 우리가 밟고 사는 지각은 지구 전체로 보면 사과 껍질만큼 얇습니다.",
+   "fig": "<svg viewBox=\"0 0 190 190\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"sans-serif\">\n     <circle cx=\"95\" cy=\"95\" r=\"85\" fill=\"#F2E4D8\" stroke=\"var(--d-earth)\" stroke-width=\"1.5\"/>\n     <circle cx=\"95\" cy=\"95\" r=\"60\" fill=\"#E8CBB0\" stroke=\"var(--d-earth)\" stroke-width=\"1\"/>\n     <circle cx=\"95\" cy=\"95\" r=\"30\" fill=\"#D99A6C\" stroke=\"var(--redpen)\" stroke-width=\"1\"/>\n     <text x=\"95\" y=\"99\" font-size=\"11\" fill=\"#7a3a12\" text-anchor=\"middle\">핵</text>\n     <text x=\"95\" y=\"55\" font-size=\"10\" fill=\"#8a5a2a\" text-anchor=\"middle\">맨틀</text>\n     <text x=\"95\" y=\"26\" font-size=\"9\" fill=\"var(--d-earth)\" text-anchor=\"middle\">지각</text>\n   </svg>",
+   "figcap": "지각(바깥) · 맨틀(중간) · 핵(중심)의 층상 구조.",
+   "stage": "hs"
+  },
+  {
+   "id": "ep3",
+   "title": "판이라는 퍼즐 조각",
+   "body": "지각과 최상부 맨틀이 하나로 굳은 단단한 조각을 \"판\"이라 합니다. 지구 표면은 크고 작은 여러 판이 맞물린 퍼즐과 같고, 이 판들이 조금씩 움직입니다. 이 개념이 대륙이동설을 완성한 판구조론입니다.",
+   "example": "<b>속도</b> 판은 1년에 손톱이 자라는 정도(수 cm)로 아주 느리게 움직입니다.",
+   "stage": "hs"
+  },
+  {
+   "id": "ep4",
+   "title": "판의 경계 세 종류",
+   "body": "판이 만나는 경계는 셋으로 나뉩니다. 서로 벌어지는 발산 경계, 서로 부딪히는 수렴 경계, 서로 어긋나 미끄러지는 보존 경계입니다. 대부분의 지진과 화산이 이 경계에서 일어납니다.",
+   "fig": "<svg viewBox=\"0 0 300 100\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"sans-serif\">\n     <g>\n       <rect x=\"12\" y=\"40\" width=\"34\" height=\"24\" fill=\"var(--d-earth)\" opacity=\"0.7\"/>\n       <rect x=\"54\" y=\"40\" width=\"34\" height=\"24\" fill=\"var(--d-earth)\" opacity=\"0.7\"/>\n       <path d=\"M40 30 l-8 6 8 6\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.5\"/>\n       <path d=\"M60 30 l8 6 -8 6\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"1.5\"/>\n       <text x=\"50\" y=\"82\" font-size=\"10\" fill=\"var(--ink)\" text-anchor=\"middle\">발산</text>\n     </g>\n     <g>\n       <rect x=\"112\" y=\"40\" width=\"34\" height=\"24\" fill=\"var(--d-earth)\" opacity=\"0.7\"/>\n       <rect x=\"154\" y=\"40\" width=\"34\" height=\"24\" fill=\"var(--d-earth)\" opacity=\"0.7\"/>\n       <path d=\"M140 30 l8 6 -8 6\" fill=\"none\" stroke=\"var(--redpen)\" stroke-width=\"1.5\"/>\n       <path d=\"M160 30 l-8 6 8 6\" fill=\"none\" stroke=\"var(--redpen)\" stroke-width=\"1.5\"/>\n       <text x=\"150\" y=\"82\" font-size=\"10\" fill=\"var(--ink)\" text-anchor=\"middle\">수렴</text>\n     </g>\n     <g>\n       <rect x=\"212\" y=\"40\" width=\"34\" height=\"24\" fill=\"var(--d-earth)\" opacity=\"0.7\"/>\n       <rect x=\"254\" y=\"40\" width=\"34\" height=\"24\" fill=\"var(--d-earth)\" opacity=\"0.7\"/>\n       <path d=\"M240 28 l0 8\" stroke=\"var(--bluepen)\" stroke-width=\"1.5\"/><path d=\"M240 30 l6 0\" stroke=\"var(--bluepen)\" stroke-width=\"1.5\"/>\n       <path d=\"M260 68 l0 -8\" stroke=\"var(--bluepen)\" stroke-width=\"1.5\"/><path d=\"M260 66 l-6 0\" stroke=\"var(--bluepen)\" stroke-width=\"1.5\"/>\n       <text x=\"250\" y=\"82\" font-size=\"10\" fill=\"var(--ink)\" text-anchor=\"middle\">보존</text>\n     </g>\n   </svg>",
+   "figcap": "벌어지는 발산 · 부딪히는 수렴 · 어긋나는 보존 경계.",
+   "stage": "hs"
+  },
+  {
+   "id": "ep5",
+   "title": "무엇이 판을 움직이나",
+   "body": "판을 움직이는 원동력은 맨틀의 대류입니다. 뜨거운 맨틀 물질이 천천히 위로 올라오고 식으면 가라앉는 순환이 일어나고, 그 위에 얹힌 판이 컨베이어벨트처럼 실려 움직입니다. 베게너가 답하지 못했던 \"움직이는 힘\"이 바로 이것입니다.",
+   "example": "<b>비유</b> 냄비 속 끓는 물의 순환처럼, 맨틀이 아주 느리게 대류합니다.",
+   "stage": "hs"
+  },
+  {
+   "id": "ep6",
+   "title": "지진과 화산의 지도",
+   "body": "지진과 화산은 아무 데나 생기지 않고 판 경계를 따라 띠처럼 몰려 있습니다. 태평양을 둘러싼 판 경계에 화산과 지진이 집중된 지역을 \"불의 고리\"라고 부릅니다.",
+   "example": "<b>예</b> 일본, 인도네시아, 칠레의 잦은 지진과 화산은 모두 판 경계에 위치한 탓입니다.",
+   "stage": "hs"
+  }
+ ],
+ "questions": [
+  {
+   "id": "ke1",
+   "card": "ep1",
+   "level": 1,
+   "type": "choice",
+   "q": "대륙이 한때 붙어 있었다는 대륙이동설을 주장한 사람은?",
+   "choices": [
+    "다윈",
+    "베게너",
+    "뉴턴",
+    "아인슈타인"
+   ],
+   "answer": 1,
+   "ex": "베게너가 대륙이동설을 제안했습니다. 다만 움직이는 힘을 설명하지 못해 당시엔 인정받지 못했습니다.",
+   "stage": "hs"
+  },
+  {
+   "id": "ke2",
+   "card": "ep3",
+   "level": 2,
+   "type": "ox",
+   "q": "판은 지각부터 지구 중심의 핵까지 포함하는 조각이다.",
+   "answer": false,
+   "ex": "판은 지각과 최상부 맨틀이 굳은 단단한 조각입니다. 핵까지 내려가지 않습니다.",
+   "stage": "hs"
+  },
+  {
+   "id": "ke3",
+   "card": "ep5",
+   "level": 2,
+   "type": "choice",
+   "q": "판을 움직이는 원동력은 무엇인가?",
+   "choices": [
+    "지구 자전",
+    "맨틀의 대류",
+    "바닷물의 흐름",
+    "태양의 인력"
+   ],
+   "answer": 1,
+   "ex": "뜨거운 맨틀 물질이 순환하는 대류가 그 위의 판을 컨베이어벨트처럼 움직입니다.",
+   "stage": "hs"
+  },
+  {
+   "id": "ke4",
+   "card": "ep4",
+   "level": 1,
+   "type": "choice",
+   "q": "두 판이 서로 벌어지는 경계를 무엇이라 하나?",
+   "choices": [
+    "수렴 경계",
+    "발산 경계",
+    "보존 경계",
+    "충돌 경계"
+   ],
+   "answer": 1,
+   "ex": "서로 멀어지는 경계가 발산 경계, 부딪히는 경계가 수렴, 어긋나 미끄러지는 경계가 보존입니다.",
+   "stage": "hs"
+  },
+  {
+   "id": "ke5",
+   "card": "ep6",
+   "level": 1,
+   "type": "ox",
+   "q": "지진과 화산은 대부분 판의 경계를 따라 몰려 있다.",
+   "answer": true,
+   "ex": "맞습니다. 태평양을 둘러싼 판 경계의 화산·지진 밀집 지역을 \"불의 고리\"라 부릅니다.",
+   "stage": "hs"
+  },
+  {
+   "id": "ke6",
+   "card": "ep2",
+   "level": 1,
+   "type": "choice",
+   "q": "지구 내부에서 가장 바깥층은?",
+   "choices": [
+    "핵",
+    "맨틀",
+    "지각",
+    "내핵"
+   ],
+   "answer": 2,
+   "ex": "바깥부터 지각-맨틀-핵 순입니다. 지각은 지구 전체로 보면 사과 껍질처럼 얇습니다.",
+   "stage": "hs"
+  },
+  {
+   "id": "ke7",
+   "card": "ep3",
+   "level": 3,
+   "type": "misc",
+   "q": "판구조론에 대한 설명 중 틀린 것은?",
+   "choices": [
+    "판은 아주 느리게 움직인다",
+    "판은 지각과 최상부 맨틀로 이루어진다",
+    "판은 하루에 수 미터씩 움직인다",
+    "지진은 주로 판 경계에서 일어난다"
+   ],
+   "answer": 2,
+   "ex": "판은 1년에 수 cm, 손톱 자라는 정도로 아주 느리게 움직입니다.",
+   "stage": "hs"
+  },
+  {
+   "id": "ke8",
+   "card": "ep1",
+   "level": 2,
+   "type": "choice",
+   "q": "베게너가 상상한, 모든 대륙이 붙어 있던 초대륙의 이름은?",
+   "choices": [
+    "곤드와나",
+    "판게아",
+    "로라시아",
+    "아틀란티스"
+   ],
+   "answer": 1,
+   "ex": "모든 대륙이 하나로 붙어 있던 초대륙을 판게아라 부릅니다.",
+   "stage": "hs"
+  }
+ ],
+ "stages": [
+  "hs"
+ ],
+ "id": "ear-plate"
+}
