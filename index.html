@@ -24,27 +24,37 @@
   src:url('fonts/LaundryGothic-Bold.woff') format('woff');
   font-weight:700; font-style:normal; font-display:swap;
 }
+@font-face{
+  font-family:'Noto Serif KR';
+  src:url('fonts/NotoSerifKR-700.woff2') format('woff2');
+  font-weight:700; font-style:normal; font-display:swap;
+}
 /* ============================================================
    하루과학 디자인 토큰
    콘셉트: 모눈종이 실험 노트 + 빨간펜 채점
    ============================================================ */
 :root{
-  --paper:#F7F8F5;
-  --grid:rgba(43,93,168,0.07);
-  --ink:#20304A;          /* 만년필 잉크 네이비 */
-  --ink-soft:#5C6B82;
-  --ink-faint:#93A0B4;
-  --line:#DDE2E9;
-  --redpen:#D6453D;       /* 채점 빨간펜 */
-  --redpen-soft:#FBEAE8;
-  --bluepen:#2B5DA8;
-  --bluepen-soft:#EAF0F9;
-  --card:#FFFFFF;
-  --shadow:0 1px 2px rgba(32,48,74,.06), 0 6px 18px rgba(32,48,74,.06);
+  --paper:#FAF6EE;        /* 따뜻한 크림 노트 캔버스 */
+  --grid:rgba(150,120,86,0.07);   /* 따뜻한 갈색 모눈선 */
+  --ink:#2B2823;          /* 따뜻한 잉크(차콜 브라운) */
+  --ink-soft:#6C6459;
+  --ink-faint:#A89F90;
+  --line:#E8E0D2;         /* 따뜻한 헤어라인 */
+  --redpen:#CB4A3B;       /* 채점 빨간펜 */
+  --redpen-soft:#F7E7E1;
+  --bluepen:#2F6D8C;      /* 파란펜(청록빛) */
+  --bluepen-soft:#E7F0F2;
+  --card:#FFFCF6;         /* 따뜻한 카드 */
+  --shadow:0 1px 2px rgba(70,52,32,.05), 0 8px 22px rgba(70,52,32,.06);
   --r:14px;
-  /* 영역 색 */
-  --d-space:#5B4FB5; --d-life:#3E8E5A; --d-matter:#C4762A;
-  --d-physics:#2B5DA8; --d-earth:#3A8C99; --d-think:#8A4E9E;
+  /* Claude 코랄 계열 강조 */
+  --coral:#CC785C; --coral-active:#A9583E; --coral-soft:#F3E4DB;
+  --cream-card:#F1E9DB;   /* 코지한 크림 블록 */
+  --good:#4E9A63; --good-soft:#E7F1E7;   /* 정답 공개(성공) */
+  --serif:'Noto Serif KR',Georgia,'Apple SD Gothic Neo','Laundry Gothic',serif;
+  /* 영역 색 (크림 위에서 조화되도록 살짝 warm) */
+  --d-space:#6E5FBE; --d-life:#4B9A63; --d-matter:#C0762C;
+  --d-physics:#39749E; --d-earth:#45949F; --d-think:#94569F;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
@@ -74,7 +84,7 @@ body{
   font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
   letter-spacing:.14em;color:var(--ink-faint);text-transform:uppercase;
 }
-h1.screen-title{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:2px 0 18px}
+h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.01em;margin:2px 0 18px}
 .card{
   background:var(--card);border:1px solid var(--line);border-radius:var(--r);
   box-shadow:var(--shadow);padding:18px;
@@ -85,7 +95,8 @@ h1.screen-title{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:2px 
   transition:transform .06s ease, background .15s ease;
 }
 .btn:active{transform:scale(.985)}
-.btn-primary{background:var(--ink);color:#fff}
+.btn-primary{background:var(--coral);color:#fff}
+.btn-primary:active{background:var(--coral-active)}
 .btn-primary:disabled{background:var(--ink-faint);cursor:default}
 .btn-ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--line)}
 .btn-red{background:var(--redpen);color:#fff}
@@ -124,7 +135,7 @@ h1.screen-title{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:2px 
 .unit-item.locked{opacity:.5;cursor:default}
 .unit-item .u-name{flex:1;font-size:14px;font-weight:500}
 .unit-item .u-count{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint)}
-.badge-ready{background:var(--bluepen-soft);color:var(--bluepen)}
+.badge-ready{background:var(--coral-soft);color:var(--coral-active)}
 .badge-soon{background:var(--paper);color:var(--ink-faint);border:1px solid var(--line)}
 
 /* ---------- 세션 (풀스크린) ---------- */
@@ -148,7 +159,8 @@ h1.screen-title{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:2px 
 /* 개념 카드 */
 .concept-tag{margin-bottom:10px}
 .concept-card{position:relative}
-.concept-card h2{font-size:22px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
+.concept-card h2{font-family:var(--serif);font-size:23px;font-weight:700;letter-spacing:-.005em;margin-bottom:12px}
+.concept-card h2::after{content:"";display:block;width:38px;height:3px;background:var(--coral);border-radius:2px;margin-top:9px;opacity:.85}
 .concept-card p{font-size:17.5px;line-height:1.8;color:var(--ink)}
 .figure{
   margin:14px 0 4px;background:var(--paper);border:1px solid var(--line);
@@ -158,11 +170,11 @@ h1.screen-title{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:2px 
 .figure figcaption{font-size:13.5px;color:var(--ink-soft);margin-top:8px;line-height:1.5}
 .q-figure{margin:0 0 16px}
 .concept-card .example{
-  margin-top:14px;padding:12px 14px;background:var(--bluepen-soft);font-size:15.5px;
-  border-left:3px solid var(--bluepen);border-radius:0 10px 10px 0;
+  margin-top:14px;padding:12px 14px;background:var(--cream-card);
+  border-left:3px solid var(--coral);border-radius:0 10px 10px 0;
   font-size:14px;color:var(--ink);
 }
-.concept-card .example b{color:var(--bluepen)}
+.concept-card .example b{color:var(--coral-active)}
 
 /* 문제 */
 .q-text{font-size:19px;font-weight:600;line-height:1.6;margin-bottom:18px}
@@ -176,7 +188,7 @@ h1.screen-title{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:2px 
 .choice:not(:disabled):hover{border-color:var(--ink-faint)}
 .choice.picked-right{border-color:var(--redpen);background:#fff}
 .choice.picked-wrong{border-color:var(--redpen);background:var(--redpen-soft)}
-.choice.reveal-answer{border-color:var(--bluepen);background:var(--bluepen-soft)}
+.choice.reveal-answer{border-color:var(--good);background:var(--good-soft)}
 .choice:disabled{cursor:default}
 .ox-wrap{display:flex;gap:12px}
 .ox-wrap .choice{flex:1;text-align:center;font-size:26px;font-weight:700;padding:22px 0}
@@ -1086,9 +1098,9 @@ function renderHome(){
   const newC = (CARDS[DEFAULT_TOPIC]||[]).filter(c=>!S.seenCards[c.id]).length;
   
   return `
-    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:2px">
-      <span style="font-size:20px;font-weight:700;letter-spacing:-.02em;color:var(--ink)">하루사이</span>
-      <span class="mono" style="font-size:12px;color:var(--ink-faint);letter-spacing:.02em">Haru-Sci</span>
+    <div style="display:flex;align-items:baseline;gap:9px;margin-bottom:3px">
+      <span style="font-family:var(--serif);font-size:27px;font-weight:700;letter-spacing:-.01em;color:var(--ink)">하루사이</span>
+      <span style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:15px;color:var(--coral-active);letter-spacing:0">Haru-Sci</span>
     </div>
     <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:16px">현대인을 위한 최소한의 과학 교양</p>
     ${attendanceCalendar()}
@@ -1104,8 +1116,8 @@ function renderHome(){
     </div>
 
     <div class="section-label">과목별 진행 · 내 수준</div>
-    ${Object.keys(S.diagDone).length===0 ? `<div class="card" style="margin-bottom:10px;border-color:var(--bluepen);background:var(--bluepen-soft)">
-      <b style="font-size:14px">먼저 수준을 진단해 보세요</b>
+    ${Object.keys(S.diagDone).length===0 ? `<div class="card" style="margin-bottom:10px;border-color:var(--coral);background:var(--coral-soft)">
+      <b style="font-size:14px;color:var(--coral-active)">먼저 수준을 진단해 보세요</b>
       <p style="font-size:13px;color:var(--ink-soft);margin:4px 0 0">과목마다 우측의 <b>진단</b>을 누르면 고등 기준 성취도에 따라 중등/학부 단계로 자동 유도 분기하여 맞춤형 수준을 설정해줍니다.</p>
     </div>` : ''}
     <div class="domain-list">
@@ -1120,7 +1132,7 @@ function renderHome(){
             </div>
             <div class="progress-bar"><div class="progress-fill" style="width:${p}%;background:${d.color}"></div></div>
           </div>
-          <button class="chip" style="cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink-soft)" onclick="event.stopPropagation();startDiagnostic('${d.id}')">진단</button>
+          <button class="chip" style="cursor:pointer;border:1px solid var(--coral);background:var(--card);color:var(--coral-active);font-weight:600" onclick="event.stopPropagation();startDiagnostic('${d.id}')">진단</button>
         </div>`;
       }).join('')}
     </div>`;

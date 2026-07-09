@@ -326,8 +326,12 @@
      "물질"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-mole",
@@ -337,8 +341,12 @@
      "반응"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-bond",
@@ -348,8 +356,12 @@
      "물질"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-water",
@@ -360,8 +372,12 @@
      "일상"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-acid",
@@ -371,8 +387,12 @@
      "일상"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-redox",
@@ -382,8 +402,12 @@
      "일상"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-rate",
@@ -392,8 +416,12 @@
      "반응"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-equil",
@@ -402,8 +430,12 @@
      "반응"
     ],
     "level": 3,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-enthalpy",
@@ -414,8 +446,12 @@
      "에너지"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-carbon",
@@ -425,8 +461,12 @@
      "생명"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-polymer",
@@ -437,8 +477,12 @@
      "일상"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-battery",
@@ -449,8 +493,12 @@
      "기술"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-solution",
@@ -460,8 +508,12 @@
      "일상"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-gas",
@@ -471,8 +523,12 @@
      "열"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-metal",
@@ -483,8 +539,12 @@
      "역사"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "chem-dose",
@@ -494,8 +554,12 @@
      "인체"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    }
   ],
   "bio": [
@@ -509,7 +573,9 @@
     "level": 1,
     "ready": true,
     "stages": [
-     "hs"
+     "ms",
+     "hs",
+     "ug"
     ]
    },
    {
@@ -520,8 +586,12 @@
      "세포"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-expression",
@@ -531,8 +601,12 @@
      "세포"
     ],
     "level": 3,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-evolution",
@@ -542,8 +616,12 @@
      "생명"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-evidence",
@@ -553,8 +631,12 @@
      "역사"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-virus",
@@ -564,8 +646,12 @@
      "인체"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-immune",
@@ -575,8 +661,12 @@
      "생명"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-vaccine",
@@ -586,8 +676,12 @@
      "기술"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-brain",
@@ -597,8 +691,12 @@
      "인체"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-memory",
@@ -608,8 +706,12 @@
      "인체"
     ],
     "level": 3,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-hormone",
@@ -618,8 +720,12 @@
      "인체"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-respiration",
@@ -629,8 +735,12 @@
      "에너지"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-photosynthesis",
@@ -640,8 +750,12 @@
      "에너지"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-mutation",
@@ -651,8 +765,12 @@
      "인체"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-crispr",
@@ -662,8 +780,12 @@
      "기술"
     ],
     "level": 3,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-microbiome",
@@ -673,8 +795,12 @@
      "인체"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-ecosystem",
@@ -684,8 +810,12 @@
      "에너지"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-biodiversity",
@@ -695,8 +825,12 @@
      "환경"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "bio-cancer",
@@ -706,8 +840,12 @@
      "세포"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    }
   ],
   "earth": [
@@ -721,7 +859,9 @@
     "level": 1,
     "ready": true,
     "stages": [
-     "hs"
+     "ms",
+     "hs",
+     "ug"
     ]
    },
    {
@@ -733,8 +873,12 @@
      "안전"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-volcano",
@@ -743,8 +887,12 @@
      "지구"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-rock",
@@ -754,8 +902,12 @@
      "물질"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-fossil",
@@ -766,8 +918,12 @@
      "스케일"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-weather",
@@ -777,8 +933,12 @@
      "일상"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-typhoon",
@@ -788,8 +948,12 @@
      "일상"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-climate",
@@ -799,8 +963,12 @@
      "환경"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-ocean",
@@ -810,8 +978,12 @@
      "지구"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-elnino",
@@ -822,8 +994,12 @@
      "환경"
     ],
     "level": 3,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-season",
@@ -834,8 +1010,12 @@
      "일상"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-tide",
@@ -846,8 +1026,12 @@
      "일상"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-solar",
@@ -857,8 +1041,12 @@
      "스케일"
     ],
     "level": 1,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-star",
@@ -868,8 +1056,12 @@
      "별"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-galaxy",
@@ -880,8 +1072,12 @@
      "스케일"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-bigbang",
@@ -892,8 +1088,12 @@
      "역사"
     ],
     "level": 3,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-blackhole",
@@ -903,8 +1103,12 @@
      "별"
     ],
     "level": 3,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    },
    {
     "id": "ear-exoplanet",
@@ -914,8 +1118,12 @@
      "생명"
     ],
     "level": 2,
-    "ready": false,
-    "stages": []
+    "ready": true,
+    "stages": [
+     "ms",
+     "hs",
+     "ug"
+    ]
    }
   ]
  }
