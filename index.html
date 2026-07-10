@@ -73,6 +73,8 @@ body{
   background-size:22px 22px, 22px 22px, auto;
   font-size:17px;
   line-height:1.62;
+  word-break:keep-all;
+  overflow-wrap:break-word;
 }
 .mono{font-family:'IBM Plex Mono',monospace}
 
@@ -181,7 +183,7 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
 .concept-card{position:relative}
 .concept-card h2{font-family:var(--serif);font-size:23px;font-weight:700;letter-spacing:-.005em;margin-bottom:12px}
 .concept-card h2::after{content:"";display:block;width:38px;height:3px;background:var(--coral);border-radius:2px;margin-top:9px;opacity:.85}
-.concept-card p{font-size:17.5px;line-height:1.8;color:var(--ink)}
+.concept-card p{font-size:18.5px;line-height:1.8;color:var(--ink)}
 .figure{
   margin:14px 0 4px;background:var(--paper);border:1px solid var(--line);
   border-radius:10px;padding:14px;text-align:center;
@@ -192,12 +194,12 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
 .concept-card .example{
   margin-top:14px;padding:12px 14px;background:var(--cream-card);
   border-left:3px solid var(--coral);border-radius:0 10px 10px 0;
-  font-size:14px;color:var(--ink);
+  font-size:15px;color:var(--ink);
 }
 .concept-card .example b{color:var(--coral-active)}
 
 /* 문제 */
-.q-text{font-size:19px;font-weight:600;line-height:1.6;margin-bottom:18px}
+.q-text{font-size:21px;font-weight:600;line-height:1.6;margin-bottom:18px}
 .q-text u{text-decoration-line:underline;text-decoration-color:var(--redpen);text-decoration-thickness:2.5px;text-underline-offset:3px}
 .collect-stamp{
   display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
@@ -209,7 +211,7 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
 .choice{
   display:block;width:100%;text-align:left;background:var(--card);
   border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;
-  font-family:inherit;font-size:17px;font-weight:500;color:var(--ink);
+  font-family:inherit;font-size:18px;font-weight:500;color:var(--ink);
   margin-bottom:10px;cursor:pointer;transition:border-color .12s;
 }
 .choice:not(:disabled):hover{border-color:var(--ink-faint)}
@@ -242,7 +244,7 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
 /* 해설 */
 .explain{
   margin-top:16px;background:var(--card);border:1px dashed var(--redpen);
-  border-radius:12px;padding:14px 16px;font-size:16px;line-height:1.75;
+  border-radius:12px;padding:14px 16px;font-size:17px;line-height:1.75;
 }
 .explain .verdict{font-weight:700;margin-bottom:6px}
 .explain .verdict.ok{color:var(--redpen)}
@@ -332,9 +334,6 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
     </button>
     <button data-tab="drill" aria-label="문제풀기">
       <svg viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg>문제풀기
-    </button>
-    <button data-tab="review" aria-label="복습">
-      <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 109-9"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg>복습
     </button>
     <button data-tab="stories" aria-label="이야기">
       <svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 012-2h8l6 6v10a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M14 3v6h6"/></svg>이야기
@@ -699,18 +698,14 @@ function closeSession(){ sess = null; $('#session').classList.remove('open'); re
 
 /* 문제풀기(양치기) — 여러 주제의 문제를 모아 카드 없이 문제만 연속으로 푸는 모드 */
 async function startDrill(){
-  const topics = allTopics(drillSubject).filter(t=>t.ready);
   const subjects = drillSubject==='all' ? Object.keys(SUENUNG_BANKS) : [drillSubject];
-  if(!topics.length && !subjects.some(s=>SUENUNG_BANKS[s])){ toast('아직 준비된 주제가 없어요'); return; }
-  try {
-    await ensureLoaded(topics.map(t=>t.id));
-    await Promise.all(subjects.map(ensureSuenungLoaded));
-  }
+  if(!subjects.some(s=>SUENUNG_BANKS[s])){ toast('아직 준비된 수능형 문제은행이 없어요'); return; }
+  try { await Promise.all(subjects.map(ensureSuenungLoaded)); }
   catch(e){ toast('콘텐츠를 불러오지 못했어요'); return; }
 
   const bankIds = subjects.map(s=>SUENUNG_BANKS[s]).filter(Boolean);
   let pool = [];
-  [...topics.map(t=>t.id), ...bankIds].forEach(uid=>{
+  bankIds.forEach(uid=>{
     (QUESTIONS[uid]||[]).forEach(q=>{
       if(drillStage==='all' || q.stage===drillStage) pool.push(q.id);
     });
@@ -1005,7 +1000,7 @@ async function openStory(id){
       <span class="eyebrow">SCIENCE STORY · ${STAGE_LABEL[st.stage]||''}</span>
       <h2 style="font-size:22px;font-weight:700;letter-spacing:-.01em;margin:8px 0 16px">${esc(st.title)}</h2>
       ${st.fig?`<figure class="figure">${st.fig}${st.figcap?`<figcaption>${st.figcap}</figcaption>`:''}</figure>`:''}
-      <div style="font-size:17.5px;line-height:1.9;color:var(--ink)">${st.body}</div>
+      <div style="font-size:18.5px;line-height:1.9;color:var(--ink)">${st.body}</div>
       ${st.footer?`<p style="font-size:13px;color:var(--ink-faint);margin-top:18px;font-style:italic">${esc(st.footer)}</p>`:''}
       ${(()=>{ const reported = S.storyReports.some(r=>r.storyId===id);
         return `<div style="margin-top:18px"><button class="report-btn ${reported?'done':''}" data-report-id="${id}" onclick="${reported?'':`openReportModal('story','${id}')`}">${reported?'신고 접수됨':'이 이야기 신고하기'}</button></div>`; })()}
@@ -1255,16 +1250,22 @@ function attendanceCalendar(){
 }
 
 function renderHome(){
-  const due = dueQuestions().length;
+  const dueList = dueQuestions();
+  const due = dueList.length;
   const newQ = (QUESTIONS[DEFAULT_TOPIC]||[]).filter(q=>!S.attempts[q.id]).length;
   const newC = (CARDS[DEFAULT_TOPIC]||[]).filter(c=>!S.seenCards[c.id]).length;
-  
+  const upcoming = Object.entries(S.srs).filter(([id,v])=>!v.graduated && v.due>S.day);
+  const byDay = {};
+  upcoming.forEach(([id,v])=>{ byDay[v.due] = (byDay[v.due]||0)+1; });
+  const wrongIds = Object.keys(S.attempts).filter(id=>{ const a=S.attempts[id]; return a.tries>a.correct; });
+
   return `
-    <div style="display:flex;align-items:baseline;gap:9px;margin-bottom:3px">
+    <span class="eyebrow">TODAY</span>
+    <div style="display:flex;align-items:baseline;gap:9px;margin:2px 0 6px">
       <span style="font-family:var(--serif);font-size:27px;font-weight:700;letter-spacing:-.01em;color:var(--ink)">하루사이</span>
       <span style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:15px;color:var(--coral-active);letter-spacing:0">Haru-Sci</span>
     </div>
-    <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:16px">현대인을 위한 최소한의 과학 교양</p>
+    <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:18px">현대인을 위한 최소한의 과학 교양</p>
     ${attendanceCalendar()}
 
     <div class="card today-card">
@@ -1298,7 +1299,17 @@ function renderHome(){
           <button class="chip" style="cursor:pointer;border:1px solid var(--coral);background:var(--card);color:var(--coral-active);font-weight:600" onclick="event.stopPropagation();startDiagnostic('${d.id}')">진단</button>
         </div>`;
       }).join('')}
-    </div>`;
+    </div>
+
+    <div class="section-label">복습</div>
+    ${Object.keys(byDay).length
+      ? `<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">${Object.entries(byDay).sort((a,b)=>a[0]-b[0]).map(([day,n])=>`<div class="result-row"><span>Day ${day} (${day-S.day}일 뒤)</span><b>${n}문제</b></div>`).join('')}</div>`
+      : `<p style="font-size:13.5px;color:var(--ink-faint);margin-bottom:10px">아직 예정된 복습이 없어요. 세션을 시작하면 여기에 쌓입니다.</p>`}
+    ${wrongIds.length ? `<details style="margin-bottom:6px">
+      <summary style="cursor:pointer;font-size:13.5px;color:var(--ink-soft)">틀린 적 있는 문제 ${wrongIds.length}개</summary>
+      <div style="margin-top:8px">${wrongIds.map(id=>{ const v=S.srs[id]||{};
+        return `<div class="wrong-item">${esc(qText(id))}<div class="w-due">${v.graduated?'졸업':'다음 복습: Day '+v.due}</div></div>`; }).join('')}</div>
+    </details>` : ''}`;
 }
 
 let exploreDomain = 'physics';
@@ -1377,9 +1388,11 @@ function pickDrillStage(s){ drillStage = s; render(); }
 function pickDrillCount(n){ drillCount = n; render(); }
 
 function renderDrill(){
-  const subjectChips = [{id:'all',name:'전체',color:'var(--ink)'}, ...DOMAINS].map(x=>
-    `<button class="chip" style="cursor:pointer;padding:6px 13px;border:1px solid ${x.id===drillSubject?x.color:'var(--line)'};background:${x.id===drillSubject?x.color:'var(--card)'};color:${x.id===drillSubject?'#fff':'var(--ink-soft)'}" onclick="pickDrillSubject('${x.id}')">${x.name}</button>`
-  ).join('');
+  const subjectChips = [{id:'all',name:'전체',color:'var(--ink)'}, ...DOMAINS].map(x=>{
+    const ready = x.id==='all' || !!SUENUNG_BANKS[x.id];
+    if(!ready) return `<button class="chip" disabled style="cursor:default;padding:6px 13px;border:1px solid var(--line);background:var(--paper);color:var(--ink-faint)">${x.name} · 준비 중</button>`;
+    return `<button class="chip" style="cursor:pointer;padding:6px 13px;border:1px solid ${x.id===drillSubject?x.color:'var(--line)'};background:${x.id===drillSubject?x.color:'var(--card)'};color:${x.id===drillSubject?'#fff':'var(--ink-soft)'}" onclick="pickDrillSubject('${x.id}')">${x.name}</button>`;
+  }).join('');
   const stageChips = ['all', ...STAGE_ORDER].map(s=>
     `<button class="chip" style="cursor:pointer;border:1px solid ${s===drillStage?'var(--coral)':'var(--line)'};background:${s===drillStage?'var(--coral)':'var(--card)'};color:${s===drillStage?'#fff':'var(--ink-soft)'}" onclick="pickDrillStage('${s}')">${s==='all'?'전체':STAGE_LABEL[s]}</button>`
   ).join('');
@@ -1390,7 +1403,7 @@ function renderDrill(){
   return `
     <span class="eyebrow">QUICK PRACTICE</span>
     <h1 class="screen-title">문제풀기</h1>
-    <p style="font-size:13px;color:var(--ink-soft);margin:-8px 0 18px">개념 카드 없이 문제만 몰아서 풀어요. 조건을 고르고 바로 시작하세요.</p>
+    <p style="font-size:14px;color:var(--ink-soft);margin:-8px 0 18px">개념 카드 없이, 수능형으로 새로 쓴 문제만 몰아서 풀어요. 조건을 고르고 바로 시작하세요.</p>
 
     <div class="card" style="margin-bottom:14px">
       <div class="section-label" style="margin-top:0">과목</div>
@@ -1401,31 +1414,6 @@ function renderDrill(){
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">${countChips}</div>
       <button class="btn btn-red" onclick="startDrill()">문제풀기 시작</button>
     </div>`;
-}
-
-function renderReview(){
-  const due = dueQuestions();
-  const upcoming = Object.entries(S.srs).filter(([id,v])=>!v.graduated && v.due>S.day);
-  const byDay = {};
-  upcoming.forEach(([id,v])=>{ byDay[v.due] = (byDay[v.due]||0)+1; });
-  const wrongIds = Object.keys(S.attempts).filter(id=>{ const a=S.attempts[id]; return a.tries>a.correct; });
-  return `
-    <span class="eyebrow">REVIEW QUEUE</span>
-    <h1 class="screen-title">복습함</h1>
-    <div class="card">
-      <b style="font-size:15px">오늘 복습할 문제 ${due.length}개</b>
-      <p style="font-size:13px;color:var(--ink-soft);margin:4px 0 12px">복습은 오늘의 세션에 자동으로 섞여 나옵니다.</p>
-      ${due.length?`<button class="btn btn-primary" onclick="startSession(DEFAULT_TOPIC)">지금 복습하기</button>`:`<p style="font-size:13px;color:var(--ink-faint)">지금은 밀린 복습이 없어요.</p>`}
-    </div>
-    <div class="section-label">다가오는 복습 일정</div>
-    ${Object.keys(byDay).length
-      ? Object.entries(byDay).sort((a,b)=>a[0]-b[0]).map(([day,n])=>`<div class="result-row" style="margin-bottom:8px"><span>Day ${day} (${day-S.day}일 뒤)</span><b>${n}문제</b></div>`).join('')
-      : `<p style="font-size:13px;color:var(--ink-faint)">아직 예정된 복습이 없어요. 세션을 시작하면 여기에 쌓입니다.</p>`}
-    <div class="section-label">틀린 적 있는 문제</div>
-    ${wrongIds.length
-      ? wrongIds.map(id=>{ const v=S.srs[id]||{};
-          return `<div class="wrong-item">${esc(qText(id))}<div class="w-due">${v.graduated?'졸업':'다음 복습: Day '+v.due}</div></div>`; }).join('')
-      : `<p style="font-size:13px;color:var(--ink-faint)">아직 틀린 문제가 없어요.</p>`}`;
 }
 
 function unlockHint(st){
@@ -1592,7 +1580,7 @@ function setTab(t){
   render();
 }
 function render(){
-  const map = {home:renderHome, explore:renderExplore, drill:renderDrill, review:renderReview, stories:renderStories, stats:renderStats};
+  const map = {home:renderHome, explore:renderExplore, drill:renderDrill, stories:renderStories, stats:renderStats};
   $('#screen').innerHTML = map[tab]();
   window.scrollTo(0,0);
   

@@ -21,11 +21,11 @@
    "stage": "hs",
    "teaser": "원자가 대부분 빈 공간이라면, 왜 벽을 통과하지 못할까?",
    "unlock": {
-    "type": "topicsCompleted",
+    "type": "correctInTopic",
     "scope": [
      "chem-atom"
     ],
-    "count": 1
+    "count": 3
    }
   },
   {
@@ -153,6 +153,274 @@
     ],
     "count": 1
    }
+  },
+  {
+   "id": "volta-pile",
+   "title": "번개를 병 속에 가둘 수 있을까",
+   "subject": "chem",
+   "stage": "hs",
+   "teaser": "개구리 다리가 씰룩거린 사건에서 인류 최초의 전지가 태어났다.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "chem-battery"
+    ],
+    "count": 1
+   }
+  },
+  {
+   "id": "carbon-backbone",
+   "title": "원자 하나가 생명 전체를 떠받치는 이유",
+   "subject": "chem",
+   "stage": "hs",
+   "teaser": "결합할 수 있는 손이 네 개라서, 생명이 필요한 모든 구조를 만들어낸다.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "chem-carbon"
+    ],
+    "count": 1
+   }
+  },
+  {
+   "id": "dna-double-helix",
+   "title": "생명의 설계도, 이중나선을 읽어낸 밤",
+   "subject": "bio",
+   "stage": "hs",
+   "teaser": "사진 한 장이 생명의 구조를 푸는 마지막 단서가 되었다.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "bio-dna"
+    ],
+    "count": 1
+   }
+  },
+  {
+   "id": "virus-half-alive",
+   "title": "생물도 무생물도 아닌 존재",
+   "subject": "bio",
+   "stage": "hs",
+   "teaser": "스스로는 아무것도 못 하지만, 세포 안에만 들어가면 완벽하게 살아난다.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "bio-virus"
+    ],
+    "count": 1
+   }
+  },
+  {
+   "id": "volcano-breath",
+   "title": "지구가 숨을 쉬는 곳",
+   "subject": "earth",
+   "stage": "hs",
+   "teaser": "지하에 갇힌 압력이 지표를 뚫고 나오는 순간.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "ear-volcano"
+    ],
+    "count": 1
+   }
+  },
+  {
+   "id": "blackhole-no-escape",
+   "title": "빛조차 도망칠 수 없는 곳",
+   "subject": "earth",
+   "stage": "hs",
+   "teaser": "질량이 극단적으로 압축되면, 빛마저 빠져나오지 못하는 경계가 생긴다.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "ear-blackhole"
+    ],
+    "count": 1
+   }
+  },
+  {
+   "id": "newton-three-laws",
+   "title": "가만히 있으려는 힘, 뉴턴이 답을 찾다",
+   "subject": "physics",
+   "stage": "hs",
+   "teaser": "물체가 멈추는 건 힘이 사라져서가 아니라, 또 다른 힘이 작용하기 때문이다.",
+   "unlock": { "type": "topicsStarted", "scope": ["phy-newton"], "count": 1 }
+  },
+  {
+   "id": "airbag-momentum",
+   "title": "에어백이 충격을 '늘려서' 막는 이유",
+   "subject": "physics",
+   "stage": "hs",
+   "teaser": "같은 충격이라도, 멈추는 시간을 늘리면 순간의 힘은 훨씬 작아진다.",
+   "unlock": { "type": "topicsStarted", "scope": ["phy-momentum"], "count": 1 }
+  },
+  {
+   "id": "induction-generator",
+   "title": "자석을 흔들면 전기가 생긴다",
+   "subject": "physics",
+   "stage": "hs",
+   "teaser": "발전소가 하는 일은 결국, 무언가를 태워 자석을 돌리는 것뿐이다.",
+   "unlock": { "type": "topicsStarted", "scope": ["phy-induction"], "count": 1 }
+  },
+  {
+   "id": "periodic-table-map",
+   "title": "원소들을 줄 세운 표 하나의 예언력",
+   "subject": "chem",
+   "stage": "hs",
+   "teaser": "빈칸을 억지로 채우지 않고, 그 자리에 올 원소의 성질까지 예측했다.",
+   "unlock": { "type": "topicsStarted", "scope": ["chem-periodic"], "count": 1 }
+  },
+  {
+   "id": "why-atoms-bond",
+   "title": "원자들은 왜 서로 붙잡는가",
+   "subject": "chem",
+   "stage": "hs",
+   "teaser": "전자를 주고받거나 함께 쓰거나, 원자는 더 안정한 상태를 찾아간다.",
+   "unlock": { "type": "topicsStarted", "scope": ["chem-bond"], "count": 1 }
+  },
+  {
+   "id": "water-anomaly",
+   "title": "얼음이 물 위에 뜨는 건 사실 이상한 일이다",
+   "subject": "chem",
+   "stage": "hs",
+   "teaser": "대부분의 물질은 얼면 가라앉는데, 물은 왜 예외일까.",
+   "unlock": { "type": "topicsStarted", "scope": ["chem-water"], "count": 1 }
+  },
+  {
+   "id": "ph-scale-story",
+   "title": "산성비, 위산, 비누: 숫자 하나로 재는 세계",
+   "subject": "chem",
+   "stage": "hs",
+   "teaser": "pH 숫자 1 차이가, 실제로는 열 배의 산성도 차이를 뜻한다.",
+   "unlock": { "type": "topicsStarted", "scope": ["chem-acid"], "count": 1 }
+  },
+  {
+   "id": "rust-and-fire",
+   "title": "녹스는 것과 타는 것은 같은 반응이다",
+   "subject": "chem",
+   "stage": "hs",
+   "teaser": "타오르는 불꽃과 조용히 녹스는 못, 화학적으로는 같은 반응이다.",
+   "unlock": { "type": "topicsStarted", "scope": ["chem-redox"], "count": 1 }
+  },
+  {
+   "id": "plastic-century",
+   "title": "백 년 동안 지지 않는 사슬, 플라스틱",
+   "subject": "chem",
+   "stage": "hs",
+   "teaser": "작은 분자 수만 개가 사슬처럼 이어지면, 백 년이 지나도 안 썩는 물질이 된다.",
+   "unlock": { "type": "topicsStarted", "scope": ["chem-polymer"], "count": 1 }
+  },
+  {
+   "id": "cell-basic-unit",
+   "title": "모든 생명은 왜 세포로 시작하는가",
+   "subject": "bio",
+   "stage": "hs",
+   "teaser": "박테리아든 사람이든, 생명은 예외 없이 같은 기본 단위로 이루어져 있다.",
+   "unlock": { "type": "topicsStarted", "scope": ["bio-cell"], "count": 1 }
+  },
+  {
+   "id": "gene-expression-switch",
+   "title": "같은 DNA인데 왜 세포마다 다른 모습일까",
+   "subject": "bio",
+   "stage": "hs",
+   "teaser": "근육세포와 신경세포는 같은 설계도를 갖고도, 다른 부분만 골라 읽는다.",
+   "unlock": { "type": "topicsStarted", "scope": ["bio-expression"], "count": 1 }
+  },
+  {
+   "id": "darwin-idea",
+   "title": "가장 강한 것이 아니라 가장 잘 맞는 것이 남는다",
+   "subject": "bio",
+   "stage": "hs",
+   "teaser": "적자생존은 가장 강한 것의 생존이 아니라, 환경에 가장 잘 맞는 것의 생존이다.",
+   "unlock": { "type": "topicsStarted", "scope": ["bio-evolution"], "count": 1 }
+  },
+  {
+   "id": "immune-defense",
+   "title": "몸속 군대는 매일 전쟁을 치른다",
+   "subject": "bio",
+   "stage": "hs",
+   "teaser": "빠르지만 거친 방어선과, 느리지만 정밀한 방어선이 함께 몸을 지킨다.",
+   "unlock": { "type": "topicsStarted", "scope": ["bio-immune"], "count": 1 }
+  },
+  {
+   "id": "neuron-brain",
+   "title": "생각은 전기 신호가 오가는 것이다",
+   "subject": "bio",
+   "stage": "hs",
+   "teaser": "뉴런 안에서는 전기로, 뉴런 사이에서는 화학 물질로 신호가 형태를 바꾼다.",
+   "unlock": { "type": "topicsStarted", "scope": ["bio-brain"], "count": 1 }
+  },
+  {
+   "id": "photosynthesis-light",
+   "title": "식물은 빛을 먹고 산소를 내뱉는다",
+   "subject": "bio",
+   "stage": "hs",
+   "teaser": "지구 생태계의 거의 모든 에너지는 이 반응 하나에서 시작된다.",
+   "unlock": { "type": "topicsStarted", "scope": ["bio-photosynthesis"], "count": 1 }
+  },
+  {
+   "id": "cancer-broken-brake",
+   "title": "암은 브레이크가 고장 난 세포다",
+   "subject": "bio",
+   "stage": "hs",
+   "teaser": "여러 겹의 통제 장치가 차례로 무너져야, 세포는 비로소 암이 된다.",
+   "unlock": { "type": "topicsStarted", "scope": ["bio-cancer"], "count": 1 }
+  },
+  {
+   "id": "plate-tectonics-drift",
+   "title": "대륙은 1년에 손톱만큼씩 움직인다",
+   "subject": "earth",
+   "stage": "hs",
+   "teaser": "느린 움직임이 수억 년 쌓이면, 대륙의 위치가 완전히 바뀐다.",
+   "unlock": { "type": "topicsStarted", "scope": ["ear-plate"], "count": 1 }
+  },
+  {
+   "id": "earthquake-fault",
+   "title": "땅이 갑자기 흔들리는 순간",
+   "subject": "earth",
+   "stage": "hs",
+   "teaser": "수십 년간 조용히 쌓인 힘이, 한순간에 풀려나는 것이 지진이다.",
+   "unlock": { "type": "topicsStarted", "scope": ["ear-quake"], "count": 1 }
+  },
+  {
+   "id": "fossil-record",
+   "title": "돌 속에 남은 생명의 기록",
+   "subject": "earth",
+   "stage": "hs",
+   "teaser": "지층의 순서와 화석 하나하나가 이어 붙으면, 생명의 역사가 된다.",
+   "unlock": { "type": "topicsStarted", "scope": ["ear-fossil"], "count": 1 }
+  },
+  {
+   "id": "typhoon-engine",
+   "title": "태풍은 따뜻한 바다가 만든 열기관이다",
+   "subject": "earth",
+   "stage": "hs",
+   "teaser": "따뜻한 바닷물이라는 연료가 끊기는 순간, 태풍은 빠르게 힘을 잃는다.",
+   "unlock": { "type": "topicsStarted", "scope": ["ear-typhoon"], "count": 1 }
+  },
+  {
+   "id": "climate-change-signal",
+   "title": "지구는 이미 온도계를 남기고 있었다",
+   "subject": "earth",
+   "stage": "hs",
+   "teaser": "얼음, 바다, 대기 곳곳의 독립적인 기록이 같은 방향을 가리키고 있다.",
+   "unlock": { "type": "topicsStarted", "scope": ["ear-climate"], "count": 1 }
+  },
+  {
+   "id": "moon-tide-pull",
+   "title": "달이 잡아당기면 바다가 부풀어 오른다",
+   "subject": "earth",
+   "stage": "hs",
+   "teaser": "달을 향한 쪽과 그 반대쪽 바다가 함께 부풀어, 하루 두 번 밀물이 온다.",
+   "unlock": { "type": "topicsStarted", "scope": ["ear-tide"], "count": 1 }
+  },
+  {
+   "id": "bigbang-origin",
+   "title": "우주는 한 점에서 시작해 지금도 팽창한다",
+   "subject": "earth",
+   "stage": "hs",
+   "teaser": "먼 은하일수록 더 빠르게 멀어지는 것이, 우주가 팽창한다는 증거다.",
+   "unlock": { "type": "topicsStarted", "scope": ["ear-bigbang"], "count": 1 }
   }
  ]
 }
