@@ -1428,8 +1428,7 @@ function renderStories(){
     <span class="eyebrow">SCIENCE STORIES</span>
     <h1 class="screen-title">이야기</h1>
     <p style="font-size:13px;color:var(--ink-faint)">아직 이야기가 없어요.</p>`;
-  const unlocked = STORIES.filter(storyUnlocked);
-  const locked = STORIES.filter(s=>!storyUnlocked(s));
+  const totalUnlocked = STORIES.filter(storyUnlocked).length;
   const card = (st, isOpen) => {
     const d = DOMAINS.find(x=>x.id===st.subject) || {color:'var(--ink)', name:''};
     if(isOpen){
@@ -1453,15 +1452,29 @@ function renderStories(){
       <p style="font-size:12px;color:var(--ink-faint);padding-left:20px;margin:0">${unlockHint(st)}</p>
     </div>`;
   };
+  const sections = DOMAINS.map(d=>{
+    const own = STORIES.filter(s=>s.subject===d.id);
+    if(!own.length) return '';
+    const unlocked = own.filter(storyUnlocked);
+    const locked = own.filter(s=>!storyUnlocked(s));
+    return `<details class="story-domain" style="margin-bottom:10px"${unlocked.length?' open':''}>
+      <summary style="cursor:pointer;display:flex;align-items:center;gap:8px;padding:8px 2px;list-style:none">
+        <span class="domain-dot" style="background:${d.color}"></span>
+        <span style="flex:1;font-weight:600;font-size:14px">${d.name}</span>
+        <span class="chip" style="font-size:11px">${unlocked.length}/${own.length}</span>
+      </summary>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+        ${unlocked.map(s=>card(s,true)).join('')}
+        ${locked.map(s=>card(s,false)).join('')}
+      </div>
+    </details>`;
+  }).join('');
   return `
     <span class="eyebrow">SCIENCE STORIES</span>
     <h1 class="screen-title">이야기</h1>
     <p style="font-size:13px;color:var(--ink-soft);margin-bottom:16px">학습이 쌓이면 그 수준에서 이해할 수 있는 과학 이야기가 열립니다.</p>
-    <div class="section-label">열린 이야기 (${unlocked.length})</div>
-    ${unlocked.length ? `<div style="display:flex;flex-direction:column;gap:8px">${unlocked.map(s=>card(s,true)).join('')}</div>`
-      : `<p style="font-size:13px;color:var(--ink-faint)">아직 열린 이야기가 없어요. 학습을 시작해 보세요.</p>`}
-    ${locked.length ? `<div class="section-label">잠긴 이야기 (${locked.length})</div>
-      <div style="display:flex;flex-direction:column;gap:8px">${locked.map(s=>card(s,false)).join('')}</div>` : ''}`;
+    ${totalUnlocked ? '' : `<p style="font-size:13px;color:var(--ink-faint);margin-bottom:12px">아직 열린 이야기가 없어요. 학습을 시작해 보세요.</p>`}
+    ${sections}`;
 }
 
 function renderStats(){
