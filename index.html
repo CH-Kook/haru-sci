@@ -138,6 +138,21 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
 .badge-ready{background:var(--coral-soft);color:var(--coral-active)}
 .badge-soon{background:var(--paper);color:var(--ink-faint);border:1px solid var(--line)}
 
+/* ---------- 확인 팝업(넛지) ---------- */
+.confirm-overlay{
+  position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;
+  background:rgba(43,40,35,.32);backdrop-filter:blur(2px);padding:20px;
+}
+.confirm-overlay.show{display:flex}
+.confirm-card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);max-width:340px;width:100%;padding:20px 20px 16px;
+}
+.confirm-card h3{font-family:var(--serif);font-size:17px;font-weight:700;margin:0 0 8px}
+.confirm-card p{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin:0 0 18px}
+.confirm-card .confirm-actions{display:flex;gap:8px}
+.confirm-card .confirm-actions .btn{padding:12px;font-size:14px}
+
 /* ---------- 세션 (풀스크린) ---------- */
 #session{
   position:fixed;inset:0;z-index:50;display:none;flex-direction:column;
@@ -314,6 +329,7 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
     </button>
   </nav>
   <section id="session" role="dialog" aria-label="학습 세션"></section>
+  <div class="confirm-overlay" id="confirm" role="dialog" aria-label="확인"></div>
   <div class="toast" id="toast"></div>
 </div>
 <script>
@@ -393,14 +409,14 @@ async function loadDiagnostic(subject){
 
 /* ── 학습 단계(stage) ─────────────────────────────────────── */
 const STAGE_ORDER = ['ms','hs','ug'];
-const STAGE_LABEL = {ms:'중등', hs:'고등', ug:'학부'};
+const STAGE_LABEL = {ms:'입문', hs:'심화', ug:'전공'};
 function topicDomain(topicId){
   for(const d in CURRICULUM){ if((CURRICULUM[d]||[]).some(t=>t.id===topicId)) return d; }
   return null;
 }
 function currentStage(topicId){
   const dom = topicDomain(topicId);
-  return (dom && S.subjectStage[dom]) || 'hs';
+  return (dom && S.subjectStage[dom]) || 'ms';
 }
 
 /* ============================================================
@@ -436,14 +452,17 @@ let S = Storage.load() || {
   stats: {answered: 0, correct: 0},
   reports: [],          // {qId, day}
   qMeta: {},            // qId -> {q, topic}  미로딩 주제 표시·복습 로드용 스냅샷
-  subjectStage: {physics:'hs', chem:'hs', bio:'hs', earth:'hs'},  // 과목별 현재 학습 단계
+  subjectStage: {physics:'ms', chem:'ms', bio:'ms', earth:'ms'},  // 과목별 현재 학습 단계(진단 전 기본값은 입문)
   diagDone: {},         // subject -> true (진단 완료 여부)
+  diagBannerDismissed: false,  // 홈 진단 추천 배너를 건너뛰기로 닫았는지
+  graduatedTopics: {},  // topicId -> true (해당 주제 문제 전체를 한 번씩 다 푼 완주 여부)
   readStories: {},      // storyId -> true
   studyDates: {},       // 'YYYY-MM-DD' -> true  (실제 달력 출석 기록)
 };
 /* 예전 저장본 마이그레이션(신규 필드 보강) */
-S.subjectStage = Object.assign({physics:'hs',chem:'hs',bio:'hs',earth:'hs'}, S.subjectStage||{});
+S.subjectStage = Object.assign({physics:'ms',chem:'ms',bio:'ms',earth:'ms'}, S.subjectStage||{});
 S.diagDone = S.diagDone || {};
+S.graduatedTopics = S.graduatedTopics || {};
 S.readStories = S.readStories || {};
 S.qMeta = S.qMeta || {};
 S.studyDates = S.studyDates || {};
@@ -485,6 +504,29 @@ const LV = ['','기초','원리','오개념'];
 function toast(msg){
   const t = $('#toast'); t.textContent = msg; t.classList.add('show');
   clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
+/* 가벼운 확인 팝업(넛지) — 진단 등 되돌리기 애매한 선택 전에 한 번 더 물어봄 */
+function showConfirm(html){
+  $('#confirm').innerHTML = `<div class="confirm-card">${html}</div>`;
+  $('#confirm').classList.add('show');
+}
+function hideConfirm(){ $('#confirm').classList.remove('show'); }
+
+function confirmSkipDiagnostic(){
+  showConfirm(`
+    <h3>진단 없이 시작할까요?</h3>
+    <p>진단을 하지 않으면 <b>${STAGE_LABEL.ms}</b> 수준에서 시작합니다. 언제든 과목별 <b>진단</b> 버튼으로 다시 맞춰볼 수 있어요.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-ghost" style="flex:1" onclick="hideConfirm()">진단하러 가기</button>
+      <button class="btn btn-primary" style="flex:1" onclick="skipDiagnostic()">건너뛰기</button>
+    </div>`);
+}
+function skipDiagnostic(){
+  S.diagBannerDismissed = true; save();
+  hideConfirm();
+  toast(`${STAGE_LABEL.ms} 수준으로 시작해요`);
+  render();
 }
 
 /* 동적 DOM 교체 시 KaTeX 렌더링을 격발해주는 안전 래퍼 함수 */
@@ -593,7 +635,7 @@ async function startDiagnostic(subject){
     if (pool[it.stage]) pool[it.stage].push(it);
   });
 
-  // 혹시라도 첫 기준점인 '고등(hs)' 문항이 비어있는지 진단 품질 검사
+  // 혹시라도 첫 기준점인 '심화(hs)' 문항이 비어있는지 진단 품질 검사
   if (!pool['hs'] || pool['hs'].length === 0) {
     toast('진단에 필요한 문항 데이터가 불충분합니다.');
     return;
@@ -604,8 +646,8 @@ async function startDiagnostic(subject){
     subject,
     title: data.title,
     pool,                 // 전체 난이도별 문항 저장소
-    currentStage: 'hs',   // 진입 첫 단계는 무조건 '고등(hs)'으로 허리 라인 시작
-    stageStep: 1,         // 진단 단계 (1단계: 고등 ➔ 2단계: 결과에 따른 중학 또는 학부 분기)
+    currentStage: 'hs',   // 진입 첫 단계는 무조건 '심화(hs)'으로 허리 라인 시작
+    stageStep: 1,         // 진단 단계 (1단계: 심화 ➔ 2단계: 결과에 따른 입문 또는 전공 분기)
     stageIdx: 0,          // 현재 가동 단계에서 풀고 있는 문제 인덱스 (0, 1, 2)
     stageItems: [],       // 현재 가동 단계에서 제시되는 3문항 묶음
     answered: false,
@@ -614,7 +656,7 @@ async function startDiagnostic(subject){
     total: { ms: 0, hs: 0, ug: 0 }
   };
 
-  // 고등(hs) 풀에서 무작위로 3문항을 추출하여 1단계 문제 세트 생성
+  // 심화(hs) 풀에서 무작위로 3문항을 추출하여 1단계 문제 세트 생성
   diag.stageItems = shuffle(pool['hs']).slice(0, 3);
 
   $('#session').classList.add('open');
@@ -706,15 +748,15 @@ function nextDiag(){
   // 현재 난이도의 3개 문항을 다 풀었을 때 분기 계산 (Routing Trigger)
   if(diag.stageIdx >= diag.stageItems.length) {
     if(diag.stageStep === 1) {
-      // 1단계(고등) 종료 지점
+      // 1단계(심화) 종료 지점
       diag.stageStep = 2;
       diag.stageIdx = 0;
-      
+
       if(diag.correctCount >= 2) {
-        // [우수] 3문제 중 2문제 이상 정답 ➔ '학부(ug)' 코스로 상향 라우팅!
+        // [우수] 3문제 중 2문제 이상 정답 ➔ '전공(ug)' 코스로 상향 라우팅!
         diag.currentStage = 'ug';
       } else {
-        // [미흡] 3문제 중 1문제 이하 정답 ➔ '중등(ms)' 코스로 하향 라우팅!
+        // [미흡] 3문제 중 1문제 이하 정답 ➔ '입문(ms)' 코스로 하향 라우팅!
         diag.currentStage = 'ms';
       }
       
@@ -743,14 +785,14 @@ function nextDiag(){
 
 function recommendStage(correct, total){
   // 어댑티브 라우팅 판별 수식
-  // 2단계에서 '학부(ug)' 경로를 거쳤을 경우
+  // 2단계에서 '전공(ug)' 경로를 거쳤을 경우
   if ((total['ug'] || 0) > 0) {
-    // 학부 경로에서 2개 이상 맞추면 최종 [학부(ug)], 떨어지면 탄탄히 다지기 위해 [고등(hs)]부터 시작
+    // 전공 경로에서 2개 이상 맞추면 최종 [전공(ug)], 떨어지면 탄탄히 다지기 위해 [심화(hs)]부터 시작
     return (correct['ug'] >= 2) ? 'ug' : 'hs';
   }
-  // 2단계에서 '중등(ms)' 경로를 거쳤을 경우
+  // 2단계에서 '입문(ms)' 경로를 거쳤을 경우
   if ((total['ms'] || 0) > 0) {
-    // 중등 경로에서 2개 이상 맞추면 무난하게 [고등(hs)] 추천, 그 미만이면 완벽한 기초 보충 위해 [중등(ms)] 추천
+    // 입문 경로에서 2개 이상 맞추면 무난하게 [심화(hs)] 추천, 그 미만이면 완벽한 기초 보충 위해 [입문(ms)] 추천
     return (correct['ms'] >= 2) ? 'hs' : 'ms';
   }
   return 'hs';
@@ -768,7 +810,7 @@ function renderDiagResult(el){
   // 라우팅 여정의 궤적을 붉은펜 채점 스타일의 결과 리스트로 아름답게 조립
   let rows = '';
   
-  // 1단계 기록 추가 (고등)
+  // 1단계 기록 추가 (심화)
   if ((diag.total['hs'] || 0) > 0) {
     const passed = diag.correct['hs'] >= 2;
     rows += `
@@ -778,26 +820,26 @@ function renderDiagResult(el){
           <b class="mono" style="color:var(--bluepen)">${diag.correct['hs']}/${diag.total['hs']}</b>
         </div>
         <div style="font-size:12px; color:var(--ink-soft)">
-          ➔ ${passed ? '2문항 이상 정답으로 <b>상위 심화 과정(학부)</b>으로 맞춤 라우팅' : '1문항 이하 정답으로 <b>기본 기초 과정(중등)</b>으로 맞춤 라우팅'}
+          ➔ ${passed ? `2문항 이상 정답으로 <b>상위 과정(${STAGE_LABEL.ug})</b>으로 맞춤 라우팅` : `1문항 이하 정답으로 <b>기초 과정(${STAGE_LABEL.ms})</b>으로 맞춤 라우팅`}
         </div>
       </div>`;
   }
 
-  // 2단계 기록 추가 (중등 혹은 학부)
+  // 2단계 기록 추가 (입문 혹은 전공)
   const step2Stage = diag.total['ug'] > 0 ? 'ug' : (diag.total['ms'] > 0 ? 'ms' : null);
   if (step2Stage) {
     const isUg = step2Stage === 'ug';
     const passed = diag.correct[step2Stage] >= 2;
     let desc = '';
     if (isUg) {
-      desc = passed ? '대학 학부 과정의 고급 추론 능력이 입증되었습니다.' : '고등 정밀 원리는 잘 알지만 학부 심화 이론은 보완이 권장됩니다.';
+      desc = passed ? `${STAGE_LABEL.ug} 수준의 고급 추론 능력이 입증되었습니다.` : `${STAGE_LABEL.hs} 원리는 잘 알지만 ${STAGE_LABEL.ug} 이론은 보완이 권장됩니다.`;
     } else {
-      desc = passed ? '중학 기초 과학 개념이 확실하여 고등 과정 진입에 무리가 없습니다.' : '과학적 개념 오해를 해소하기 위해 중학 기초 개념부터 빌드업이 필요합니다.';
+      desc = passed ? `${STAGE_LABEL.ms} 기초 개념이 확실하여 ${STAGE_LABEL.hs} 과정 진입에 무리가 없습니다.` : `과학적 개념 오해를 해소하기 위해 ${STAGE_LABEL.ms} 기초 개념부터 빌드업이 필요합니다.`;
     }
     rows += `
       <div class="result-row" style="border-left: 3px solid ${isUg ? 'var(--d-space)' : 'var(--d-life)'}; flex-direction:column; align-items:flex-start; gap:4px; margin-top:8px">
         <div style="display:flex; justify-content:space-between; width:100%; font-size:14px; font-weight:700">
-          <span>2단계: ${STAGE_LABEL[step2Stage]} 과정 (${isUg ? '심화 판정' : '기초 보정'})</span>
+          <span>2단계: ${STAGE_LABEL[step2Stage]} 과정 (${isUg ? '상위 판정' : '기초 보정'})</span>
           <b class="mono" style="color:${isUg ? 'var(--d-space)' : 'var(--d-life)'}">${diag.correct[step2Stage]}/${diag.total[step2Stage]}</b>
         </div>
         <div style="font-size:12px; color:var(--ink-soft)">➔ ${desc}</div>
@@ -820,7 +862,7 @@ function renderDiagResult(el){
       <div class="section-label" style="margin-bottom:8px">어댑티브 라우팅 매칭 리포트</div>
       <div class="result-list">${rows}</div>
       <p class="dev-note" style="margin-top:16px; line-height:1.6">
-        하루사이의 맞춤형 어댑티브 진단은 단순 선형 시험이 아닙니다. 중간층인 고등 난이도의 정답 궤적을 토대로, 사용자를 상위/하위 검증 경로로 동적 우회하여 가장 빠르게 실제 이해도를 역추적해냅니다.
+        하루사이의 맞춤형 어댑티브 진단은 단순 선형 시험이 아닙니다. 중간층인 ${STAGE_LABEL.hs} 난이도의 정답 궤적을 토대로, 사용자를 상위/하위 검증 경로로 동적 우회하여 가장 빠르게 실제 이해도를 역추적해냅니다.
       </p>
     </div>
     <div class="sess-foot">
@@ -1007,6 +1049,11 @@ function nextQ(){
     sess.phase = 'done';
     markAttendance();                 // 실제 달력 날짜로 출석 기록
     S.streak = attendanceStreak();    // 표시용 스트릭도 실제 날짜 기준
+    /* 이 세션으로 주제의 모든 문제를 처음 다 풀었다면 완주 표시 */
+    if(unitProgress(sess.unitId) >= 100 && !S.graduatedTopics[sess.unitId]){
+      S.graduatedTopics[sess.unitId] = true;
+      sess.justGraduated = true;
+    }
     save();
   }
   renderSession();
@@ -1015,9 +1062,16 @@ function nextQ(){
 function renderResult(el){
   const total = sess.qIds.length;
   const pct = total ? Math.round(100*sess.correct/total) : 100;
+  const gradBanner = sess.justGraduated ? `
+      <div class="card" style="margin-bottom:14px;border-color:var(--coral);background:var(--coral-soft);text-align:center">
+        <div class="eyebrow" style="color:var(--coral-active)">TOPIC COMPLETE</div>
+        <div style="font-family:var(--serif);font-size:19px;font-weight:700;margin-top:4px">${esc(unitName(sess.unitId))} 완주를 축하합니다!</div>
+        <p style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">이 주제의 모든 문제를 한 번씩 풀었어요. 복습은 계속 이어집니다.</p>
+      </div>` : '';
   el.innerHTML = `
     <div class="sess-top"><button class="sess-close" onclick="closeSession()" aria-label="닫기">×</button><div class="sess-track"><i style="width:100%"></i></div></div>
     <div class="sess-body">
+      ${gradBanner}
       <div class="result-hero">
         <div class="big">${sess.correct}<span style="font-size:26px;color:var(--ink-faint)">/${total}</span></div>
         <div class="sub">${pct>=85?'훌륭해요. 빨간펜이 심심했네요':pct>=60?'좋아요. 틀린 건 내일 다시 만나요':'괜찮아요. 복습이 알아서 챙겨줄 거예요'}</div>
@@ -1116,14 +1170,15 @@ function renderHome(){
     </div>
 
     <div class="section-label">과목별 진행 · 내 수준</div>
-    ${Object.keys(S.diagDone).length===0 ? `<div class="card" style="margin-bottom:10px;border-color:var(--coral);background:var(--coral-soft)">
-      <b style="font-size:14px;color:var(--coral-active)">먼저 수준을 진단해 보세요</b>
-      <p style="font-size:13px;color:var(--ink-soft);margin:4px 0 0">과목마다 우측의 <b>진단</b>을 누르면 고등 기준 성취도에 따라 중등/학부 단계로 자동 유도 분기하여 맞춤형 수준을 설정해줍니다.</p>
+    ${(Object.keys(S.diagDone).length===0 && !S.diagBannerDismissed) ? `<div class="card" style="margin-bottom:10px;border-color:var(--coral);background:var(--coral-soft)">
+      <b style="font-size:14px;color:var(--coral-active)">3분이면 충분해요 — 먼저 수준을 진단해 보세요</b>
+      <p style="font-size:13px;color:var(--ink-soft);margin:4px 0 0">과목마다 우측의 <b>진단</b>을 누르면 ${STAGE_LABEL.hs} 기준 성취도에 따라 ${STAGE_LABEL.ms}/${STAGE_LABEL.ug} 단계로 자동 유도 분기하여 맞춤형 수준을 설정해줍니다. 헤매지 않고 딱 맞는 난이도부터 시작할 수 있어요.</p>
+      <button class="chip" style="cursor:pointer;margin-top:10px;border:1px solid var(--line);background:transparent;color:var(--ink-faint)" onclick="confirmSkipDiagnostic()">진단 건너뛰기</button>
     </div>` : ''}
     <div class="domain-list">
       ${DOMAINS.map(d=>{
         const p = domainProgress(d.id);
-        const stage = S.subjectStage[d.id] || 'hs';
+        const stage = S.subjectStage[d.id] || 'ms';
         return `<div class="domain-row">
           <span class="domain-dot" style="background:${d.color}"></span>
           <div style="flex:1" onclick="goExplore('${d.id}')">
@@ -1147,7 +1202,7 @@ function domainMeta(did){ return DOMAINS.find(x=>x.id===did); }
 
 function topicCard(t){
   const d = domainMeta(t.domain);
-  const cur = S.subjectStage[t.domain] || 'hs';
+  const cur = S.subjectStage[t.domain] || 'ms';
   const tagHtml = t.tags.map(tag=>`<span onclick="event.stopPropagation();pickTag('${tag}')" style="cursor:pointer;font-size:11px;color:${exploreTag===tag?'#fff':'var(--ink-faint)'};background:${exploreTag===tag?d.color:'var(--paper)'};border:1px solid var(--line);border-radius:99px;padding:1px 8px">#${tag}</span>`).join(' ');
   const stageBadges = (t.stages||[]).map(s=>`<span style="font-size:10px;padding:0 6px;border-radius:99px;border:1px solid ${s===cur?d.color:'var(--line)'};color:${s===cur?'#fff':'var(--ink-faint)'};background:${s===cur?d.color:'transparent'}">${STAGE_LABEL[s]}</span>`).join(' ');
   const head = t.ready
@@ -1186,7 +1241,7 @@ function renderExplore(){
   /* 특정 과목 선택 시 단계 전환 바 */
   let stageBar = '';
   if(exploreDomain!=='all'){
-    const d = domainMeta(exploreDomain); const cur = S.subjectStage[exploreDomain]||'hs';
+    const d = domainMeta(exploreDomain); const cur = S.subjectStage[exploreDomain]||'ms';
     stageBar = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
       <span style="font-size:12px;color:var(--ink-soft)">학습 단계</span>
       <div style="display:flex;gap:5px">${STAGE_ORDER.map(s=>`<button class="chip" style="cursor:pointer;border:1px solid ${s===cur?d.color:'var(--line)'};background:${s===cur?d.color:'var(--card)'};color:${s===cur?'#fff':'var(--ink-soft)'}" onclick="pickStage('${exploreDomain}','${s}')">${STAGE_LABEL[s]}</button>`).join('')}</div>
@@ -1366,11 +1421,11 @@ function doImport(){
   }
   /* 누락 필드 기본값 보강 */
   S = Object.assign(
-    {day:0,streak:0,lastStudyDay:-1,seenCards:{},srs:{},attempts:{},stats:{answered:0,correct:0},reports:[],qMeta:{},subjectStage:{physics:'hs',chem:'hs',bio:'hs',earth:'hs'},diagDone:{},readStories:{},studyDates:{}},
+    {day:0,streak:0,lastStudyDay:-1,seenCards:{},srs:{},attempts:{},stats:{answered:0,correct:0},reports:[],qMeta:{},subjectStage:{physics:'ms',chem:'ms',bio:'ms',earth:'ms'},diagDone:{},diagBannerDismissed:false,graduatedTopics:{},readStories:{},studyDates:{}},
     incoming
   );
-  S.subjectStage = Object.assign({physics:'hs',chem:'hs',bio:'hs',earth:'hs'}, S.subjectStage||{});
-  if(!S.qMeta) S.qMeta = {}; if(!S.diagDone) S.diagDone={}; if(!S.readStories) S.readStories={}; if(!S.studyDates) S.studyDates={};
+  S.subjectStage = Object.assign({physics:'ms',chem:'ms',bio:'ms',earth:'ms'}, S.subjectStage||{});
+  if(!S.qMeta) S.qMeta = {}; if(!S.diagDone) S.diagDone={}; if(!S.graduatedTopics) S.graduatedTopics={}; if(!S.readStories) S.readStories={}; if(!S.studyDates) S.studyDates={};
   save(); render();
   toast('진도를 가져왔어요');
 }
@@ -1382,7 +1437,7 @@ function devFillAttendance(){
   S.streak=attendanceStreak(); save(); render(); toast('출석 예시를 채웠어요');
 }
 function devReset(){
-  S = {day:0,streak:0,lastStudyDay:-1,seenCards:{},srs:{},attempts:{},stats:{answered:0,correct:0},reports:[],qMeta:{},subjectStage:{physics:'hs',chem:'hs',bio:'hs',earth:'hs'},diagDone:{},readStories:{},studyDates:{}};
+  S = {day:0,streak:0,lastStudyDay:-1,seenCards:{},srs:{},attempts:{},stats:{answered:0,correct:0},reports:[],qMeta:{},subjectStage:{physics:'ms',chem:'ms',bio:'ms',earth:'ms'},diagDone:{},diagBannerDismissed:false,graduatedTopics:{},readStories:{},studyDates:{}};
   save(); render(); toast('초기화했어요');
 }
 
