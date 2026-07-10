@@ -125,6 +125,34 @@
     ],
     "count": 1
    }
+  },
+  {
+   "id": "crispr-scissors",
+   "title": "박테리아의 방어 무기가 유전자 가위가 되기까지",
+   "subject": "bio",
+   "stage": "hs",
+   "teaser": "박테리아의 바이러스 방어 무기가 어떻게 인류의 유전자 편집 도구가 됐을까.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "bio-crispr"
+    ],
+    "count": 1
+   }
+  },
+  {
+   "id": "exoplanet-hunt",
+   "title": "별빛이 깜빡이는 순간, 새로운 행성이 발견된다",
+   "subject": "earth",
+   "stage": "hs",
+   "teaser": "별을 직접 안 봐도, 아주 살짝 어두워지는 순간만으로 행성을 찾아낸다.",
+   "unlock": {
+    "type": "topicsStarted",
+    "scope": [
+     "ear-exoplanet"
+    ],
+    "count": 1
+   }
   }
  ]
 }

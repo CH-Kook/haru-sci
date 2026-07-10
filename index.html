@@ -193,6 +193,13 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
 
 /* 문제 */
 .q-text{font-size:19px;font-weight:600;line-height:1.6;margin-bottom:18px}
+.q-text u{text-decoration-line:underline;text-decoration-color:var(--redpen);text-decoration-thickness:2.5px;text-underline-offset:3px}
+.collect-stamp{
+  display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-family:var(--serif);font-size:10.5px;font-weight:700;color:var(--redpen);
+  border:1.5px solid var(--redpen);border-radius:6px;padding:2px 7px;
+  transform:rotate(-7deg);letter-spacing:.03em;background:rgba(203,74,59,.06);
+}
 .q-level{margin-bottom:10px}
 .choice{
   display:block;width:100%;text-align:left;background:var(--card);
@@ -318,6 +325,9 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
     <button data-tab="explore" aria-label="탐색">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2 5-4 1 2-5z"/></svg>탐색
     </button>
+    <button data-tab="drill" aria-label="문제풀기">
+      <svg viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg>문제풀기
+    </button>
     <button data-tab="review" aria-label="복습">
       <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 109-9"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg>복습
     </button>
@@ -348,7 +358,26 @@ let DOMAINS = [];
 let CURRICULUM = {};
 const CARDS = {};        // 주제별 카드 (fetch로 채워짐)
 const QUESTIONS = {};    // 주제별 문제 (fetch로 채워짐)
-const LEVEL_LABEL = {1:'입문', 2:'기본', 3:'심화'};
+
+/* 수능형 전용 문제은행(양치기 전용) — 탐색 탭 커리큘럼과는 별도 저장소.
+   기출 원문이 아니라 출제 경향만 참고해 100% 새로 쓴 문항만 담는다. */
+const SUENUNG_BANKS = {physics:'physics-suneung', chem:null, bio:null, earth:null};
+const SUENUNG_TITLES = {'physics-suneung':'물리학Ⅰ 수능형'};
+const loadedSuenung = {};
+async function ensureSuenungLoaded(subject){
+  const bankId = SUENUNG_BANKS[subject];
+  if(!bankId || loadedSuenung[bankId]) return bankId || null;
+  try{
+    const res = await fetch(`${DATA_BASE}/suneung/${subject}.json`);
+    if(!res.ok) return null;
+    const data = await res.json();
+    CARDS[bankId] = [];
+    QUESTIONS[bankId] = data.questions || [];
+    loadedSuenung[bankId] = true;
+    return bankId;
+  }catch(e){ return null; }
+}
+const LEVEL_LABEL = {1:'쉬움', 2:'보통', 3:'도전'};
 
 /* 커리큘럼 헬퍼 (CURRICULUM이 로드된 뒤 동작) */
 function allTopics(did){
@@ -451,6 +480,7 @@ let S = Storage.load() || {
   attempts: {},         // qId -> {tries, correct}
   stats: {answered: 0, correct: 0},
   reports: [],          // {qId, day}
+  storyReports: [],      // {storyId, day}
   qMeta: {},            // qId -> {q, topic}  미로딩 주제 표시·복습 로드용 스냅샷
   subjectStage: {physics:'ms', chem:'ms', bio:'ms', earth:'ms'},  // 과목별 현재 학습 단계(진단 전 기본값은 입문)
   diagDone: {},         // subject -> true (진단 완료 여부)
@@ -463,6 +493,7 @@ let S = Storage.load() || {
 S.subjectStage = Object.assign({physics:'ms',chem:'ms',bio:'ms',earth:'ms'}, S.subjectStage||{});
 S.diagDone = S.diagDone || {};
 S.graduatedTopics = S.graduatedTopics || {};
+S.storyReports = S.storyReports || [];
 S.readStories = S.readStories || {};
 S.qMeta = S.qMeta || {};
 S.studyDates = S.studyDates || {};
@@ -497,7 +528,8 @@ function totalStudyDays(){ return Object.keys(S.studyDates).filter(k=>S.studyDat
    유틸 및 LaTeX 렌더링 도구
    ============================================================ */
 const $ = sel => document.querySelector(sel);
-const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+/* 부정어 강조(<b>,<u>)만 화이트리스트로 허용하고 나머지 태그는 이스케이프 */
+const esc = s => s.replace(/&/g,'&amp;').replace(/<(?!\/?(b|u)>)/g,'&lt;');
 const shuffle = a => { a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
 const LV = ['','기초','원리','오개념'];
 
@@ -529,6 +561,46 @@ function skipDiagnostic(){
   render();
 }
 
+/* 문제/이야기 신고 — 사유를 적어 서버(Cloudflare Pages Function)로 전송, 실패해도 로컬 기록은 남는다 */
+function reportLabel(type, id){
+  if(type==='question') return qText(id);
+  return (STORIES.find(s=>s.id===id)||{}).title || id;
+}
+function openReportModal(type, id){
+  const label = reportLabel(type, id);
+  showConfirm(`
+    <h3>${type==='question'?'이 문제':'이 이야기'} 신고하기</h3>
+    <p style="margin-bottom:8px">${esc(label)}</p>
+    <textarea id="reportReason" placeholder="무엇이 잘못됐는지 알려주시면 확인에 도움이 돼요 (선택)" style="width:100%;min-height:70px;border:1px solid var(--line);border-radius:8px;padding:8px;font-family:inherit;font-size:13px;color:var(--ink);resize:vertical;margin-bottom:14px;background:var(--paper)"></textarea>
+    <div class="confirm-actions">
+      <button class="btn btn-ghost" style="flex:1" onclick="hideConfirm()">취소</button>
+      <button class="btn btn-primary" style="flex:1" onclick="submitReport('${type}','${id}')">신고하기</button>
+    </div>`);
+}
+async function submitReport(type, id){
+  const reasonEl = document.getElementById('reportReason');
+  const reason = reasonEl ? reasonEl.value.trim() : '';
+  hideConfirm();
+
+  if(type==='question'){
+    if(!S.reports.some(r=>r.qId===id)) S.reports.push({qId:id, day:S.day});
+    document.querySelectorAll(`.report-btn[data-report-id="${id}"]`).forEach(b=>{ b.textContent='신고 접수됨'; b.classList.add('done'); b.onclick=null; });
+  } else {
+    if(!S.storyReports.some(r=>r.storyId===id)) S.storyReports.push({storyId:id, day:S.day});
+    document.querySelectorAll(`.report-btn[data-report-id="${id}"]`).forEach(b=>{ b.textContent='신고 접수됨'; b.classList.add('done'); b.onclick=null; });
+  }
+  save();
+  toast('신고했어요. 확인 후 반영할게요');
+
+  try{
+    await fetch('/api/report', {
+      method:'POST',
+      headers:{'content-type':'application/json'},
+      body: JSON.stringify({ type, id, title: reportLabel(type, id), reason, day: S.day })
+    });
+  }catch(e){ /* 네트워크 실패해도 로컬 기록은 이미 남았으니 조용히 무시 */ }
+}
+
 /* 동적 DOM 교체 시 KaTeX 렌더링을 격발해주는 안전 래퍼 함수 */
 function triggerMathRender(target) {
   const el = target || document.getElementById('app');
@@ -554,6 +626,7 @@ function findQ(qId){
 /* 목록 표시용 문제 텍스트: 스냅샷 우선(미로딩 주제도 표시 가능) */
 function qText(qId){ return (S.qMeta[qId]||{}).q || (findQ(qId)||{}).q || qId; }
 function unitName(uid){
+  if(SUENUNG_TITLES[uid]) return SUENUNG_TITLES[uid];
   for(const d in CURRICULUM){ const t = CURRICULUM[d].find(x=>x.id===uid); if(t) return t.title; }
   return uid;
 }
@@ -618,6 +691,32 @@ async function startSession(unitId){
   renderSession();
 }
 function closeSession(){ sess = null; $('#session').classList.remove('open'); render(); }
+
+/* 문제풀기(양치기) — 여러 주제의 문제를 모아 카드 없이 문제만 연속으로 푸는 모드 */
+async function startDrill(){
+  const topics = allTopics(drillSubject).filter(t=>t.ready);
+  const subjects = drillSubject==='all' ? Object.keys(SUENUNG_BANKS) : [drillSubject];
+  if(!topics.length && !subjects.some(s=>SUENUNG_BANKS[s])){ toast('아직 준비된 주제가 없어요'); return; }
+  try {
+    await ensureLoaded(topics.map(t=>t.id));
+    await Promise.all(subjects.map(ensureSuenungLoaded));
+  }
+  catch(e){ toast('콘텐츠를 불러오지 못했어요'); return; }
+
+  const bankIds = subjects.map(s=>SUENUNG_BANKS[s]).filter(Boolean);
+  let pool = [];
+  [...topics.map(t=>t.id), ...bankIds].forEach(uid=>{
+    (QUESTIONS[uid]||[]).forEach(q=>{
+      if(drillStage==='all' || q.stage===drillStage) pool.push(q.id);
+    });
+  });
+  if(!pool.length){ toast('조건에 맞는 문제가 없어요. 다른 조건으로 시도해보세요'); return; }
+
+  const qIds = shuffle(pool).slice(0, drillCount);
+  sess = { unitId:null, isDrill:true, stage:drillStage, cards:[], qIds, idx:0, phase:'quiz', qIdx:0, correct:0, answered:false };
+  $('#session').classList.add('open');
+  renderSession();
+}
 
 /* ============================================================
    스마트 라우팅 어댑티브 진단 평가 엔진 (Adaptive Diagnostic Engine)
@@ -903,6 +1002,8 @@ async function openStory(id){
       ${st.fig?`<figure class="figure">${st.fig}${st.figcap?`<figcaption>${st.figcap}</figcaption>`:''}</figure>`:''}
       <div style="font-size:17.5px;line-height:1.9;color:var(--ink)">${st.body}</div>
       ${st.footer?`<p style="font-size:13px;color:var(--ink-faint);margin-top:18px;font-style:italic">${esc(st.footer)}</p>`:''}
+      ${(()=>{ const reported = S.storyReports.some(r=>r.storyId===id);
+        return `<div style="margin-top:18px"><button class="report-btn ${reported?'done':''}" data-report-id="${id}" onclick="${reported?'':`openReportModal('story','${id}')`}">${reported?'신고 접수됨':'이 이야기 신고하기'}</button></div>`; })()}
     </div>
     <div class="sess-foot"><button class="btn btn-primary" onclick="closeStory()">닫기</button></div>`;
   
@@ -917,6 +1018,14 @@ function sessProgress(){
   return Math.round(100 * done / Math.max(total,1));
 }
 
+/* 세션 상단에 표시할 라벨: 일반 세션은 주제명, 문제풀기(다중 주제)는 현재 문제의 출처 주제명 */
+function sessLabel(){
+  if(!sess.isDrill) return unitName(sess.unitId);
+  const qId = sess.qIds[sess.qIdx];
+  const q = qId && findQ(qId);
+  return q ? `문제풀기 · ${unitName(q.unit)}` : '문제풀기';
+}
+
 function renderSession(){
   const el = $('#session');
   if(!sess) return;
@@ -925,7 +1034,7 @@ function renderSession(){
     <div class="sess-top">
       <button class="sess-close" onclick="closeSession()" aria-label="세션 닫기">×</button>
       <div class="sess-track"><i style="width:${sessProgress()}%"></i></div>
-      <span class="mono" style="font-size:11px;color:var(--ink-faint)">${unitName(sess.unitId)}</span>
+      <span class="mono" style="font-size:11px;color:var(--ink-faint)">${sessLabel()}</span>
     </div>`;
 
   if(sess.phase === 'card'){
@@ -1028,19 +1137,12 @@ function answer(picked){
     <div class="explain">
       <div class="verdict ${ok?'ok':'no'}">${ok?'정답!':'오답'} ${ok?'':'— 내일 복습 큐에 담았어요'}</div>
       ${esc(q.ex)}
-      <div><button class="report-btn ${reported?'done':''}" onclick="reportQ('${qId}', this)">${reported?'신고 접수됨':'이 문제 신고하기'}</button></div>
+      <div><button class="report-btn ${reported?'done':''}" data-report-id="${qId}" onclick="${reported?'':`openReportModal('question','${qId}')`}">${reported?'신고 접수됨':'이 문제 신고하기'}</button></div>
     </div>`;
 
   triggerMathRender($('#explainBox'));
 
   $('#sessFoot').innerHTML = `<button class="btn btn-primary" onclick="nextQ()">${sess.qIdx+1>=sess.qIds.length?'결과 보기':'다음 문제'}</button>`;
-}
-
-function reportQ(qId, btn){
-  if(S.reports.some(r=>r.qId===qId)) return;
-  S.reports.push({qId, day:S.day}); save();
-  btn.textContent = '신고 접수됨'; btn.classList.add('done');
-  toast('신고했어요. 통계 탭에서 확인할 수 있어요');
 }
 
 function nextQ(){
@@ -1049,11 +1151,12 @@ function nextQ(){
     sess.phase = 'done';
     markAttendance();                 // 실제 달력 날짜로 출석 기록
     S.streak = attendanceStreak();    // 표시용 스트릭도 실제 날짜 기준
-    /* 이 세션으로 주제의 모든 문제를 처음 다 풀었다면 완주 표시 */
-    if(unitProgress(sess.unitId) >= 100 && !S.graduatedTopics[sess.unitId]){
-      S.graduatedTopics[sess.unitId] = true;
-      sess.justGraduated = true;
-    }
+    /* 이 세션으로 주제의 모든 문제를 처음 다 풀었다면 완주 표시(문제풀기는 여러 주제를 오갈 수 있어 전부 검사) */
+    const touchedTopics = sess.isDrill
+      ? [...new Set(sess.qIds.map(id => (S.qMeta[id]||{}).topic).filter(Boolean))]
+      : [sess.unitId];
+    sess.justGraduatedTopics = touchedTopics.filter(uid => unitProgress(uid) >= 100 && !S.graduatedTopics[uid]);
+    sess.justGraduatedTopics.forEach(uid => { S.graduatedTopics[uid] = true; });
     save();
   }
   renderSession();
@@ -1062,12 +1165,12 @@ function nextQ(){
 function renderResult(el){
   const total = sess.qIds.length;
   const pct = total ? Math.round(100*sess.correct/total) : 100;
-  const gradBanner = sess.justGraduated ? `
+  const gradBanner = (sess.justGraduatedTopics||[]).map(uid => `
       <div class="card" style="margin-bottom:14px;border-color:var(--coral);background:var(--coral-soft);text-align:center">
         <div class="eyebrow" style="color:var(--coral-active)">TOPIC COMPLETE</div>
-        <div style="font-family:var(--serif);font-size:19px;font-weight:700;margin-top:4px">${esc(unitName(sess.unitId))} 완주를 축하합니다!</div>
+        <div style="font-family:var(--serif);font-size:19px;font-weight:700;margin-top:4px">${esc(unitName(uid))} 완주를 축하합니다!</div>
         <p style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">이 주제의 모든 문제를 한 번씩 풀었어요. 복습은 계속 이어집니다.</p>
-      </div>` : '';
+      </div>`).join('');
   el.innerHTML = `
     <div class="sess-top"><button class="sess-close" onclick="closeSession()" aria-label="닫기">×</button><div class="sess-track"><i style="width:100%"></i></div></div>
     <div class="sess-body">
@@ -1261,6 +1364,40 @@ function renderExplore(){
     </div>`;
 }
 
+let drillSubject = 'all';
+let drillStage = 'all';
+let drillCount = 20;
+function pickDrillSubject(id){ drillSubject = id; render(); }
+function pickDrillStage(s){ drillStage = s; render(); }
+function pickDrillCount(n){ drillCount = n; render(); }
+
+function renderDrill(){
+  const subjectChips = [{id:'all',name:'전체',color:'var(--ink)'}, ...DOMAINS].map(x=>
+    `<button class="chip" style="cursor:pointer;padding:6px 13px;border:1px solid ${x.id===drillSubject?x.color:'var(--line)'};background:${x.id===drillSubject?x.color:'var(--card)'};color:${x.id===drillSubject?'#fff':'var(--ink-soft)'}" onclick="pickDrillSubject('${x.id}')">${x.name}</button>`
+  ).join('');
+  const stageChips = ['all', ...STAGE_ORDER].map(s=>
+    `<button class="chip" style="cursor:pointer;border:1px solid ${s===drillStage?'var(--coral)':'var(--line)'};background:${s===drillStage?'var(--coral)':'var(--card)'};color:${s===drillStage?'#fff':'var(--ink-soft)'}" onclick="pickDrillStage('${s}')">${s==='all'?'전체':STAGE_LABEL[s]}</button>`
+  ).join('');
+  const countChips = [10,20,30].map(n=>
+    `<button class="chip" style="cursor:pointer;border:1px solid ${n===drillCount?'var(--coral)':'var(--line)'};background:${n===drillCount?'var(--coral)':'var(--card)'};color:${n===drillCount?'#fff':'var(--ink-soft)'}" onclick="pickDrillCount(${n})">${n}문제</button>`
+  ).join('');
+
+  return `
+    <span class="eyebrow">QUICK PRACTICE</span>
+    <h1 class="screen-title">문제풀기</h1>
+    <p style="font-size:13px;color:var(--ink-soft);margin:-8px 0 18px">개념 카드 없이 문제만 몰아서 풀어요. 조건을 고르고 바로 시작하세요.</p>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="section-label" style="margin-top:0">과목</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">${subjectChips}</div>
+      <div class="section-label">난이도</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">${stageChips}</div>
+      <div class="section-label">문항 수</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">${countChips}</div>
+      <button class="btn btn-red" onclick="startDrill()">문제풀기 시작</button>
+    </div>`;
+}
+
 function renderReview(){
   const due = dueQuestions();
   const upcoming = Object.entries(S.srs).filter(([id,v])=>!v.graduated && v.due>S.day);
@@ -1307,7 +1444,7 @@ function renderStories(){
         <div style="display:flex;align-items:center;gap:8px;width:100%">
           <span class="domain-dot" style="background:${d.color}"></span>
           <span class="u-name" style="flex:1;font-weight:600">${st.title}</span>
-          ${unread?`<span class="chip" style="background:var(--redpen);color:#fff">NEW</span>`:''}
+          ${unread?`<span class="chip" style="background:var(--redpen);color:#fff">NEW</span>`:`<span class="collect-stamp">수집 완료</span>`}
           <span class="chip badge-ready">읽기</span>
         </div>
         <p style="font-size:12.5px;color:var(--ink-soft);padding-left:20px;margin:0">${st.teaser||''}</p>
@@ -1421,11 +1558,11 @@ function doImport(){
   }
   /* 누락 필드 기본값 보강 */
   S = Object.assign(
-    {day:0,streak:0,lastStudyDay:-1,seenCards:{},srs:{},attempts:{},stats:{answered:0,correct:0},reports:[],qMeta:{},subjectStage:{physics:'ms',chem:'ms',bio:'ms',earth:'ms'},diagDone:{},diagBannerDismissed:false,graduatedTopics:{},readStories:{},studyDates:{}},
+    {day:0,streak:0,lastStudyDay:-1,seenCards:{},srs:{},attempts:{},stats:{answered:0,correct:0},reports:[],storyReports:[],qMeta:{},subjectStage:{physics:'ms',chem:'ms',bio:'ms',earth:'ms'},diagDone:{},diagBannerDismissed:false,graduatedTopics:{},readStories:{},studyDates:{}},
     incoming
   );
   S.subjectStage = Object.assign({physics:'ms',chem:'ms',bio:'ms',earth:'ms'}, S.subjectStage||{});
-  if(!S.qMeta) S.qMeta = {}; if(!S.diagDone) S.diagDone={}; if(!S.graduatedTopics) S.graduatedTopics={}; if(!S.readStories) S.readStories={}; if(!S.studyDates) S.studyDates={};
+  if(!S.qMeta) S.qMeta = {}; if(!S.diagDone) S.diagDone={}; if(!S.graduatedTopics) S.graduatedTopics={}; if(!S.storyReports) S.storyReports=[]; if(!S.readStories) S.readStories={}; if(!S.studyDates) S.studyDates={};
   save(); render();
   toast('진도를 가져왔어요');
 }
@@ -1437,7 +1574,7 @@ function devFillAttendance(){
   S.streak=attendanceStreak(); save(); render(); toast('출석 예시를 채웠어요');
 }
 function devReset(){
-  S = {day:0,streak:0,lastStudyDay:-1,seenCards:{},srs:{},attempts:{},stats:{answered:0,correct:0},reports:[],qMeta:{},subjectStage:{physics:'ms',chem:'ms',bio:'ms',earth:'ms'},diagDone:{},diagBannerDismissed:false,graduatedTopics:{},readStories:{},studyDates:{}};
+  S = {day:0,streak:0,lastStudyDay:-1,seenCards:{},srs:{},attempts:{},stats:{answered:0,correct:0},reports:[],storyReports:[],qMeta:{},subjectStage:{physics:'ms',chem:'ms',bio:'ms',earth:'ms'},diagDone:{},diagBannerDismissed:false,graduatedTopics:{},readStories:{},studyDates:{}};
   save(); render(); toast('초기화했어요');
 }
 
@@ -1450,7 +1587,7 @@ function setTab(t){
   render();
 }
 function render(){
-  const map = {home:renderHome, explore:renderExplore, review:renderReview, stories:renderStories, stats:renderStats};
+  const map = {home:renderHome, explore:renderExplore, drill:renderDrill, review:renderReview, stories:renderStories, stats:renderStats};
   $('#screen').innerHTML = map[tab]();
   window.scrollTo(0,0);
   
