@@ -145,6 +145,14 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
 .badge-ready{background:var(--coral-soft);color:var(--coral-active)}
 .badge-soon{background:var(--paper);color:var(--ink-faint);border:1px solid var(--line)}
 
+/* ---------- 이야기: 과목별 접기/펼치기 ---------- */
+.story-domain{border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:10px;overflow:hidden}
+.story-domain summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:14px}
+.story-domain summary::-webkit-details-marker{display:none}
+.story-domain summary::after{content:'▾';margin-left:2px;color:var(--ink-faint);font-size:12px;transition:transform .15s ease}
+.story-domain[open] summary::after{transform:rotate(180deg)}
+.story-domain .story-domain-body{padding:0 12px 12px}
+
 /* ---------- 확인 팝업(넛지) ---------- */
 .confirm-overlay{
   position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;
@@ -1457,13 +1465,13 @@ function renderStories(){
     if(!own.length) return '';
     const unlocked = own.filter(storyUnlocked);
     const locked = own.filter(s=>!storyUnlocked(s));
-    return `<details class="story-domain" style="margin-bottom:10px"${unlocked.length?' open':''}>
-      <summary style="cursor:pointer;display:flex;align-items:center;gap:8px;padding:8px 2px;list-style:none">
+    return `<details class="story-domain"${unlocked.length?' open':''}>
+      <summary>
         <span class="domain-dot" style="background:${d.color}"></span>
         <span style="flex:1;font-weight:600;font-size:14px">${d.name}</span>
-        <span class="chip" style="font-size:11px">${unlocked.length}/${own.length}</span>
+        <span class="chip" style="background:var(--paper);border:1px solid var(--line);font-size:11px">${unlocked.length}/${own.length}</span>
       </summary>
-      <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+      <div class="story-domain-body" style="display:flex;flex-direction:column;gap:8px">
         ${unlocked.map(s=>card(s,true)).join('')}
         ${locked.map(s=>card(s,false)).join('')}
       </div>
