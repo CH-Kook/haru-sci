@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>사용법 — 하루사이 (Haru-Sci)</title>
+<meta name="description" content="하루사이(Haru-Sci) 사용법 안내. 매일 5분 학습 세션, 문제풀기(양치기), 진단, 이야기, 복습 기능을 어떻게 쓰는지 설명합니다.">
+<link rel="canonical" href="https://haru-sci.com/guide.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="하루사이 (Haru-Sci)">
+<meta property="og:title" content="사용법 — 하루사이 (Haru-Sci)">
+<meta property="og:description" content="하루사이(Haru-Sci) 사용법 안내. 매일 5분 학습 세션, 문제풀기(양치기), 진단, 이야기, 복습 기능을 어떻게 쓰는지 설명합니다.">
+<meta property="og:url" content="https://haru-sci.com/guide.html">
+<meta property="og:image" content="https://haru-sci.com/icon-512.png">
+<meta property="og:locale" content="ko_KR">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#CC785C">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+@font-face{
+  font-family:'Laundry Gothic';
+  src:url('fonts/LaundryGothic-Regular.woff') format('woff');
+  font-weight:400 600; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'Laundry Gothic';
+  src:url('fonts/LaundryGothic-Bold.woff') format('woff');
+  font-weight:700; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'Noto Serif KR';
+  src:url('fonts/NotoSerifKR-700.woff2') format('woff2');
+  font-weight:700; font-style:normal; font-display:swap;
+}
+:root{
+  --paper:#FAF6EE; --ink:#2B2823; --ink-soft:#6C6459; --ink-faint:#A89F90;
+  --line:#E8E0D2; --redpen:#CB4A3B; --card:#FFFCF6;
+  --coral:#CC785C; --coral-active:#A9583E; --coral-soft:#F3E4DB;
+  --shadow:0 1px 2px rgba(70,52,32,.05), 0 8px 22px rgba(70,52,32,.06);
+  --r:14px; --serif:'Noto Serif KR',Georgia,'Apple SD Gothic Neo','Laundry Gothic',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Laundry Gothic',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.7; font-size:17px;
+  word-break:keep-all; overflow-wrap:break-word;
+}
+main{max-width:640px;margin:0 auto;padding:40px 20px 80px}
+a{color:var(--coral-active)}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.14em;color:var(--ink-faint);text-transform:uppercase;
+}
+h1{font-family:var(--serif);font-size:30px;font-weight:700;letter-spacing:-.01em;margin:6px 0 8px}
+.lead{font-size:16px;color:var(--ink-soft);margin-bottom:28px}
+h2{font-family:var(--serif);font-size:20px;font-weight:700;margin:34px 0 10px}
+p{margin-bottom:12px}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--shadow);padding:16px 18px;margin-bottom:12px;
+}
+.card b{display:block;font-size:15.5px;margin-bottom:4px}
+.card p{margin:0;font-size:14.5px;color:var(--ink-soft)}
+.cta{
+  display:inline-block;margin-top:28px;background:var(--coral);color:#fff;
+  text-decoration:none;font-weight:600;padding:14px 24px;border-radius:12px;
+}
+footer{margin-top:48px;font-size:12.5px;color:var(--ink-faint)}
+</style>
+</head>
+<body>
+<main>
+  <span class="eyebrow">GUIDE</span>
+  <h1>하루사이 사용법</h1>
+  <p class="lead">하루사이(Haru-Sci)는 바쁜 성인을 위한 과학 교양 학습 앱입니다. 물리학·화학·생명과학·지구과학을 하루 5분, 부담 없이 쌓아갈 수 있도록 만들었습니다. 회원가입이나 설치 없이 브라우저에서 바로 시작할 수 있습니다.</p>
+
+  <h2>1. 오늘의 세션</h2>
+  <div class="card">
+    <b>홈 화면에서 "오늘의 세션 시작"</b>
+    <p>개념 카드 몇 장과 문제 몇 개를 5분 안에 끝낼 수 있는 분량으로 묶어서 매일 보여줍니다. 복습이 밀려 있으면 자동으로 오늘 세션에 섞여 나오므로, 이 버튼 하나만 눌러도 그날의 학습과 복습이 함께 끝납니다.</p>
+  </div>
+
+  <h2>2. 진단으로 내 수준 맞추기</h2>
+  <div class="card">
+    <b>과목별 "진단" 버튼</b>
+    <p>처음 시작할 때 과목마다 짧은 적응형 진단을 통해 입문·심화·전공 세 단계 중 내 수준에 맞는 난이도를 자동으로 찾아줍니다. 진단을 건너뛰어도 언제든 나중에 다시 받을 수 있고, 단계는 탐색 화면에서 직접 바꿀 수도 있습니다.</p>
+  </div>
+
+  <h2>3. 탐색: 주제별로 골라 배우기</h2>
+  <div class="card">
+    <b>탐색 탭</b>
+    <p>물리·화학·생명과학·지구과학 네 과목, 70개가 넘는 주제를 원하는 순서로 골라 학습할 수 있습니다. 태그로 필터링하거나 난이도 단계를 바꿔가며 관심 있는 주제부터 시작해도 됩니다.</p>
+  </div>
+
+  <h2>4. 문제풀기: 수능형 문제만 몰아서</h2>
+  <div class="card">
+    <b>문제풀기 탭</b>
+    <p>개념 카드 없이 문제만 연속으로 풀고 싶을 때 쓰는 모드입니다. 실제 수능 기출문제가 아니라, 공개된 출제 경향을 참고해 새로 만든 수능형 문제로만 채워져 있습니다. 과목·난이도·문항 수를 고르고 바로 시작할 수 있습니다.</p>
+  </div>
+
+  <h2>5. 복습은 자동으로</h2>
+  <div class="card">
+    <b>홈 화면 하단 "복습" 섹션</b>
+    <p>한 번 풀었던 문제는 간격 반복(SRS) 알고리즘에 따라 적절한 시점에 다시 등장합니다. 따로 복습 목록을 관리할 필요 없이, 다가오는 복습 일정과 틀렸던 문제를 홈 화면에서 확인만 하면 됩니다.</p>
+  </div>
+
+  <h2>6. 이야기: 배운 것을 다른 방식으로</h2>
+  <div class="card">
+    <b>이야기 탭</b>
+    <p>특정 주제를 학습하거나 문제를 맞히면, 그 주제와 관련된 짧은 과학 이야기가 하나씩 열립니다. 개념을 문제로만 익히는 게 지겨울 때, 같은 내용을 다른 각도에서 다시 만나는 용도입니다.</p>
+  </div>
+
+  <h2>7. 진도는 이 브라우저에만 저장됩니다</h2>
+  <div class="card">
+    <b>통계 탭 → 백업/가져오기</b>
+    <p>별도 계정 시스템이 없어서 모든 학습 기록은 지금 쓰는 브라우저에만 저장됩니다. 다른 기기에서도 이어서 하고 싶다면 통계 탭에서 백업 코드를 만들어 복사해두고, 새 기기에서 그 코드를 붙여넣어 가져오면 됩니다.</p>
+  </div>
+
+  <h2>오류나 이상한 문제를 발견했다면</h2>
+  <p>문제나 이야기 화면 하단에 있는 "신고하기" 버튼을 누르면 바로 제작자에게 전달됩니다. 무엇이 잘못됐는지 간단히 적어주시면 확인 후 반영합니다.</p>
+
+  <a class="cta" href="/">하루사이 시작하기 →</a>
+
+  <footer>© 하루사이 (Haru-Sci) — 현대인을 위한 최소한의 과학 교양</footer>
+</main>
+</body>
+</html>
