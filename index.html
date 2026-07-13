@@ -1404,17 +1404,30 @@ function topicCard(t){
   const cur = S.subjectStage[t.domain] || 'ms';
   const tagHtml = t.tags.map(tag=>`<span onclick="event.stopPropagation();pickTag('${tag}')" style="cursor:pointer;font-size:11px;color:${exploreTag===tag?'#fff':'var(--ink-faint)'};background:${exploreTag===tag?d.color:'var(--paper)'};border:1px solid var(--line);border-radius:99px;padding:1px 8px">#${tag}</span>`).join(' ');
   const stageBadges = (t.stages||[]).map(s=>`<span style="font-size:10px;padding:0 6px;border-radius:99px;border:1px solid ${s===cur?d.color:'var(--line)'};color:${s===cur?'#fff':'var(--ink-faint)'};background:${s===cur?d.color:'transparent'}">${STAGE_LABEL[s]}</span>`).join(' ');
+  /* 진행 상황: 완주 여부는 항상 정확(로컬 저장), 진행률(%)은 이 주제 문제가 이미 로드된 경우에만 실측치 표시 */
+  const graduated = !!S.graduatedTopics[t.id];
+  const started = topicStarted(t.id);
+  const loaded = QUESTIONS[t.id] && QUESTIONS[t.id].length;
+  const pct = loaded ? unitProgress(t.id) : null;
   const head = t.ready
     ? `onclick="startSession('${t.id}')" class="unit-item" style="flex-wrap:wrap"`
     : `class="unit-item locked" style="flex-wrap:wrap"`;
+  const statusBadge = !t.ready
+    ? `<span class="chip badge-soon">준비 중</span>`
+    : graduated
+      ? `<span class="chip" style="background:var(--good-soft);color:var(--good)">완주 ✓</span>`
+      : started
+        ? `<span class="chip badge-ready">학습 중${pct!=null?` · ${pct}%`:''}</span>`
+        : `<span class="chip badge-ready">학습</span>`;
   return `<div ${head}>
     <div style="display:flex;align-items:center;gap:10px;width:100%">
       <span class="domain-dot" style="background:${t.ready?d.color:'var(--line)'}"></span>
       <span class="u-name" style="flex:1">${t.title}</span>
       ${exploreDomain==='all'?`<span class="chip" style="background:var(--paper);color:${d.color};border:1px solid var(--line)">${d.name}</span>`:''}
       <span class="u-count">${LEVEL_LABEL[t.level]}</span>
-      ${t.ready?`<span class="chip badge-ready">학습</span>`:`<span class="chip badge-soon">준비 중</span>`}
+      ${statusBadge}
     </div>
+    ${pct!=null && started && !graduated ? `<div class="progress-bar" style="margin:6px 0 0 20px"><div class="progress-fill" style="width:${pct}%;background:${d.color}"></div></div>` : ''}
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-left:20px;margin-top:7px">
       ${stageBadges?`<span style="display:flex;gap:4px">${stageBadges}</span>`:''}
       <span style="display:flex;gap:5px;flex-wrap:wrap">${tagHtml}</span>
