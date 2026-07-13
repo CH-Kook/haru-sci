@@ -314,12 +314,11 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
   pointer-events:auto;
   width:34px;height:34px;border-radius:50%;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.94);backdrop-filter:blur(8px);
-  border:1px solid var(--line);box-shadow:var(--shadow);
-  color:var(--ink-soft);font-family:var(--serif);font-weight:700;font-size:15px;
-  text-decoration:none;
+  background:transparent;border:none;
+  color:var(--ink-faint);font-family:var(--serif);font-weight:700;font-size:17px;
+  text-decoration:none;opacity:.6;transition:opacity .15s ease,color .15s ease;
 }
-#helpBar a:active{background:var(--paper)}
+#helpBar a:active{opacity:1;color:var(--ink-soft)}
 
 /* ---------- 하단 탭 ---------- */
 #tabbar{
