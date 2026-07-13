@@ -511,9 +511,11 @@ const Storage = (() => {
    day: 시뮬레이션 날짜 카운터 (설정의 개발자 도구로 하루씩 넘겨
         간격 반복이 실제로 도는지 확인할 수 있다)
    ============================================================ */
-const SRS_INTERVALS = [1, 3, 7, 21];   // 틀리면 0단계(1일)로, 맞히면 다음 단계로
+const REVIEW_WRONG_DAYS = 1;             // 틀리면 내일 다시
+const REVIEW_CORRECT_DAYS = 180;         // 맞히면 6개월 뒤 재복습 (이미 아는 걸 매일 복습할 이유는 없음)
 const SESSION_Q = 7;                    // 세션당 문제 수
 const SESSION_C = 3;                    // 세션당 카드 수
+const REVIEW_BATCH = 10;                // '지금 복습하기' 한 번에 나오는 문제 수 (남으면 이어서 더 할 수 있음)
 const DEFAULT_TOPIC = 'p1-motion';      // 홈 '오늘의 세션'이 기본으로 여는 주제
 const DEV_MODE = new URLSearchParams(location.search).get('dev') === '0919';
 
@@ -677,8 +679,9 @@ function unitName(uid){
   return uid;
 }
 function dueQuestions(){
+  /* graduated는 '지금 6개월 대기 중'이라는 상태 표시일 뿐, 6개월 뒤 due가 되면 다시 나와야 하므로 필터에서 제외하지 않는다 */
   return Object.entries(S.srs)
-    .filter(([id,v]) => !v.graduated && v.due <= S.day)
+    .filter(([id,v]) => v.due <= S.day)
     .map(([id]) => id);
 }
 
@@ -756,6 +759,20 @@ async function startDrill(){
 
   const qIds = shuffle(pool).slice(0, drillCount);
   sess = { unitId:null, isDrill:true, stage:drillStage, cards:[], qIds, idx:0, phase:'quiz', qIdx:0, correct:0, answered:false };
+  $('#session').classList.add('open');
+  renderSession();
+}
+
+/* 복습 전용 세션 — 밀린 복습을 한 번에 다 쏟아내지 않고 REVIEW_BATCH개씩 꺼내고,
+   다 풀면 남은 개수를 보여주며 이어서 더 할지 고를 수 있게 한다. */
+async function startReview(){
+  const due = dueQuestions();
+  if(!due.length){ toast('지금은 밀린 복습이 없어요'); return; }
+  const dueTopics = due.map(qId => (S.qMeta[qId]||{}).topic).filter(Boolean);
+  try { await ensureLoaded(dueTopics); }
+  catch(e){ toast('콘텐츠를 불러오지 못했어요'); return; }
+  const qIds = shuffle(due).slice(0, REVIEW_BATCH);
+  sess = { unitId:null, isReview:true, cards:[], qIds, idx:0, phase:'quiz', qIdx:0, correct:0, answered:false };
   $('#session').classList.add('open');
   renderSession();
 }
@@ -1060,12 +1077,19 @@ function sessProgress(){
   return Math.round(100 * done / Math.max(total,1));
 }
 
-/* 세션 상단에 표시할 라벨: 일반 세션은 주제명, 문제풀기(다중 주제)는 현재 문제의 출처 주제명 */
+/* 세션 상단에 표시할 라벨: 일반 세션은 주제명, 문제풀기/복습(다중 주제)은 현재 문제의 출처 주제명 */
 function sessLabel(){
-  if(!sess.isDrill) return unitName(sess.unitId);
-  const qId = sess.qIds[sess.qIdx];
-  const q = qId && findQ(qId);
-  return q ? `문제풀기 · ${unitName(q.unit)}` : '문제풀기';
+  if(sess.isDrill){
+    const qId = sess.qIds[sess.qIdx];
+    const q = qId && findQ(qId);
+    return q ? `문제풀기 · ${unitName(q.unit)}` : '문제풀기';
+  }
+  if(sess.isReview){
+    const qId = sess.qIds[sess.qIdx];
+    const topic = (S.qMeta[qId]||{}).topic;
+    return topic ? `복습 · ${unitName(topic)}` : '복습';
+  }
+  return unitName(sess.unitId);
 }
 
 function renderSession(){
@@ -1149,14 +1173,10 @@ function answer(picked){
   S.qMeta[qId] = {q: q.q, topic: q.unit};   // 미로딩 상태에서도 목록에 표시·복습 로드 가능
   S.stats.answered++; if(ok){ S.stats.correct++; sess.correct++; }
 
-  /* 간격 반복 갱신 */
-  const cur = S.srs[qId] || {step:-1, due:S.day, graduated:false};
-  if(ok){
-    const step = cur.step + 1;
-    if(step >= SRS_INTERVALS.length) S.srs[qId] = {step, due:Infinity, graduated:true};
-    else S.srs[qId] = {step, due:S.day + SRS_INTERVALS[step], graduated:false};
-  } else {
-    S.srs[qId] = {step:0, due:S.day + 1, graduated:false};
+  /* 간격 반복 갱신 — 문제풀기(양치기)는 정답률만 기록하고 장기 복습 큐에는 넣지 않는다 */
+  if(!sess.isDrill){
+    if(ok) S.srs[qId] = {due:S.day + REVIEW_CORRECT_DAYS, graduated:true};
+    else S.srs[qId] = {due:S.day + REVIEW_WRONG_DAYS, graduated:false};
   }
   save();
 
@@ -1177,7 +1197,7 @@ function answer(picked){
   const reported = S.reports.some(r=>r.qId===qId);
   $('#explainBox').innerHTML = `
     <div class="explain">
-      <div class="verdict ${ok?'ok':'no'}">${ok?'정답!':'오답'} ${ok?'':'— 내일 복습 큐에 담았어요'}</div>
+      <div class="verdict ${ok?'ok':'no'}">${ok?'정답!':'오답'} ${!ok && !sess.isDrill ? '— 내일 복습 큐에 담았어요' : ''}</div>
       ${esc(q.ex)}
       <div><button class="report-btn ${reported?'done':''}" data-report-id="${qId}" onclick="${reported?'':`openReportModal('question','${qId}')`}">${reported?'신고 접수됨':'이 문제 신고하기'}</button></div>
     </div>`;
@@ -1193,8 +1213,8 @@ function nextQ(){
     sess.phase = 'done';
     markAttendance();                 // 실제 달력 날짜로 출석 기록
     S.streak = attendanceStreak();    // 표시용 스트릭도 실제 날짜 기준
-    /* 이 세션으로 주제의 모든 문제를 처음 다 풀었다면 완주 표시(문제풀기는 여러 주제를 오갈 수 있어 전부 검사) */
-    const touchedTopics = sess.isDrill
+    /* 이 세션으로 주제의 모든 문제를 처음 다 풀었다면 완주 표시(문제풀기·복습은 여러 주제를 오갈 수 있어 전부 검사) */
+    const touchedTopics = (sess.isDrill || sess.isReview)
       ? [...new Set(sess.qIds.map(id => (S.qMeta[id]||{}).topic).filter(Boolean))]
       : [sess.unitId];
     sess.justGraduatedTopics = touchedTopics.filter(uid => unitProgress(uid) >= 100 && !S.graduatedTopics[uid]);
@@ -1223,11 +1243,17 @@ function renderResult(el){
       </div>
       <div class="result-list">
         <div class="result-row"><span>연속 학습</span><b>${S.streak}일</b></div>
-        <div class="result-row"><span>내일 복습 예정</span><b>${Object.values(S.srs).filter(v=>!v.graduated&&v.due===S.day+1).length}문제</b></div>
-        <div class="result-row"><span>졸업한 문제(21일 통과)</span><b>${Object.values(S.srs).filter(v=>v.graduated).length}문제</b></div>
+        <div class="result-row"><span>내일 복습 예정</span><b>${Object.values(S.srs).filter(v=>v.due===S.day+1).length}문제</b></div>
+        <div class="result-row"><span>6개월 후 복습 예정</span><b>${Object.values(S.srs).filter(v=>v.graduated).length}문제</b></div>
       </div>
     </div>
-    <div class="sess-foot"><button class="btn btn-primary" onclick="closeSession()">완료</button></div>`;
+    <div class="sess-foot">
+      ${(() => { const remaining = sess.isReview ? dueQuestions().length : 0;
+        return remaining
+          ? `<button class="btn btn-primary" onclick="startReview()" style="margin-bottom:8px">복습 ${remaining}개 더 남음 · 계속하기</button>
+             <button class="btn btn-ghost" onclick="closeSession()">그만하기</button>`
+          : `<button class="btn btn-primary" onclick="closeSession()">완료</button>`; })()}
+    </div>`;
 
   triggerMathRender(el);
 }
@@ -1296,7 +1322,7 @@ function renderHome(){
   const due = dueList.length;
   const newQ = (QUESTIONS[DEFAULT_TOPIC]||[]).filter(q=>!S.attempts[q.id]).length;
   const newC = (CARDS[DEFAULT_TOPIC]||[]).filter(c=>!S.seenCards[c.id]).length;
-  const upcoming = Object.entries(S.srs).filter(([id,v])=>!v.graduated && v.due>S.day);
+  const upcoming = Object.entries(S.srs).filter(([id,v])=>v.due>S.day);
   const byDay = {};
   upcoming.forEach(([id,v])=>{ byDay[v.due] = (byDay[v.due]||0)+1; });
   const wrongIds = Object.keys(S.attempts).filter(id=>{ const a=S.attempts[id]; return a.tries>a.correct; });
@@ -1344,13 +1370,14 @@ function renderHome(){
     </div>
 
     <div class="section-label">복습</div>
+    ${due ? `<button class="btn btn-primary" onclick="startReview()" style="margin-bottom:14px">지금 복습하기 · ${due}개</button>` : ''}
     ${Object.keys(byDay).length
       ? `<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">${Object.entries(byDay).sort((a,b)=>a[0]-b[0]).map(([day,n])=>`<div class="result-row"><span>Day ${day} (${day-S.day}일 뒤)</span><b>${n}문제</b></div>`).join('')}</div>`
       : `<p style="font-size:13.5px;color:var(--ink-faint);margin-bottom:10px">아직 예정된 복습이 없어요. 세션을 시작하면 여기에 쌓입니다.</p>`}
     ${wrongIds.length ? `<details style="margin-bottom:6px">
       <summary style="cursor:pointer;font-size:13.5px;color:var(--ink-soft)">틀린 적 있는 문제 ${wrongIds.length}개</summary>
       <div style="margin-top:8px">${wrongIds.map(id=>{ const v=S.srs[id]||{};
-        return `<div class="wrong-item">${esc(qText(id))}<div class="w-due">${v.graduated?'졸업':'다음 복습: Day '+v.due}</div></div>`; }).join('')}</div>
+        return `<div class="wrong-item">${esc(qText(id))}<div class="w-due">${v.due!=null?'다음 복습: Day '+v.due:''}</div></div>`; }).join('')}</div>
     </details>` : ''}`;
 }
 
@@ -1529,7 +1556,7 @@ function renderStats(){
       <div class="stat-cell"><b>${acc}%</b><span>전체 정답률</span></div>
       <div class="stat-cell"><b>${S.stats.answered}</b><span>푼 문제 수</span></div>
       <div class="stat-cell"><b>${S.streak}일</b><span>연속 학습</span></div>
-      <div class="stat-cell"><b>${grad}</b><span>졸업한 문제</span></div>
+      <div class="stat-cell"><b>${grad}</b><span>잘 아는 문제</span></div>
     </div>
     <div class="section-label">신고한 문제 (${S.reports.length})</div>
     ${S.reports.length
