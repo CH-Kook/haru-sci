@@ -302,6 +302,25 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
 .section-label{font-size:13px;font-weight:700;color:var(--ink-soft);margin:20px 0 10px;letter-spacing:.02em}
 .dev-note{font-size:12px;color:var(--ink-faint);line-height:1.6;margin-top:8px}
 
+/* ---------- 사용법 도움말 버튼 ---------- */
+#helpBar{
+  position:fixed;top:0;left:0;right:0;z-index:45;
+  max-width:430px;margin:0 auto;
+  display:flex;justify-content:flex-end;
+  padding:calc(14px + env(safe-area-inset-top)) 14px 0 0;
+  pointer-events:none;
+}
+#helpBar a{
+  pointer-events:auto;
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.94);backdrop-filter:blur(8px);
+  border:1px solid var(--line);box-shadow:var(--shadow);
+  color:var(--ink-soft);font-family:var(--serif);font-weight:700;font-size:15px;
+  text-decoration:none;
+}
+#helpBar a:active{background:var(--paper)}
+
 /* ---------- 하단 탭 ---------- */
 #tabbar{
   position:fixed;bottom:0;left:0;right:0;z-index:40;
@@ -331,6 +350,7 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
 @media (min-width:820px){
   #app{ max-width:760px; }
   #tabbar{ max-width:760px; }
+  #helpBar{ max-width:760px; }
   #session{ max-width:760px; }
   #screen{ padding:28px 26px 110px; }
   h1.screen-title{ font-size:28px; }
@@ -344,12 +364,14 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
 @media (min-width:1100px){
   #app{ max-width:860px; }
   #tabbar{ max-width:860px; }
+  #helpBar{ max-width:860px; }
   #session{ max-width:860px; }
 }
 </style>
 </head>
 <body>
 <div id="app">
+  <div id="helpBar"><a href="/guide.html" target="_blank" rel="noopener" aria-label="사용법 안내">?</a></div>
   <main id="screen" aria-live="polite"></main>
   <nav id="tabbar" aria-label="주요 메뉴">
     <button data-tab="home" class="active" aria-label="홈">
