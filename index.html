@@ -32,6 +32,10 @@
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
 
+<!-- 백업 QR 생성/스캔용 (서버 없이 기기 간 진도 이동) -->
+<script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+
 <style>
 @font-face{
   font-family:'Laundry Gothic';
@@ -1518,10 +1522,15 @@ function renderStats(){
       : `<p style="font-size:13px;color:var(--ink-faint)">신고한 문제가 없어요. 문제 해설 아래 버튼으로 신고할 수 있습니다.</p>`}
     <div class="section-label">데이터 백업 · 기기 이동</div>
     <div class="card">
-      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;line-height:1.6">진도는 이 브라우저에만 저장돼요. 다른 기기로 옮기려면 이 기기에서 파일로 저장한 뒤, 새 기기에서 그 파일을 불러오면 됩니다.</p>
+      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;line-height:1.6">진도는 이 브라우저에만 저장돼요. 카메라가 있는 두 기기끼리는 QR로 가장 빠르고, 데스크탑처럼 카메라가 애매한 경우엔 파일로 저장·불러오면 됩니다.</p>
       <div style="display:flex;gap:8px;margin-bottom:6px">
-        <button class="btn btn-primary" onclick="downloadBackup()" style="flex:1">파일로 저장</button>
-        <button class="btn btn-red" onclick="document.getElementById('importFile').click()" style="flex:1">파일에서 가져오기</button>
+        <button class="btn btn-primary" onclick="showExportQR()" style="flex:1">QR로 보여주기</button>
+        <button class="btn btn-red" onclick="openQrScanner()" style="flex:1">카메라로 스캔</button>
+      </div>
+      <div id="qrDisplay" style="text-align:center;margin:10px 0"></div>
+      <div style="display:flex;gap:8px;margin-bottom:6px">
+        <button class="btn btn-ghost" onclick="downloadBackup()" style="flex:1">파일로 저장</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('importFile').click()" style="flex:1">파일에서 가져오기</button>
       </div>
       <input type="file" id="importFile" accept=".json,application/json" style="display:none" onchange="importFromFile(this)">
       <details style="margin-top:10px">
@@ -1617,6 +1626,69 @@ function importFromFile(input){
   reader.onerror = () => toast('파일을 읽지 못했어요');
   reader.readAsText(file);
   input.value = '';
+}
+
+/* ── QR로 기기 간 이동 (서버 없이) ──────────────────────────
+   QR 용량 한계 때문에 데이터가 크면 안내하고 파일 방식으로 유도한다. */
+const QR_MAX_LEN = 1800;
+function showExportQR(){
+  const data = exportString();
+  if(data.length > QR_MAX_LEN){
+    toast('데이터가 너무 커서 QR로는 안 돼요. 파일로 저장해주세요');
+    return;
+  }
+  const el = document.getElementById('qrDisplay');
+  el.innerHTML = '';
+  if(typeof QRCode === 'undefined'){ toast('QR 기능을 불러오지 못했어요'); return; }
+  new QRCode(el, { text: data, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.M });
+  toast('다른 기기의 카메라로 이 QR을 스캔하세요');
+}
+
+let qrScanStream = null, qrScanRAF = null;
+function openQrScanner(){
+  if(typeof jsQR === 'undefined'){ toast('QR 기능을 불러오지 못했어요'); return; }
+  showConfirm(`
+    <h3>QR 코드 스캔</h3>
+    <p style="margin-bottom:8px">다른 기기 화면에 띄운 QR 코드를 카메라로 비춰주세요.</p>
+    <video id="qrVideo" playsinline muted style="width:100%;border-radius:10px;background:#000"></video>
+    <canvas id="qrCanvas" style="display:none"></canvas>
+    <div class="confirm-actions" style="margin-top:14px">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeQrScanner()">취소</button>
+    </div>`);
+  startQrScan();
+}
+async function startQrScan(){
+  try{
+    qrScanStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+  }catch(e){ toast('카메라를 사용할 수 없어요'); hideConfirm(); return; }
+  const video = document.getElementById('qrVideo');
+  if(!video){ closeQrScanner(); return; }
+  video.srcObject = qrScanStream;
+  await video.play();
+  const canvas = document.getElementById('qrCanvas');
+  const ctx = canvas.getContext('2d');
+  const tick = () => {
+    if(!qrScanStream) return;
+    if(video.readyState === video.HAVE_ENOUGH_DATA){
+      canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const code = jsQR(img.data, img.width, img.height);
+      if(code && code.data){
+        const text = code.data;
+        closeQrScanner();
+        applyImportedBackup(text);
+        return;
+      }
+    }
+    qrScanRAF = requestAnimationFrame(tick);
+  };
+  qrScanRAF = requestAnimationFrame(tick);
+}
+function closeQrScanner(){
+  if(qrScanRAF){ cancelAnimationFrame(qrScanRAF); qrScanRAF = null; }
+  if(qrScanStream){ qrScanStream.getTracks().forEach(t => t.stop()); qrScanStream = null; }
+  hideConfirm();
 }
 
 function devNextDay(){ S.day++; save(); render(); toast(`Day ${S.day} — 복습 ${dueQuestions().length}문제 대기 중`); }
