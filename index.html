@@ -1518,18 +1518,25 @@ function renderStats(){
       : `<p style="font-size:13px;color:var(--ink-faint)">신고한 문제가 없어요. 문제 해설 아래 버튼으로 신고할 수 있습니다.</p>`}
     <div class="section-label">데이터 백업 · 기기 이동</div>
     <div class="card">
-      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;line-height:1.6">진도는 이 브라우저에만 저장돼요. 다른 기기로 옮기려면 여기서 내보낸 뒤, 새 기기에서 가져오면 됩니다.</p>
-      <button class="btn btn-primary" onclick="doExport()" style="margin-bottom:8px">내보내기 (백업 코드 만들기)</button>
-      <textarea id="backupBox" placeholder="여기에 백업 코드가 나타납니다. 복사해서 안전한 곳에 보관하세요." style="width:100%;height:80px;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink);resize:vertical;margin-bottom:8px"></textarea>
-      <div style="display:flex;gap:8px;margin-bottom:14px">
-        <button class="btn btn-ghost" onclick="copyBackup()" style="flex:1">복사</button>
-        <button class="btn btn-ghost" onclick="downloadBackup()" style="flex:1">파일로 저장</button>
+      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;line-height:1.6">진도는 이 브라우저에만 저장돼요. 다른 기기로 옮기려면 이 기기에서 파일로 저장한 뒤, 새 기기에서 그 파일을 불러오면 됩니다.</p>
+      <div style="display:flex;gap:8px;margin-bottom:6px">
+        <button class="btn btn-primary" onclick="downloadBackup()" style="flex:1">파일로 저장</button>
+        <button class="btn btn-red" onclick="document.getElementById('importFile').click()" style="flex:1">파일에서 가져오기</button>
       </div>
-      <div style="border-top:1px dashed var(--line);padding-top:14px">
-        <p style="font-size:13px;color:var(--ink-soft);margin-bottom:8px">백업 코드를 붙여넣고 가져오기</p>
-        <textarea id="importBox" placeholder="다른 기기에서 만든 백업 코드를 여기에 붙여넣으세요." style="width:100%;height:70px;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink);resize:vertical;margin-bottom:8px"></textarea>
-        <button class="btn btn-red" onclick="doImport()">가져오기 (현재 진도를 덮어씁니다)</button>
-      </div>
+      <input type="file" id="importFile" accept=".json,application/json" style="display:none" onchange="importFromFile(this)">
+      <details style="margin-top:10px">
+        <summary style="cursor:pointer;font-size:12.5px;color:var(--ink-faint)">파일 저장이 안 될 때 — 텍스트로 직접 복사·붙여넣기</summary>
+        <div style="margin-top:10px">
+          <button class="btn btn-ghost" onclick="doExport()" style="margin-bottom:8px">백업 코드 만들기</button>
+          <textarea id="backupBox" placeholder="여기에 백업 코드가 나타납니다. 복사해서 안전한 곳에 보관하세요." style="width:100%;height:80px;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink);resize:vertical;margin-bottom:8px"></textarea>
+          <button class="btn btn-ghost" onclick="copyBackup()" style="margin-bottom:14px">복사</button>
+          <div style="border-top:1px dashed var(--line);padding-top:14px">
+            <p style="font-size:13px;color:var(--ink-soft);margin-bottom:8px">백업 코드를 붙여넣고 가져오기</p>
+            <textarea id="importBox" placeholder="다른 기기에서 만든 백업 코드를 여기에 붙여넣으세요." style="width:100%;height:70px;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink);resize:vertical;margin-bottom:8px"></textarea>
+            <button class="btn btn-red" onclick="doImport()">가져오기 (현재 진도를 덮어씁니다)</button>
+          </div>
+        </div>
+      </details>
     </div>
     ${DEV_MODE ? `<div class="section-label">개발자 도구</div>
     <div class="card">
@@ -1576,15 +1583,15 @@ function downloadBackup(){
     toast('저장이 막혀 있어요. 위 코드를 복사해 보관하세요');
   }
 }
-function doImport(){
-  const box = document.getElementById('importBox');
-  if(!box || !box.value.trim()){ toast('가져올 백업 코드를 붙여넣어주세요'); return; }
+/* 백업 코드 문자열(텍스트 붙여넣기 또는 파일 내용)을 검증해 현재 상태에 반영. 성공 시 true. */
+function applyImportedBackup(raw){
+  if(!raw || !raw.trim()){ toast('가져올 백업 코드가 없어요'); return false; }
   let parsed;
-  try { parsed = JSON.parse(box.value.trim()); }
-  catch(e){ toast('코드 형식이 올바르지 않아요'); return; }
+  try { parsed = JSON.parse(raw.trim()); }
+  catch(e){ toast('코드 형식이 올바르지 않아요'); return false; }
   const incoming = parsed && parsed.state ? parsed.state : parsed;   // 순수 state도 허용
   if(!incoming || typeof incoming !== 'object' || !('srs' in incoming) || !('stats' in incoming)){
-    toast('하루사이 백업 코드가 아니에요'); return;
+    toast('하루사이 백업 코드가 아니에요'); return false;
   }
   /* 누락 필드 기본값 보강 */
   S = Object.assign(
@@ -1595,6 +1602,21 @@ function doImport(){
   if(!S.qMeta) S.qMeta = {}; if(!S.diagDone) S.diagDone={}; if(!S.graduatedTopics) S.graduatedTopics={}; if(!S.storyReports) S.storyReports=[]; if(!S.readStories) S.readStories={}; if(!S.studyDates) S.studyDates={};
   save(); render();
   toast('진도를 가져왔어요');
+  return true;
+}
+function doImport(){
+  const box = document.getElementById('importBox');
+  if(!box || !box.value.trim()){ toast('가져올 백업 코드를 붙여넣어주세요'); return; }
+  applyImportedBackup(box.value);
+}
+function importFromFile(input){
+  const file = input.files && input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => applyImportedBackup(String(reader.result || ''));
+  reader.onerror = () => toast('파일을 읽지 못했어요');
+  reader.readAsText(file);
+  input.value = '';
 }
 
 function devNextDay(){ S.day++; save(); render(); toast(`Day ${S.day} — 복습 ${dueQuestions().length}문제 대기 중`); }
