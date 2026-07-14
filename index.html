@@ -1591,19 +1591,34 @@ function renderStats(){
       : `<p style="font-size:13px;color:var(--ink-faint)">신고한 문제가 없어요. 문제 해설 아래 버튼으로 신고할 수 있습니다.</p>`}
     <div class="section-label">데이터 백업 · 기기 이동</div>
     <div class="card">
-      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;line-height:1.6">진도는 이 브라우저에만 저장돼요. 카메라가 있는 두 기기끼리는 QR로 가장 빠르고, 데스크탑처럼 카메라가 애매한 경우엔 파일로 저장·불러오면 됩니다.</p>
-      <div style="display:flex;gap:8px;margin-bottom:6px">
-        <button class="btn btn-primary" onclick="showExportQR()" style="flex:1">QR로 보여주기</button>
-        <button class="btn btn-red" onclick="openQrScanner()" style="flex:1">카메라로 스캔</button>
+      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;line-height:1.6">진도는 이 브라우저에만 저장돼요. 다른 기기로 옮기고 싶으면 코드 하나로 가장 빠르게 옮길 수 있어요.</p>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <button class="btn btn-primary" onclick="sendBackupCode()" style="flex:1">코드로 보내기</button>
+        <button class="btn btn-red" onclick="showReceiveCodeBox()" style="flex:1">코드로 받기</button>
       </div>
-      <div id="qrDisplay" style="text-align:center;margin:10px 0"></div>
-      <div style="display:flex;gap:8px;margin-bottom:6px">
-        <button class="btn btn-ghost" onclick="downloadBackup()" style="flex:1">파일로 저장</button>
-        <button class="btn btn-ghost" onclick="document.getElementById('importFile').click()" style="flex:1">파일에서 가져오기</button>
+      <div id="backupCodeDisplay" style="text-align:center;margin:6px 0"></div>
+      <div id="receiveCodeBox" style="display:none;margin-top:8px">
+        <input type="text" id="receiveCodeInput" placeholder="다른 기기에 뜬 코드를 입력 (예: 가나다라1234)" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--ink);margin-bottom:8px;text-align:center">
+        <button class="btn btn-red" onclick="receiveBackupCode()" style="width:100%">가져오기 (현재 진도를 덮어씁니다)</button>
       </div>
-      <input type="file" id="importFile" accept=".json,application/json" style="display:none" onchange="importFromFile(this)">
+      <p style="font-size:12px;color:var(--ink-faint);margin-top:8px">코드는 10분 동안만 유효하고, 한 번 쓰면 바로 사라져요.</p>
+      <details style="margin-top:12px">
+        <summary style="cursor:pointer;font-size:12.5px;color:var(--ink-faint)">다른 방법 — 파일로 저장하거나 QR로 옮기기</summary>
+        <div style="margin-top:10px">
+          <div style="display:flex;gap:8px;margin-bottom:10px">
+            <button class="btn btn-ghost" onclick="downloadBackup()" style="flex:1">파일로 저장</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('importFile').click()" style="flex:1">파일에서 가져오기</button>
+          </div>
+          <input type="file" id="importFile" accept=".json,application/json" style="display:none" onchange="importFromFile(this)">
+          <div style="display:flex;gap:8px;margin-bottom:6px">
+            <button class="btn btn-ghost" onclick="showExportQR()" style="flex:1">QR로 보여주기</button>
+            <button class="btn btn-ghost" onclick="openQrScanner()" style="flex:1">카메라로 스캔</button>
+          </div>
+          <div id="qrDisplay" style="text-align:center;margin:10px 0"></div>
+        </div>
+      </details>
       <details style="margin-top:10px">
-        <summary style="cursor:pointer;font-size:12.5px;color:var(--ink-faint)">파일 저장이 안 될 때 — 텍스트로 직접 복사·붙여넣기</summary>
+        <summary style="cursor:pointer;font-size:12.5px;color:var(--ink-faint)">그래도 안 될 때 — 텍스트로 직접 복사·붙여넣기</summary>
         <div style="margin-top:10px">
           <button class="btn btn-ghost" onclick="doExport()" style="margin-bottom:8px">백업 코드 만들기</button>
           <textarea id="backupBox" placeholder="여기에 백업 코드가 나타납니다. 복사해서 안전한 곳에 보관하세요." style="width:100%;height:80px;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink);resize:vertical;margin-bottom:8px"></textarea>
@@ -1695,6 +1710,45 @@ function importFromFile(input){
   reader.onerror = () => toast('파일을 읽지 못했어요');
   reader.readAsText(file);
   input.value = '';
+}
+
+/* ── 코드로 기기 간 이동 (Cloudflare KV에 10분간 임시 저장) ──────
+   진도 데이터가 잠깐 서버를 거치는 유일한 경로. 코드를 모르면 접근 불가하고,
+   가져가는 즉시 또는 10분 뒤 자동 삭제된다. */
+async function sendBackupCode(){
+  const el = document.getElementById('backupCodeDisplay');
+  el.innerHTML = `<p style="font-size:13px;color:var(--ink-faint)">코드를 만드는 중...</p>`;
+  try {
+    const res = await fetch('/api/backup', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ data: exportString() }),
+    });
+    const json = await res.json();
+    if(!json.ok){ el.innerHTML = ''; toast('코드를 만들지 못했어요'); return; }
+    el.innerHTML = `<div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;letter-spacing:.04em;color:var(--coral-active);padding:14px;background:var(--coral-soft);border-radius:12px">${esc(json.code)}</div>
+      <p style="font-size:12px;color:var(--ink-faint);margin-top:6px">다른 기기에서 "코드로 받기"에 이 코드를 입력하세요</p>`;
+  } catch(e){
+    el.innerHTML = '';
+    toast('네트워크 오류로 코드를 만들지 못했어요');
+  }
+}
+function showReceiveCodeBox(){
+  const box = document.getElementById('receiveCodeBox');
+  if(box){ box.style.display = 'block'; document.getElementById('receiveCodeInput').focus(); }
+}
+async function receiveBackupCode(){
+  const input = document.getElementById('receiveCodeInput');
+  const code = input && input.value.trim();
+  if(!code){ toast('코드를 입력해주세요'); return; }
+  try {
+    const res = await fetch('/api/backup?code=' + encodeURIComponent(code));
+    const json = await res.json();
+    if(!json.ok){ toast('코드가 잘못됐거나 만료됐어요'); return; }
+    applyImportedBackup(json.data);
+  } catch(e){
+    toast('네트워크 오류로 가져오지 못했어요');
+  }
 }
 
 /* ── QR로 기기 간 이동 (서버 없이) ──────────────────────────
