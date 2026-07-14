@@ -32,10 +32,6 @@
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
 
-<!-- 백업 QR 생성/스캔용 (서버 없이 기기 간 진도 이동) -->
-<script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-
 <style>
 @font-face{
   font-family:'Laundry Gothic';
@@ -1603,31 +1599,14 @@ function renderStats(){
       </div>
       <p style="font-size:12px;color:var(--ink-faint);margin-top:8px">코드는 10분 동안만 유효하고, 한 번 쓰면 바로 사라져요.</p>
       <details style="margin-top:12px">
-        <summary style="cursor:pointer;font-size:12.5px;color:var(--ink-faint)">다른 방법 — 파일로 저장하거나 QR로 옮기기</summary>
+        <summary style="cursor:pointer;font-size:12.5px;color:var(--ink-faint)">파일로 따로 보관해두기</summary>
         <div style="margin-top:10px">
-          <div style="display:flex;gap:8px;margin-bottom:10px">
+          <p style="font-size:12.5px;color:var(--ink-faint);margin-bottom:8px">기기를 옮길 때보다는, 브라우저 데이터를 지우기 전에 안전하게 따로 저장해두고 싶을 때 씁니다.</p>
+          <div style="display:flex;gap:8px">
             <button class="btn btn-ghost" onclick="downloadBackup()" style="flex:1">파일로 저장</button>
             <button class="btn btn-ghost" onclick="document.getElementById('importFile').click()" style="flex:1">파일에서 가져오기</button>
           </div>
           <input type="file" id="importFile" accept=".json,application/json" style="display:none" onchange="importFromFile(this)">
-          <div style="display:flex;gap:8px;margin-bottom:6px">
-            <button class="btn btn-ghost" onclick="showExportQR()" style="flex:1">QR로 보여주기</button>
-            <button class="btn btn-ghost" onclick="openQrScanner()" style="flex:1">카메라로 스캔</button>
-          </div>
-          <div id="qrDisplay" style="text-align:center;margin:10px 0"></div>
-        </div>
-      </details>
-      <details style="margin-top:10px">
-        <summary style="cursor:pointer;font-size:12.5px;color:var(--ink-faint)">그래도 안 될 때 — 텍스트로 직접 복사·붙여넣기</summary>
-        <div style="margin-top:10px">
-          <button class="btn btn-ghost" onclick="doExport()" style="margin-bottom:8px">백업 코드 만들기</button>
-          <textarea id="backupBox" placeholder="여기에 백업 코드가 나타납니다. 복사해서 안전한 곳에 보관하세요." style="width:100%;height:80px;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink);resize:vertical;margin-bottom:8px"></textarea>
-          <button class="btn btn-ghost" onclick="copyBackup()" style="margin-bottom:14px">복사</button>
-          <div style="border-top:1px dashed var(--line);padding-top:14px">
-            <p style="font-size:13px;color:var(--ink-soft);margin-bottom:8px">백업 코드를 붙여넣고 가져오기</p>
-            <textarea id="importBox" placeholder="다른 기기에서 만든 백업 코드를 여기에 붙여넣으세요." style="width:100%;height:70px;border:1px solid var(--line);border-radius:10px;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink);resize:vertical;margin-bottom:8px"></textarea>
-            <button class="btn btn-red" onclick="doImport()">가져오기 (현재 진도를 덮어씁니다)</button>
-          </div>
         </div>
       </details>
     </div>
@@ -1646,20 +1625,6 @@ const BACKUP_VERSION = 1;
 function exportString(){
   return JSON.stringify({ _app:'haru-sci', _v:BACKUP_VERSION, _at:new Date().toISOString(), state:S });
 }
-function doExport(){
-  const box = document.getElementById('backupBox');
-  if(box){ box.value = exportString(); box.focus(); box.select(); }
-  toast('백업 코드를 만들었어요');
-}
-function copyBackup(){
-  const box = document.getElementById('backupBox');
-  if(!box || !box.value){ toast('먼저 내보내기를 눌러주세요'); return; }
-  box.select();
-  let ok = false;
-  try { ok = document.execCommand('copy'); } catch(e){}
-  if(navigator.clipboard){ navigator.clipboard.writeText(box.value).then(()=>toast('복사했어요')).catch(()=>{}); ok = true; }
-  toast(ok ? '복사했어요' : '길게 눌러 직접 복사해주세요');
-}
 function downloadBackup(){
   const data = exportString();
   try {
@@ -1671,9 +1636,7 @@ function downloadBackup(){
     setTimeout(()=>URL.revokeObjectURL(url), 1000);
     toast('파일로 저장했어요');
   } catch(e){
-    const box = document.getElementById('backupBox');
-    if(box){ box.value = data; }
-    toast('저장이 막혀 있어요. 위 코드를 복사해 보관하세요');
+    toast('저장이 막혀 있어요. 브라우저 설정을 확인해주세요');
   }
 }
 /* 백업 코드 문자열(텍스트 붙여넣기 또는 파일 내용)을 검증해 현재 상태에 반영. 성공 시 true. */
@@ -1696,11 +1659,6 @@ function applyImportedBackup(raw){
   save(); render();
   toast('진도를 가져왔어요');
   return true;
-}
-function doImport(){
-  const box = document.getElementById('importBox');
-  if(!box || !box.value.trim()){ toast('가져올 백업 코드를 붙여넣어주세요'); return; }
-  applyImportedBackup(box.value);
 }
 function importFromFile(input){
   const file = input.files && input.files[0];
@@ -1749,69 +1707,6 @@ async function receiveBackupCode(){
   } catch(e){
     toast('네트워크 오류로 가져오지 못했어요');
   }
-}
-
-/* ── QR로 기기 간 이동 (서버 없이) ──────────────────────────
-   QR 용량 한계 때문에 데이터가 크면 안내하고 파일 방식으로 유도한다. */
-const QR_MAX_LEN = 1800;
-function showExportQR(){
-  const data = exportString();
-  if(data.length > QR_MAX_LEN){
-    toast('데이터가 너무 커서 QR로는 안 돼요. 파일로 저장해주세요');
-    return;
-  }
-  const el = document.getElementById('qrDisplay');
-  el.innerHTML = '';
-  if(typeof QRCode === 'undefined'){ toast('QR 기능을 불러오지 못했어요'); return; }
-  new QRCode(el, { text: data, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.M });
-  toast('다른 기기의 카메라로 이 QR을 스캔하세요');
-}
-
-let qrScanStream = null, qrScanRAF = null;
-function openQrScanner(){
-  if(typeof jsQR === 'undefined'){ toast('QR 기능을 불러오지 못했어요'); return; }
-  showConfirm(`
-    <h3>QR 코드 스캔</h3>
-    <p style="margin-bottom:8px">다른 기기 화면에 띄운 QR 코드를 카메라로 비춰주세요.</p>
-    <video id="qrVideo" playsinline muted style="width:100%;border-radius:10px;background:#000"></video>
-    <canvas id="qrCanvas" style="display:none"></canvas>
-    <div class="confirm-actions" style="margin-top:14px">
-      <button class="btn btn-ghost" style="flex:1" onclick="closeQrScanner()">취소</button>
-    </div>`);
-  startQrScan();
-}
-async function startQrScan(){
-  try{
-    qrScanStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-  }catch(e){ toast('카메라를 사용할 수 없어요'); hideConfirm(); return; }
-  const video = document.getElementById('qrVideo');
-  if(!video){ closeQrScanner(); return; }
-  video.srcObject = qrScanStream;
-  await video.play();
-  const canvas = document.getElementById('qrCanvas');
-  const ctx = canvas.getContext('2d');
-  const tick = () => {
-    if(!qrScanStream) return;
-    if(video.readyState === video.HAVE_ENOUGH_DATA){
-      canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const code = jsQR(img.data, img.width, img.height);
-      if(code && code.data){
-        const text = code.data;
-        closeQrScanner();
-        applyImportedBackup(text);
-        return;
-      }
-    }
-    qrScanRAF = requestAnimationFrame(tick);
-  };
-  qrScanRAF = requestAnimationFrame(tick);
-}
-function closeQrScanner(){
-  if(qrScanRAF){ cancelAnimationFrame(qrScanRAF); qrScanRAF = null; }
-  if(qrScanStream){ qrScanStream.getTracks().forEach(t => t.stop()); qrScanStream = null; }
-  hideConfirm();
 }
 
 function devNextDay(){ S.day++; save(); render(); toast(`Day ${S.day} — 복습 ${dueQuestions().length}문제 대기 중`); }
