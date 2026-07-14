@@ -131,17 +131,18 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
 .streak-num{font-family:'IBM Plex Mono',monospace;font-size:44px;font-weight:600;color:var(--redpen);line-height:1}
 .streak-label{font-size:14px;color:var(--ink-soft);font-weight:500}
 .today-card{margin-top:16px}
-.today-meta{display:flex;gap:14px;margin:10px 0 16px}
-.today-meta .m{flex:1;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-.today-meta .m b{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:600;display:block}
-.today-meta .m span{font-size:12px;color:var(--ink-soft)}
+.today-topic{margin:10px 0 16px}
+.today-topic-domain{font-size:12.5px;font-weight:700;letter-spacing:.02em}
+.today-topic-title{font-family:var(--serif);font-size:19px;font-weight:700;margin:4px 0 6px;line-height:1.35}
+.today-topic-chapter{font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--ink-faint)}
 .domain-list{margin-top:22px;display:flex;flex-direction:column;gap:10px}
 .domain-row{
   display:flex;align-items:center;gap:12px;background:var(--card);
   border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;
 }
 .domain-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
-.domain-name{font-weight:600;font-size:15px;flex:1}
+.domain-name{font-weight:600;font-size:16px;flex:1}
+.domain-next{font-size:13.5px;color:var(--ink-soft);margin-top:3px}
 .domain-prog{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-faint)}
 .progress-bar{height:4px;background:var(--paper);border-radius:2px;overflow:hidden;margin-top:6px}
 .progress-fill{height:100%;border-radius:2px;transition:width .4s ease}
@@ -154,8 +155,8 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
   border:1px solid var(--line);border-radius:12px;margin-bottom:8px;cursor:pointer;
 }
 .unit-item.locked{opacity:.5;cursor:default}
-.unit-item .u-name{flex:1;font-size:14px;font-weight:500}
-.unit-item .u-count{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint)}
+.unit-item .u-name{flex:1;font-size:15px;font-weight:500}
+.unit-item .u-count{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-faint)}
 .badge-ready{background:var(--coral-soft);color:var(--coral-active)}
 .badge-soon{background:var(--paper);color:var(--ink-faint);border:1px solid var(--line)}
 
@@ -211,7 +212,7 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
   border-radius:10px;padding:14px;text-align:center;
 }
 .figure svg{max-width:100%;height:auto}
-.figure figcaption{font-size:13.5px;color:var(--ink-soft);margin-top:8px;line-height:1.5}
+.figure figcaption{font-size:14.5px;color:var(--ink-soft);margin-top:8px;line-height:1.5}
 .q-figure{margin:0 0 16px}
 .concept-card .example{
   margin-top:14px;padding:12px 14px;background:var(--cream-card);
@@ -519,7 +520,6 @@ const REVIEW_CORRECT_DAYS = 180;         // 처음부터 맞혔거나 계단을 
 const SESSION_Q = 7;                    // 세션당 문제 수
 const SESSION_C = 3;                    // 세션당 카드 수
 const REVIEW_BATCH = 10;                // '지금 복습하기' 한 번에 나오는 문제 수 (남으면 이어서 더 할 수 있음)
-const DEFAULT_TOPIC = 'p1-motion';      // 홈 '오늘의 세션'이 기본으로 여는 주제
 const DEV_MODE = new URLSearchParams(location.search).get('dev') === '0919';
 
 let S = Storage.load() || {
@@ -1339,6 +1339,14 @@ function domainProgress(did){
   const started = ready.filter(t=>topicStarted(t.id)).length;
   return Math.round(100*started/ready.length);
 }
+/* 과목별 '다음 차시': 커리큘럼 순서상 아직 완주하지 않은 첫 주제 */
+function nextTopicInfo(did){
+  const ready = allTopics(did).filter(t=>t.ready);
+  if(!ready.length) return null;
+  const idx = ready.findIndex(t=>!S.graduatedTopics[t.id]);
+  if(idx===-1) return {done:true,total:ready.length};
+  return {done:false,topic:ready[idx],chapter:idx+1,total:ready.length};
+}
 
 function attendanceCalendar(){
   const streak = attendanceStreak();
@@ -1380,8 +1388,8 @@ function attendanceCalendar(){
 function renderHome(){
   const dueList = dueQuestions();
   const due = dueList.length;
-  const newQ = (QUESTIONS[DEFAULT_TOPIC]||[]).filter(q=>!S.attempts[q.id]).length;
-  const newC = (CARDS[DEFAULT_TOPIC]||[]).filter(c=>!S.seenCards[c.id]).length;
+  const domainSpots = DOMAINS.map(d=>({d, info:nextTopicInfo(d.id)}));
+  const spotlight = domainSpots.find(x=>x.info && !x.info.done) || domainSpots.filter(x=>x.info).pop();
   const upcoming = Object.entries(S.srs).filter(([id,v])=>v.due>S.day);
   const byDay = {};
   upcoming.forEach(([id,v])=>{ byDay[v.due] = (byDay[v.due]||0)+1; });
@@ -1398,12 +1406,17 @@ function renderHome(){
 
     <div class="card today-card">
       <span class="eyebrow">TODAY'S SESSION</span>
-      <div class="today-meta">
-        <div class="m"><b>${due}</b><span>복습할 문제</span></div>
-        <div class="m"><b>${Math.min(newQ, Math.max(0,SESSION_Q-due))}</b><span>새 문제</span></div>
-        <div class="m"><b>${Math.min(newC,SESSION_C)}</b><span>개념 카드</span></div>
-      </div>
-      <button class="btn btn-red" onclick="startSession(DEFAULT_TOPIC)">오늘의 세션 시작 · 5분</button>
+      ${spotlight && spotlight.info && !spotlight.info.done ? `
+        <div class="today-topic">
+          <span class="today-topic-domain" style="color:${spotlight.d.color}">${spotlight.d.name}</span>
+          <div class="today-topic-title">${spotlight.info.topic.title}</div>
+          <span class="today-topic-chapter">${spotlight.info.chapter}/${spotlight.info.total}차시</span>
+        </div>
+        <button class="btn btn-red" onclick="startSession('${spotlight.info.topic.id}')">오늘의 세션 시작 · 5분</button>
+      ` : `
+        <p style="font-size:14.5px;color:var(--ink-soft);margin:8px 0 14px">모든 과목의 차시를 완주했어요 🎉 복습으로 감각을 유지해 보세요.</p>
+        <button class="btn btn-ghost" onclick="setTab('explore')">주제 둘러보기</button>
+      `}
     </div>
 
     <div class="section-label">과목별 진행 · 내 수준</div>
@@ -1413,15 +1426,17 @@ function renderHome(){
       <button class="chip" style="cursor:pointer;margin-top:10px;border:1px solid var(--line);background:transparent;color:var(--ink-faint)" onclick="confirmSkipDiagnostic()">진단 건너뛰기</button>
     </div>` : ''}
     <div class="domain-list">
-      ${DOMAINS.map(d=>{
+      ${domainSpots.map(({d,info})=>{
         const p = domainProgress(d.id);
         const stage = S.subjectStage[d.id] || 'ms';
+        const nextLabel = !info ? '' : info.done ? '모든 차시 완주 🎉' : `${info.topic.title} · ${info.chapter}/${info.total}차시`;
         return `<div class="domain-row">
           <span class="domain-dot" style="background:${d.color}"></span>
           <div style="flex:1" onclick="goExplore('${d.id}')">
             <div class="domain-name">${d.name}
               <span class="chip" style="background:var(--paper);border:1px solid var(--line);color:${d.color};font-size:11px;margin-left:2px">${STAGE_LABEL[stage]}</span>
             </div>
+            ${nextLabel ? `<div class="domain-next">${nextLabel}</div>` : ''}
             <div class="progress-bar"><div class="progress-fill" style="width:${p}%;background:${d.color}"></div></div>
           </div>
           <button class="chip" style="cursor:pointer;border:1px solid var(--coral);background:var(--card);color:var(--coral-active);font-weight:600" onclick="event.stopPropagation();startDiagnostic('${d.id}')">진단</button>
@@ -1451,8 +1466,8 @@ function domainMeta(did){ return DOMAINS.find(x=>x.id===did); }
 function topicCard(t){
   const d = domainMeta(t.domain);
   const cur = S.subjectStage[t.domain] || 'ms';
-  const tagHtml = t.tags.map(tag=>`<span onclick="event.stopPropagation();pickTag('${tag}')" style="cursor:pointer;font-size:11px;color:${exploreTag===tag?'#fff':'var(--ink-faint)'};background:${exploreTag===tag?d.color:'var(--paper)'};border:1px solid var(--line);border-radius:99px;padding:1px 8px">#${tag}</span>`).join(' ');
-  const stageBadges = (t.stages||[]).map(s=>`<span style="font-size:10px;padding:0 6px;border-radius:99px;border:1px solid ${s===cur?d.color:'var(--line)'};color:${s===cur?'#fff':'var(--ink-faint)'};background:${s===cur?d.color:'transparent'}">${STAGE_LABEL[s]}</span>`).join(' ');
+  const tagHtml = t.tags.map(tag=>`<span onclick="event.stopPropagation();pickTag('${tag}')" style="cursor:pointer;font-size:12px;color:${exploreTag===tag?'#fff':'var(--ink-faint)'};background:${exploreTag===tag?d.color:'var(--paper)'};border:1px solid var(--line);border-radius:99px;padding:1px 8px">#${tag}</span>`).join(' ');
+  const stageBadges = (t.stages||[]).map(s=>`<span style="font-size:11px;padding:0 6px;border-radius:99px;border:1px solid ${s===cur?d.color:'var(--line)'};color:${s===cur?'#fff':'var(--ink-faint)'};background:${s===cur?d.color:'transparent'}">${STAGE_LABEL[s]}</span>`).join(' ');
   /* 진행 상황: 완주 여부는 항상 정확(로컬 저장), 진행률(%)은 이 주제 문제가 이미 로드된 경우에만 실측치 표시 */
   const graduated = !!S.graduatedTopics[t.id];
   const started = topicStarted(t.id);
@@ -1795,7 +1810,7 @@ async function init(){
   $('#screen').innerHTML = `<div style="padding:70px 0;text-align:center;color:var(--ink-faint);font-size:14px">불러오는 중…</div>`;
   try {
     await loadIndex();
-    await Promise.all([ ensureLoaded([DEFAULT_TOPIC]), loadStoriesIndex() ]);   // 홈 카운트·이야기 목록
+    await loadStoriesIndex();
   } catch(e){
     $('#screen').innerHTML = `<div class="card" style="margin-top:40px">
       <b style="font-size:15px">콘텐츠를 불러오지 못했어요</b>
