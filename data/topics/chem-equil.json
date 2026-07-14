@@ -68,6 +68,20 @@
    "title": "촉매와 평형",
    "body": "촉매는 정반응·역반응 속도를 똑같이 높여 평형에 '더 빨리' 도달하게 할 뿐, 평형의 위치($K$)나 최종 농도는 바꾸지 않습니다.",
    "example": "<b>주의</b> 촉매는 평형을 이동시키지 않습니다. 도달 속도만 높입니다."
+  },
+  {
+   "id": "eu4",
+   "stage": "ug",
+   "title": "ICE표를 이용한 평형 계산",
+   "body": "초기 농도(Initial), 변화량(Change), 평형 농도(Equilibrium)를 표로 정리하는 ICE표를 쓰면 평형 농도와 $K$를 실제로 계산할 수 있습니다. 변화량은 반응식의 계수비를 따르며, 미지수 $x$로 두고 문제에서 준 조건(평형 농도 또는 $K$)과 연결해 풉니다.",
+   "example": "<b>계산</b> $\\mathrm{A \\rightleftharpoons B}$ 반응에서 초기 $[\\mathrm{A}]_0=1.00\\,\\mathrm{M}$, $[\\mathrm{B}]_0=0\\,\\mathrm{M}$으로 시작해 평형에서 $[\\mathrm{B}]=0.60\\,\\mathrm{M}$이 되었다면, 평형에서 $[\\mathrm{A}]=1.00-0.60=0.40\\,\\mathrm{M}$이고 $K=\\dfrac{[\\mathrm{B}]}{[\\mathrm{A}]}=\\dfrac{0.60}{0.40}=1.5$입니다."
+  },
+  {
+   "id": "eu5",
+   "stage": "ug",
+   "title": "Kp, 자유에너지와 평형 상수",
+   "body": "기체 반응에서는 농도 대신 부분압력으로 나타낸 평형 상수 $K_p$를 쓰기도 하며, $K_p = K_c(RT)^{\\Delta n}$의 관계가 있습니다($\\Delta n$: 생성물과 반응물의 기체 몰수 차). 한편 평형 상수는 반응의 표준 자유에너지 변화와도 연결됩니다: $\\Delta G^\\circ = -RT\\ln K$. $K>1$이면 $\\Delta G^\\circ<0$이 되어 정반응이 표준 상태에서 자발적임을 뜻합니다.",
+   "example": "<b>예</b> $\\Delta n=0$인 반응(예: $\\mathrm{H_2+I_2\\rightleftharpoons 2HI}$)은 $K_p=K_c$입니다. 암모니아 합성 $\\mathrm{N_2+3H_2\\rightleftharpoons 2NH_3}$은 $\\Delta n=2-4=-2$이므로 $K_p=K_c(RT)^{-2}$로 달라집니다."
   }
  ],
  "questions": [
@@ -242,6 +256,48 @@
     "촉매는 평형을 생성물 쪽으로 이동시킨다"
    ],
    "answer": 3
+  },
+  {
+   "id": "qe_ug6",
+   "card": "eu4",
+   "stage": "ug",
+   "level": 3,
+   "type": "choice",
+   "q": "$\\mathrm{A \\rightleftharpoons B}$ 반응에서 초기 $[\\mathrm{A}]=1.00\\,\\mathrm{M}$, $[\\mathrm{B}]=0\\,\\mathrm{M}$으로 시작해 평형에서 $[\\mathrm{B}]=0.60\\,\\mathrm{M}$이 되었다. 이 반응의 평형 상수 $K$는?",
+   "ex": "평형 $[\\mathrm{A}]=1.00-0.60=0.40\\,\\mathrm{M}$이므로 $K=[\\mathrm{B}]/[\\mathrm{A}]=0.60/0.40=1.5$입니다.",
+   "choices": [
+    "0.4",
+    "0.6",
+    "1.5",
+    "2.5"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "qe_ug7",
+   "card": "eu5",
+   "stage": "ug",
+   "level": 3,
+   "type": "ox",
+   "q": "기체 몰수 변화($\\Delta n$)가 0인 반응에서는 $K_p=K_c$가 성립한다.",
+   "answer": true,
+   "ex": "$K_p=K_c(RT)^{\\Delta n}$에서 $\\Delta n=0$이면 $(RT)^0=1$이므로 $K_p=K_c$입니다."
+  },
+  {
+   "id": "qe_ug8",
+   "card": "eu5",
+   "stage": "ug",
+   "level": 3,
+   "type": "choice",
+   "q": "$\\Delta G^\\circ=-RT\\ln K$에서 평형 상수 $K>1$이면 $\\Delta G^\\circ$의 부호는?",
+   "ex": "$K>1$이면 $\\ln K>0$이고 $R,T>0$이므로 $\\Delta G^\\circ=-RT\\ln K<0$, 즉 음수입니다.",
+   "choices": [
+    "양수(0보다 큼)",
+    "음수(0보다 작음)",
+    "정확히 0",
+    "알 수 없음"
+   ],
+   "answer": 1
   }
  ]
 }

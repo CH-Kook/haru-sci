@@ -75,6 +75,20 @@
    "title": "pH와 이온화 상수",
    "body": "pH는 수소 이온 농도의 음의 로그입니다: $\\mathrm{pH} = -\\log[\\mathrm{H^+}]$. 약산의 세기는 이온화 상수 $K_a$로 나타내며, $K_a$가 클수록 강한 산입니다. 25°C 순수한 물에서는 $[\\mathrm{H^+}][\\mathrm{OH^-}] = K_w = 10^{-14}$가 항상 성립합니다.",
    "example": "<b>식</b> $\\mathrm{pH} = -\\log[\\mathrm{H^+}]$, $K_a = \\dfrac{[\\mathrm{H^+}][\\mathrm{A^-}]}{[\\mathrm{HA}]}$"
+  },
+  {
+   "id": "au4",
+   "stage": "ug",
+   "title": "완충용액과 헨더슨-하셀바흐 방정식",
+   "body": "약산과 그 짝염기(또는 약염기와 짝산)를 함께 녹이면 산이나 염기를 조금 넣어도 pH가 크게 변하지 않는 완충용액이 됩니다. pH는 헨더슨-하셀바흐 방정식으로 바로 계산할 수 있습니다: $\\mathrm{pH} = \\mathrm{p}K_a + \\log\\dfrac{[\\mathrm{A^-}]}{[\\mathrm{HA}]}$.",
+   "example": "<b>계산</b> 아세트산 $K_a=1.8\\times10^{-5}$(p$K_a\\approx4.74$)인 용액에서 $[\\mathrm{CH_3COOH}]=0.10\\,\\mathrm{M}$, $[\\mathrm{CH_3COO^-}]=0.20\\,\\mathrm{M}$이면 $\\mathrm{pH} = 4.74 + \\log(0.20/0.10) = 4.74+0.30 = 5.04$입니다."
+  },
+  {
+   "id": "au5",
+   "stage": "ug",
+   "title": "적정곡선과 다양성자산",
+   "body": "산-염기 적정에서 넣어준 염기의 몰수가 산의 몰수와 같아지는 지점이 당량점입니다. 당량점의 절반 지점(half-equivalence point)에서는 $[\\mathrm{HA}]=[\\mathrm{A^-}]$가 되어 헨더슨-하셀바흐 식의 로그항이 0이 되므로 $\\mathrm{pH}=\\mathrm{p}K_a$가 성립합니다. 인산처럼 H⁺를 여러 개 내놓는 다양성자산은 한 번에 다 이온화되지 않고 단계적으로 이온화되며, 뒤로 갈수록 이온화 상수가 급격히 작아집니다($K_{a1}>K_{a2}>K_{a3}$).",
+   "example": "<b>예</b> 인산 $\\mathrm{H_3PO_4}$는 $K_{a1}\\approx7.5\\times10^{-3}$, $K_{a2}\\approx6.2\\times10^{-8}$, $K_{a3}\\approx4.2\\times10^{-13}$로 3단계에 걸쳐 이온화됩니다. 각 단계 사이에 적정곡선의 당량점이 하나씩 나타납니다."
   }
  ],
  "questions": [
@@ -345,6 +359,38 @@
     "물은 항상 산으로만 작용한다"
    ],
    "answer": 3
+  },
+  {
+   "id": "qa_ug7",
+   "card": "au4",
+   "stage": "ug",
+   "level": 3,
+   "type": "choice",
+   "q": "아세트산-아세트산나트륨 완충용액에서 $[\\mathrm{CH_3COOH}]=0.10\\,\\mathrm{M}$, $[\\mathrm{CH_3COO^-}]=0.20\\,\\mathrm{M}$이다. $K_a=1.8\\times10^{-5}$(p$K_a\\approx4.74$)일 때 이 완충용액의 pH는?",
+   "ex": "헨더슨-하셀바흐 식으로 $\\mathrm{pH} = 4.74 + \\log(0.20/0.10) = 4.74 + 0.30 = 5.04$입니다.",
+   "choices": [
+    "4.44",
+    "4.74",
+    "5.04",
+    "5.34"
+   ],
+   "answer": 2
+  },
+  {
+   "id": "qa_ug8",
+   "card": "au5",
+   "stage": "ug",
+   "level": 3,
+   "type": "choice",
+   "q": "산-염기 적정곡선에서 당량점의 절반(half-equivalence point)에서 성립하는 것은?",
+   "ex": "이 지점에서는 $[\\mathrm{HA}]=[\\mathrm{A^-}]$가 되어 헨더슨-하셀바흐 식의 로그항이 0이 되므로 $\\mathrm{pH}=\\mathrm{p}K_a$입니다.",
+   "choices": [
+    "pH = pKa",
+    "pH = 7",
+    "[HA] = 0",
+    "[A⁻] = 0"
+   ],
+   "answer": 0
   }
  ]
 }
