@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.haru_sci.twa",
+    "sha256_cert_fingerprints": [
+      "A9:BB:63:94:5B:01:33:D7:87:CC:C9:0E:56:29:50:F0:1D:9E:FB:6B:C5:CD:B5:F9:96:89:ED:A3:C7:81:AE:6C"
+    ]
+  }
+}]
