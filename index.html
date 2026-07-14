@@ -797,6 +797,7 @@ async function startReview(){
   catch(e){ toast('콘텐츠를 불러오지 못했어요'); return; }
   const qIds = shuffle(due).slice(0, REVIEW_BATCH);
   sess = { unitId:null, isReview:true, cards:[], qIds, idx:0, phase:'quiz', qIdx:0, correct:0, answered:false };
+  openModalHistory();
   $('#session').classList.add('open');
   renderSession();
 }
