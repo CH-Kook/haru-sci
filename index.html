@@ -1390,6 +1390,10 @@ function renderHome(){
   const due = dueList.length;
   const domainSpots = DOMAINS.map(d=>({d, info:nextTopicInfo(d.id)}));
   const spotlight = domainSpots.find(x=>x.info && !x.info.done) || domainSpots.filter(x=>x.info).pop();
+  if(spotlight && spotlight.info && !spotlight.info.done){
+    const tid = spotlight.info.topic.id;
+    if(!QUESTIONS[tid]) ensureLoaded([tid]).then(()=>{ if(tab==='home') render(); });
+  }
   const upcoming = Object.entries(S.srs).filter(([id,v])=>v.due>S.day);
   const byDay = {};
   upcoming.forEach(([id,v])=>{ byDay[v.due] = (byDay[v.due]||0)+1; });
@@ -1406,14 +1410,18 @@ function renderHome(){
 
     <div class="card today-card">
       <span class="eyebrow">TODAY'S SESSION</span>
-      ${spotlight && spotlight.info && !spotlight.info.done ? `
+      ${spotlight && spotlight.info && !spotlight.info.done ? (() => {
+        const tid = spotlight.info.topic.id;
+        const pct = (QUESTIONS[tid] && QUESTIONS[tid].length) ? unitProgress(tid) : null;
+        return `
         <div class="today-topic">
           <span class="today-topic-domain" style="color:${spotlight.d.color}">${spotlight.d.name}</span>
           <div class="today-topic-title">${spotlight.info.topic.title}</div>
-          <span class="today-topic-chapter">${spotlight.info.chapter}/${spotlight.info.total}차시</span>
+          <span class="today-topic-chapter">${spotlight.info.chapter}/${spotlight.info.total}차시${pct!=null?` · 이 차시 진행 ${pct}%`:''}</span>
+          ${pct!=null ? `<div class="progress-bar" style="margin-top:6px"><div class="progress-fill" style="width:${pct}%;background:${spotlight.d.color}"></div></div>` : ''}
         </div>
-        <button class="btn btn-red" onclick="startSession('${spotlight.info.topic.id}')">오늘의 세션 시작 · 5분</button>
-      ` : `
+        <button class="btn btn-red" onclick="startSession('${tid}')">오늘의 세션 시작 · 5분</button>
+      `; })() : `
         <p style="font-size:14.5px;color:var(--ink-soft);margin:8px 0 14px">모든 과목의 차시를 완주했어요 🎉 복습으로 감각을 유지해 보세요.</p>
         <button class="btn btn-ghost" onclick="setTab('explore')">주제 둘러보기</button>
       `}
