@@ -738,6 +738,14 @@ function stageFillOrder(cur){
   for(let i=idx+1;i<STAGE_ORDER.length;i++) order.push(STAGE_ORDER[i]); // 위쪽(어려움)
   return order;
 }
+function cardFillOrder(cur){
+  // 카드(개념 설명)는 쉬운 단계로 내려가지 않는다 — 전공 단계 세션 중간에
+  // 건너뛴 중등 개념 카드가 뜬금없이 끼어드는 것을 방지. 현재 단계부터 어려운 단계로만 보충.
+  const idx = STAGE_ORDER.indexOf(cur);
+  const order = [cur];
+  for(let i=idx+1;i<STAGE_ORDER.length;i++) order.push(STAGE_ORDER[i]);
+  return order;
+}
 function buildSession(unitId){
   const stage = currentStage(unitId);
   const allQ = QUESTIONS[unitId] || [];
@@ -753,9 +761,9 @@ function buildSession(unitId){
   }
   const qIds = [...due, ...fresh.slice(0, Math.max(0, SESSION_Q - due.length)).map(q=>q.id)];
 
-  // 카드도 같은 우선순위로 채움
+  // 카드는 현재 단계 이상에서만 채움(쉬운 단계로 내려가지 않음)
   let cards = [];
-  for(const st of order){
+  for(const st of cardFillOrder(stage)){
     if(cards.length >= SESSION_C) break;
     cards = cards.concat(allC.filter(c => c.stage===st && !S.seenCards[c.id]));
   }
