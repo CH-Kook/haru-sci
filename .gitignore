@@ -1,0 +1,13 @@
+# 로컬 작업용 스크래치 파일 (배포 리포에는 불필요)
+.claude/
+HANDOFF.md
+design-reference/
+new/
+prompts/
+tools/
+feature-graphic*.png
+feature-graphic-source-screenshot.png
+data/index.json.stories-bak
+*.bak
+_phys_backup_*/
+build/
