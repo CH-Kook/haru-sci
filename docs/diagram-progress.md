@@ -1,0 +1,59 @@
+# 카드 삽화(그림) 추가 진행 체크리스트
+
+개념 카드가 텍스트로만 설명돼서 이해하기 어려운 부분에 SVG 라인아트 삽화(`fig`/`figcap` 필드,
+기존 이야기(story) 기능에서 쓰던 것과 같은 방식 — CSS 변수 `var(--redpen)`/`var(--bluepen)`/
+`var(--ink-faint)` 등을 써서 라이트/다크 테마 모두 대응)를 추가하는 작업.
+
+작업 순서: 물리 → 화학 → 생명과학 → 지구과학. 한 과목이 끝날 때마다 커밋 + 배포.
+다른 세션에서 이어서 작업할 때는 이 파일에서 미완료 항목부터 시작하면 됨.
+
+## 물리 (진행 중)
+
+- [ ] p1-motion: 그래프가 말해주는 것(c6) — 위치-시간/속도-시간 그래프
+- [ ] p1-motion: 2차원 운동(ugc5) — 포물선 운동 성분분해
+- [ ] phy-newton: 자유물체도와 힘 분석(ugc2)
+- [ ] phy-newton: 원운동과 구심력(ugc6)
+- [ ] phy-momentum: 2차원 충돌(ugc4) — 성분별 보존
+- [ ] phy-coaster: 롤러코스터 에너지 시소(cc4/msc2)
+- [ ] phy-coaster: 구심 가속도(ugc1)
+- [ ] phy-wave: 파장·진폭(w2), 중첩과 간섭(ugc3), 정상파(ugc5), 도플러 효과(ugc6)
+- [ ] phy-light: 반사·굴절(l2/l3), 전반사(l5), 이중슬릿 간섭(ugc4)
+- [ ] phy-rainbow: 분산(r2), 2차 무지개(ugc4)
+- [ ] phy-current/phy-induction: 회로도, 패러데이/렌츠 법칙
+- [ ] phy-semicon: 띠 이론(ugc1), pn접합(ugc3)
+- [ ] phy-thermo: 카르노 사이클(ugc5/ugc6)
+
+## 화학 (대기)
+
+- [ ] chem-atom: 원자 구조, 오비탈 모양
+- [ ] chem-bond: 이온/공유 결합, 분자 모양, 혼성궤도
+- [ ] chem-periodic: 오비탈 채움 순서
+- [ ] chem-gas: 보일·샤를 법칙 그래프
+- [ ] chem-rate/chem-equil: 에너지 다이어그램, 평형 이동
+- [ ] chem-acid: pH 척도, 적정곡선
+- [ ] chem-battery: 전지 구조
+- [ ] chem-carbon: 탄화수소 구조식
+
+## 생명과학 (대기)
+
+- [ ] bio-cell: 세포 구조, 삼투
+- [ ] bio-dna: 이중나선, 복제 과정
+- [ ] bio-expression: 전사·번역, 오페론
+- [ ] bio-photosynthesis/bio-respiration: 소기관 구조, 전자전달계
+- [ ] bio-brain: 뉴런 구조, 시냅스, 활동전위 그래프
+- [ ] bio-immune: 항원-항체, 면역 반응 과정
+- [ ] bio-hormone: 시상하부-뇌하수체 축
+- [ ] bio-ecosystem: 먹이그물, 에너지 피라미드
+- [ ] bio-evidence: 상동기관, 계통수
+
+## 지구과학 (대기)
+
+- [ ] ear-plate: 판 경계 세 종류, 지구 내부 층
+- [ ] ear-quake: P파·S파, 단층
+- [ ] ear-rock: 암석의 순환
+- [ ] ear-season: 자전축 기울기·태양고도
+- [ ] ear-tide: 기조력, 달-지구-태양 배치
+- [ ] ear-solar: 행성 배치, 케플러 법칙
+- [ ] ear-star: H-R도
+- [ ] ear-galaxy: 회전곡선, 은하 분류
+- [ ] ear-weather: 기단·전선, 대기 순환
