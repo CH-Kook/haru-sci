@@ -512,6 +512,16 @@ function ensureTopicStage(topicId){
   if(!S.topicStage[topicId]) S.topicStage[topicId] = currentStage(topicId);
   return S.topicStage[topicId];
 }
+function topicMeta(topicId){
+  const d = topicDomain(topicId);
+  return d ? (CURRICULUM[d]||[]).find(t=>t.id===topicId) : null;
+}
+/* 사용자가 직접 이 주제의 학습 단계를 바꾼다 (자동 승급과 별개로 언제든 수동 전환 가능) */
+function setTopicStage(topicId, stage){
+  if(!STAGE_ORDER.includes(stage) || S.topicStage[topicId]===stage) return;
+  S.topicStage[topicId] = stage;
+  save();
+}
 /* 그 단계의 카드·문제를 전부 봤는지(=그 단계를 완주했는지) 판정 */
 function stageComplete(topicId, stage){
   const qs = (QUESTIONS[topicId]||[]).filter(q=>q.stage===stage);
@@ -1396,6 +1406,28 @@ function sessLabel(){
   return `${unitName(sess.unitId)} · ${STAGE_LABEL[sess.stage]}`;
 }
 
+/* 일반 주제 학습 세션(양치기·복습·개념 다시보기 제외)에서만 단계를 직접 바꿀 수 있게 한다 */
+function stageSwitcherHtml(){
+  if(sess.isDrill || sess.isReview || sess.isCardReview) return '';
+  const meta = topicMeta(sess.unitId);
+  if(!meta || !meta.stages || meta.stages.length<2) return '';
+  return `<div style="display:flex;gap:5px;padding:0 18px 10px">
+    ${meta.stages.map(s=>`<button onclick="switchSessionStage('${s}')" style="cursor:pointer;font-family:inherit;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:99px;border:1px solid ${s===sess.stage?'var(--coral)':'var(--line)'};background:${s===sess.stage?'var(--coral)':'var(--card)'};color:${s===sess.stage?'#fff':'var(--ink-soft)'}">${STAGE_LABEL[s]}</button>`).join('')}
+  </div>`;
+}
+function switchSessionStage(stage){
+  if(!sess || sess.stage===stage) return;
+  const prevStage = sess.stage;
+  setTopicStage(sess.unitId, stage);
+  const s = buildSession(sess.unitId);
+  if(!s.steps.length){
+    toast(`${STAGE_LABEL[stage]} 단계에 새로 풀 문제가 없어요`);
+    S.topicStage[sess.unitId] = prevStage; save();
+    return;
+  }
+  sess = s;
+  renderSession();
+}
 function renderSession(){
   const el = $('#session');
   if(!sess) return;
@@ -1405,7 +1437,8 @@ function renderSession(){
       <button class="sess-close" onclick="confirmCloseSession()" aria-label="세션 닫기">×</button>
       <div class="sess-track"><i style="width:${sessProgress()}%"></i></div>
       <span class="mono" style="font-size:11px;color:var(--ink-faint)">${sessLabel()}</span>
-    </div>`;
+    </div>
+    ${stageSwitcherHtml()}`;
 
   const step = sess.steps[sess.idx];
 
@@ -1790,7 +1823,7 @@ function topicCard(t){
   const d = domainMeta(t.domain);
   const cur = currentStage(t.id);
   const tagHtml = t.tags.map(tag=>`<span onclick="event.stopPropagation();pickTag('${tag}')" style="cursor:pointer;font-size:12px;color:${exploreTag===tag?'#fff':'var(--ink-faint)'};background:${exploreTag===tag?d.color:'var(--paper)'};border:1px solid var(--line);border-radius:99px;padding:1px 8px">#${tag}</span>`).join(' ');
-  const stageBadges = (t.stages||[]).map(s=>`<span style="font-size:11px;padding:0 6px;border-radius:99px;border:1px solid ${s===cur?d.color:'var(--line)'};color:${s===cur?'#fff':'var(--ink-faint)'};background:${s===cur?d.color:'transparent'}">${STAGE_LABEL[s]}</span>`).join(' ');
+  const stageBadges = (t.stages||[]).map(s=>`<button onclick="event.stopPropagation();pickTopicStage('${t.id}','${s}')" style="cursor:pointer;font-family:inherit;font-size:11px;padding:0 6px;border-radius:99px;border:1px solid ${s===cur?d.color:'var(--line)'};color:${s===cur?'#fff':'var(--ink-faint)'};background:${s===cur?d.color:'transparent'}">${STAGE_LABEL[s]}</button>`).join(' ');
   /* 진행 상황: 완주 여부는 항상 정확(로컬 저장), 진행률(%)은 이 주제 문제가 이미 로드된 경우에만 실측치 표시 */
   const graduated = !!S.graduatedTopics[t.id];
   const started = topicStarted(t.id);
@@ -1824,6 +1857,11 @@ function topicCard(t){
 }
 
 function pickTag(tag){ exploreTag = (exploreTag===tag)?null:tag; render(); }
+function pickTopicStage(topicId, stage){
+  setTopicStage(topicId, stage);
+  toast(`${STAGE_LABEL[stage]} 단계로 바꿨어요`);
+  render();
+}
 
 function renderExplore(){
   let topics = allTopics(exploreDomain);
