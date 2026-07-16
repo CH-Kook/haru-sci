@@ -590,6 +590,14 @@ S.qMeta = S.qMeta || {};
 S.studyDates = S.studyDates || {};
 function save(){ Storage.save(S); }
 
+/* 카드/문제 id는 파일마다 msc1·ugq3처럼 짧게 재사용돼서 주제 간에 충돌한다
+   (예: p1-motion과 phy-newton이 둘 다 "msc1"을 씀). 그래서 진도 기록(attempts·srs·
+   seenCards·qMeta)은 항상 "주제id::원래id" 형태의 네임스페이스된 키로 저장한다.
+   이 스크립트 블록에서 바로 아래 마이그레이션이 즉시 실행되므로, nsKey는 반드시
+   이 시점 이전(같은 <script> 블록 안)에 정의돼 있어야 한다 — 다른 <script> 블록에
+   있으면 그 블록이 실행되기 전이라 호이스팅이 적용되지 않는다. */
+function nsKey(unitId, localId){ return unitId + '::' + localId; }
+
 /* 예전 저장본 마이그레이션: attempts·srs·qMeta·reports가 "주제id::원래id" 없이
    bare id로만 저장돼 있던 시절 데이터를, 같이 저장된 qMeta의 topic 정보를 이용해
    네임스페이스된 키로 옮긴다. topic을 알 수 없는 항목은 건드리지 않는다
@@ -616,10 +624,8 @@ function migrateNamespacedKeys(){
     if(r.qId && r.qId.indexOf('::')===-1 && topicOf[r.qId]) r.qId = nsKey(topicOf[r.qId], r.qId);
   });
   save();
-  console.log('[migrate] done, attempts now:', JSON.stringify(S.attempts));
 }
-console.log('[migrate] about to call, qMeta:', JSON.stringify(S.qMeta));
-try { migrateNamespacedKeys(); } catch(e) { console.error('[migrate] threw:', e); }
+migrateNamespacedKeys();
 
 /* ── 출석(실제 달력 날짜 기반) ─────────────────────────────── */
 function ymd(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
@@ -740,11 +746,6 @@ function triggerMathRender(target) {
     }
   }
 }
-
-/* 카드/문제 id는 파일마다 msc1·ugq3처럼 짧게 재사용돼서 주제 간에 충돌한다
-   (예: p1-motion과 phy-newton이 둘 다 "msc1"을 씀). 그래서 진도 기록(attempts·srs·
-   seenCards·qMeta)은 항상 "주제id::원래id" 형태의 네임스페이스된 키로 저장한다. */
-function nsKey(unitId, localId){ return unitId + '::' + localId; }
 
 function findQ(qId){
   const sep = qId.indexOf('::');
