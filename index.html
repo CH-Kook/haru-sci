@@ -616,8 +616,10 @@ function migrateNamespacedKeys(){
     if(r.qId && r.qId.indexOf('::')===-1 && topicOf[r.qId]) r.qId = nsKey(topicOf[r.qId], r.qId);
   });
   save();
+  console.log('[migrate] done, attempts now:', JSON.stringify(S.attempts));
 }
-migrateNamespacedKeys();
+console.log('[migrate] about to call, qMeta:', JSON.stringify(S.qMeta));
+try { migrateNamespacedKeys(); } catch(e) { console.error('[migrate] threw:', e); }
 
 /* ── 출석(실제 달력 날짜 기반) ─────────────────────────────── */
 function ymd(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
