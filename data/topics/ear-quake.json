@@ -32,14 +32,18 @@
    "stage": "hs",
    "title": "단층과 지진의 발생",
    "body": "판 경계에서 암석이 힘을 받으면 변형되며 에너지가 쌓이다가, 한계를 넘으면 끊어지면서 어긋납니다. 이 끊어진 면을 단층이라 하고, 이때 방출된 에너지가 지진이 됩니다. 지진이 처음 발생한 땅속 지점을 진원, 그 바로 위 지표를 진앙이라 합니다.",
-   "example": "<b>용어</b> 진원(땅속 발생 지점) · 진앙(그 바로 위 지표 지점)."
+   "example": "<b>용어</b> 진원(땅속 발생 지점) · 진앙(그 바로 위 지표 지점).",
+   "fig": "<svg viewBox=\"0 0 240 110\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"10\" x2=\"20\" y2=\"100\" stroke=\"var(--ink-faint)\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/><text x=\"3\" y=\"20\" font-size=\"9\" fill=\"var(--ink-soft)\">지표</text><line x1=\"20\" y1=\"20\" x2=\"220\" y2=\"20\" stroke=\"var(--ink)\" stroke-width=\"1\"/><path d=\"M60 20 L140 90\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><circle cx=\"140\" cy=\"90\" r=\"5\" fill=\"var(--redpen)\"/><text x=\"148\" y=\"93\" font-size=\"9\" fill=\"var(--redpen)\">진원</text><circle cx=\"88\" cy=\"20\" r=\"5\" fill=\"var(--bluepen)\"/><text x=\"70\" y=\"14\" font-size=\"9\" fill=\"var(--bluepen)\">진앙</text><line x1=\"140\" y1=\"90\" x2=\"88\" y2=\"20\" stroke=\"var(--ink-faint)\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/></svg>",
+   "figcap": "땅속 지진이 시작된 곳이 진원, 그 바로 위 지표가 진앙입니다"
   },
   {
    "id": "eq_h2",
    "stage": "hs",
    "title": "지진파: P파와 S파",
    "body": "지진 에너지는 파동(지진파)으로 퍼집니다. P파는 속도가 빨라 먼저 도착하는 종파이고, S파는 느리게 도착하는 횡파입니다. 두 파가 도착하는 시간 차이를 이용해 진앙까지의 거리를 알아낼 수 있습니다.",
-   "example": "<b>활용</b> P파와 S파의 도착 시간차 → 진앙 거리 계산."
+   "example": "<b>활용</b> P파와 S파의 도착 시간차 → 진앙 거리 계산.",
+   "fig": "<svg viewBox=\"0 0 260 100\" xmlns=\"http://www.w3.org/2000/svg\"><text x=\"5\" y=\"20\" font-size=\"9\" fill=\"var(--redpen)\">P파(종파, 빠름)</text><path d=\"M10 35 L20 35 L25 25 L35 45 L45 25 L55 45 L65 35 L250 35\" fill=\"none\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><text x=\"5\" y=\"70\" font-size=\"9\" fill=\"var(--bluepen)\">S파(횡파, 느림)</text><path d=\"M10 85 Q 30 65 50 85 T 90 85 T 130 85 T 170 85\" fill=\"none\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/></svg>",
+   "figcap": "P파(종파)는 밀고 당기며, S파(횡파)는 위아래로 흔들며 나아갑니다"
   },
   {
    "id": "eq_h3",

@@ -60,7 +60,9 @@
    "stage": "ug",
    "title": "은하 회전곡선과 암흑물질",
    "body": "케플러 법칙에 따르면 은하 중심에서 멀어질수록 별의 공전 속도는 점점 느려져야 합니다(v∝1/√r). 하지만 실제 관측된 우리은하나 다른 나선 은하의 회전곡선은 바깥쪽으로 가도 속도가 거의 일정하게 유지됩니다. 이 불일치를 설명하려면 눈에 보이는 별의 질량을 훨씬 뛰어넘는, 빛을 내지 않는 암흑물질이 은하 전체에 넓게 퍼져 있어야 합니다. 또한 많은 은하의 중심에는 초대질량 블랙홀이 있는 것으로 알려져 있습니다.",
-   "example": "<b>불일치</b> 케플러 예측: 바깥일수록 느려짐 / 실제 관측: 거의 일정 → 암흑물질이 필요."
+   "example": "<b>불일치</b> 케플러 예측: 바깥일수록 느려짐 / 실제 관측: 거의 일정 → 암흑물질이 필요.",
+   "fig": "<svg viewBox=\"0 0 240 120\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"100\" x2=\"220\" y2=\"100\" stroke=\"var(--ink-faint)\" stroke-width=\"2\"/><line x1=\"20\" y1=\"100\" x2=\"20\" y2=\"20\" stroke=\"var(--ink-faint)\" stroke-width=\"2\"/><text x=\"170\" y=\"115\" font-size=\"9\" fill=\"var(--ink-faint)\">중심에서 거리</text><text x=\"3\" y=\"18\" font-size=\"9\" fill=\"var(--ink-faint)\">회전 속도</text><path d=\"M20 90 Q 60 30 100 30 L 210 30\" fill=\"none\" stroke=\"var(--good)\" stroke-width=\"2.5\"/><text x=\"130\" y=\"25\" font-size=\"9\" fill=\"var(--good)\">실제 관측(거의 일정)</text><path d=\"M20 90 Q 60 30 100 30 Q 160 30 210 75\" fill=\"none\" stroke=\"var(--redpen)\" stroke-width=\"2\" stroke-dasharray=\"4,3\"/><text x=\"140\" y=\"95\" font-size=\"9\" fill=\"var(--redpen)\">케플러 예측(느려짐)</text></svg>",
+   "figcap": "실제 회전 속도는 예측과 달리 바깥에서도 줄지 않아, 안 보이는 질량(암흑물질)을 짐작하게 합니다"
   },
   {
    "id": "ga_u3",
@@ -74,7 +76,9 @@
    "stage": "ug",
    "title": "허블의 은하 분류",
    "body": "허블은 은하를 모양에 따라 소리굽쇠 모양의 분류 체계로 나눴습니다. 타원 은하는 편평도에 따라 E0(원형)부터 E7(납작함)까지, 나선 은하는 중심 팽대부의 크기와 나선팔이 감긴 정도에 따라 Sa·Sb·Sc로, 막대 구조가 있는 나선 은하는 SBa·SBb·SBc로 나뉩니다. 한때는 이 배열이 은하의 진화 순서라고 오해되기도 했지만, 지금은 은하 병합이 은하의 모양을 바꾸는 핵심 과정으로 이해됩니다.",
-   "example": "<b>분류</b> 타원(E0~E7) · 나선(Sa~Sc) · 막대나선(SBa~SBc) · 불규칙."
+   "example": "<b>분류</b> 타원(E0~E7) · 나선(Sa~Sc) · 막대나선(SBa~SBc) · 불규칙.",
+   "fig": "<svg viewBox=\"0 0 240 90\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"40\" cy=\"45\" rx=\"25\" ry=\"18\" fill=\"var(--ink-faint)\" opacity=\"0.4\"/><text x=\"18\" y=\"78\" font-size=\"9\" fill=\"var(--ink-soft)\">타원은하</text><path d=\"M120 45 Q 100 20 130 15 Q 160 20 120 45 Q 140 70 110 75 Q 80 70 120 45\" fill=\"var(--bluepen)\" opacity=\"0.3\"/><text x=\"95\" y=\"88\" font-size=\"9\" fill=\"var(--ink-soft)\">나선은하</text><rect x=\"185\" y=\"38\" width=\"30\" height=\"10\" fill=\"var(--redpen)\" opacity=\"0.4\"/><path d=\"M200 43 Q 180 20 205 12 Q 225 20 200 43\" fill=\"var(--redpen)\" opacity=\"0.25\"/><text x=\"175\" y=\"75\" font-size=\"9\" fill=\"var(--ink-soft)\">막대나선은하</text></svg>",
+   "figcap": "은하는 모양에 따라 타원·나선·막대나선·불규칙으로 나뉩니다"
   },
   {
    "id": "ga_u5",

@@ -91,7 +91,9 @@
    "stage": "ug",
    "title": "판 경계 세 종류, 힘의 방향과 지형",
    "body": "판 경계마다 작용하는 힘의 방향과 그 결과로 생기는 지형이 다릅니다. 발산 경계에서는 판을 서로 벌리는 장력이 작용해 해령이나 동아프리카 열곡대 같은 갈라진 지형이 생깁니다. 수렴 경계에서는 판을 미는 압축력이 작용하는데, 해양판과 대륙판이 만나면 해양판이 가라앉으며 해구와 화산호(예: 안데스산맥)가 만들어지고, 대륙판끼리 충돌하면 어느 쪽도 가라앉지 못해 히말라야처럼 거대한 습곡산맥이 솟아오릅니다. 보존 경계에서는 판이 서로를 미끄러지듯 스치는 전단력이 작용해 변환단층(예: 산안드레아스 단층)이 생깁니다.",
-   "example": "<b>대응</b> 발산=장력(해령) · 수렴=압축력(해구·산맥) · 보존=전단력(변환단층)."
+   "example": "<b>대응</b> 발산=장력(해령) · 수렴=압축력(해구·산맥) · 보존=전단력(변환단층).",
+   "fig": "<svg viewBox=\"0 0 260 100\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"50\" x2=\"5\" y2=\"50\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><polygon points=\"5,45 -5,50 5,55\" fill=\"var(--redpen)\"/><line x1=\"60\" y1=\"50\" x2=\"75\" y2=\"50\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><polygon points=\"75,45 85,50 75,55\" fill=\"var(--redpen)\"/><text x=\"5\" y=\"75\" font-size=\"9\" fill=\"var(--ink-soft)\">발산(장력)</text><line x1=\"110\" y1=\"50\" x2=\"140\" y2=\"50\" stroke=\"var(--bluepen)\" stroke-width=\"3\"/><polygon points=\"135,45 145,50 135,55\" fill=\"var(--bluepen)\"/><line x1=\"195\" y1=\"50\" x2=\"160\" y2=\"50\" stroke=\"var(--bluepen)\" stroke-width=\"3\"/><polygon points=\"165,45 155,50 165,55\" fill=\"var(--bluepen)\"/><text x=\"105\" y=\"75\" font-size=\"9\" fill=\"var(--ink-soft)\">수렴(압축력)</text><line x1=\"205\" y1=\"35\" x2=\"245\" y2=\"65\" stroke=\"var(--good)\" stroke-width=\"3\"/><text x=\"195\" y=\"85\" font-size=\"9\" fill=\"var(--ink-soft)\">보존(전단력)</text></svg>",
+   "figcap": "발산은 벌어지고, 수렴은 부딪히고, 보존은 옆으로 스치며 어긋납니다"
   },
   {
    "id": "epu5",

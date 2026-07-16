@@ -39,14 +39,18 @@
    "stage": "hs",
    "title": "조석의 원인",
    "body": "조석은 달(과 태양)의 인력이 바닷물을 끌어당겨 생깁니다. 달을 향한 쪽의 바닷물이 부풀어 밀물이 되는데, 흥미롭게도 지구 반대편의 바닷물도 함께 부풀어 그곳에서도 밀물이 됩니다. 그래서 밀물이 하루에 약 두 번 나타납니다.",
-   "example": "<b>포인트</b> 달 쪽과 그 반대쪽 바닷물이 함께 부푼다 → 하루 약 두 번 밀물."
+   "example": "<b>포인트</b> 달 쪽과 그 반대쪽 바닷물이 함께 부푼다 → 하루 약 두 번 밀물.",
+   "fig": "<svg viewBox=\"0 0 240 100\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"120\" cy=\"50\" rx=\"55\" ry=\"38\" fill=\"var(--bluepen)\" opacity=\"0.2\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><circle cx=\"120\" cy=\"50\" r=\"30\" fill=\"var(--ink-faint)\" opacity=\"0.3\"/><circle cx=\"210\" cy=\"50\" r=\"10\" fill=\"var(--ink)\"/><text x=\"195\" y=\"70\" font-size=\"9\" fill=\"var(--ink-soft)\">달</text><text x=\"165\" y=\"30\" font-size=\"9\" fill=\"var(--bluepen)\">달 쪽 밀물</text><text x=\"20\" y=\"30\" font-size=\"9\" fill=\"var(--bluepen)\">반대쪽도 밀물</text></svg>",
+   "figcap": "달을 향한 쪽과 그 반대쪽 바다가 동시에 부풀어서 하루 두 번 밀물이 됩니다"
   },
   {
    "id": "td_h3",
    "stage": "hs",
    "title": "사리와 조금",
    "body": "태양과 달이 일직선에 놓이는 보름과 그믐 무렵에는 두 인력이 합쳐져 밀물과 썰물의 차이(조차)가 가장 큰 사리가 됩니다. 반달 무렵에는 두 인력이 어긋나 조차가 가장 작은 조금이 됩니다.",
-   "example": "<b>구분</b> 보름·그믐 → 사리(조차 큼) / 반달 → 조금(조차 작음)."
+   "example": "<b>구분</b> 보름·그믐 → 사리(조차 큼) / 반달 → 조금(조차 작음).",
+   "fig": "<svg viewBox=\"0 0 240 110\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"40\" cy=\"30\" r=\"6\" fill=\"var(--ink)\"/><circle cx=\"90\" cy=\"30\" r=\"12\" fill=\"var(--ink-faint)\"/><circle cx=\"170\" cy=\"30\" r=\"6\" fill=\"var(--ink)\"/><line x1=\"46\" y1=\"30\" x2=\"78\" y2=\"30\" stroke=\"var(--redpen)\" stroke-width=\"1.5\"/><line x1=\"102\" y1=\"30\" x2=\"164\" y2=\"30\" stroke=\"var(--redpen)\" stroke-width=\"1.5\"/><text x=\"55\" y=\"55\" font-size=\"9\" fill=\"var(--redpen)\">일직선 → 사리(조차 큼)</text><circle cx=\"90\" cy=\"90\" r=\"12\" fill=\"var(--ink-faint)\"/><circle cx=\"140\" cy=\"60\" r=\"6\" fill=\"var(--ink)\"/><circle cx=\"55\" cy=\"55\" r=\"6\" fill=\"var(--ink)\"/><text x=\"5\" y=\"105\" font-size=\"9\" fill=\"var(--bluepen)\">직각 → 조금(조차 작음)</text></svg>",
+   "figcap": "태양·달·지구가 일직선이면 사리, 직각이면 조금이 됩니다"
   },
   {
    "id": "td_u1",

@@ -74,7 +74,9 @@
    "stage": "ug",
    "title": "H-R도로 보는 별의 삶",
    "body": "H-R도(헤르츠스프룽-러셀도)는 별을 가로축에 표면 온도(또는 색), 세로축에 광도(밝기)로 늘어놓은 그래프입니다. 온도는 오른쪽으로 갈수록 낮아지도록 그리는 게 관례입니다. 주계열 별은 왼쪽 위(뜨겁고 밝음)에서 오른쪽 아래(차갑고 어두움)로 이어지는 대각선 띠를 이루고, 거성은 차가운데도 광도가 높아 오른쪽 위에, 백색왜성은 뜨거운데도 어두워 왼쪽 아래에 자리 잡습니다.",
-   "example": "<b>위치</b> 주계열=대각선 띠 / 거성=오른쪽 위(차갑지만 큼) / 백색왜성=왼쪽 아래(뜨겁지만 작음)."
+   "example": "<b>위치</b> 주계열=대각선 띠 / 거성=오른쪽 위(차갑지만 큼) / 백색왜성=왼쪽 아래(뜨겁지만 작음).",
+   "fig": "<svg viewBox=\"0 0 240 130\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"110\" x2=\"220\" y2=\"110\" stroke=\"var(--ink-faint)\" stroke-width=\"2\"/><line x1=\"20\" y1=\"110\" x2=\"20\" y2=\"15\" stroke=\"var(--ink-faint)\" stroke-width=\"2\"/><text x=\"140\" y=\"125\" font-size=\"9\" fill=\"var(--ink-faint)\">온도(오른쪽이 낮음)</text><text x=\"3\" y=\"18\" font-size=\"9\" fill=\"var(--ink-faint)\">밝기</text><line x1=\"30\" y1=\"100\" x2=\"200\" y2=\"25\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><text x=\"70\" y=\"55\" font-size=\"9\" fill=\"var(--redpen)\">주계열</text><circle cx=\"175\" cy=\"45\" r=\"7\" fill=\"var(--good)\" opacity=\"0.4\"/><text x=\"150\" y=\"38\" font-size=\"8\" fill=\"var(--good)\">거성</text><circle cx=\"55\" cy=\"90\" r=\"3\" fill=\"var(--bluepen)\"/><text x=\"35\" y=\"105\" font-size=\"8\" fill=\"var(--bluepen)\">백색왜성</text></svg>",
+   "figcap": "가로축은 온도, 세로축은 밝기 — 별의 종류마다 도표 위 위치가 다릅니다"
   },
   {
    "id": "st_u5",

@@ -49,14 +49,16 @@
 - [x] bio-ecosystem: 에너지 피라미드(ec_h2)
 - [x] bio-evidence: 상동기관(evd_h1), 계통수(evd_u5)
 
-## 지구과학 (대기)
+## 지구과학 (완료 · 2026-07-16)
 
-- [ ] ear-plate: 판 경계 세 종류, 지구 내부 층
-- [ ] ear-quake: P파·S파, 단층
-- [ ] ear-rock: 암석의 순환
-- [ ] ear-season: 자전축 기울기·태양고도
-- [ ] ear-tide: 기조력, 달-지구-태양 배치
-- [ ] ear-solar: 행성 배치, 케플러 법칙
-- [ ] ear-star: H-R도
-- [ ] ear-galaxy: 회전곡선, 은하 분류
-- [ ] ear-weather: 기단·전선, 대기 순환
+- [x] ear-plate: 판 경계 세 종류·힘의 방향(epu4) — ep2·ep4는 기존에 이미 있었음
+- [x] ear-quake: 단층·진원/진앙(eq_h1), P파·S파(eq_h2)
+- [x] ear-rock: 암석의 순환(rk_u2)
+- [x] ear-season: 자전축 기울기(se_h1)
+- [x] ear-tide: 조석의 원인(td_h2), 사리와 조금(td_h3)
+- [x] ear-solar: 케플러 제2법칙(so_u4)
+- [x] ear-star: H-R도(st_u4)
+- [x] ear-galaxy: 은하 회전곡선(ga_u2), 허블 분류(ga_u4)
+- [x] ear-weather: 기단과 전선(we_h3), 전선 단면 구조(we_u5)
+
+## 전체 완료 (2026-07-16) — 물리·화학·생명과학·지구과학 4과목 전부 끝

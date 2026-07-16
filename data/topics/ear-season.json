@@ -32,7 +32,9 @@
    "stage": "hs",
    "title": "23.5도 기울어진 자전축",
    "body": "지구의 자전축은 공전 궤도면에 대해 약 23.5도 기울어져 있습니다. 이 기울기를 유지한 채 공전하기 때문에, 같은 지역이라도 계절에 따라 태양의 높이와 낮의 길이가 달라집니다.",
-   "example": "<b>원인</b> 약 23.5도 기운 자전축을 유지하며 공전."
+   "example": "<b>원인</b> 약 23.5도 기운 자전축을 유지하며 공전.",
+   "fig": "<svg viewBox=\"0 0 220 130\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"110\" cy=\"70\" rx=\"90\" ry=\"35\" fill=\"none\" stroke=\"var(--ink-faint)\" stroke-width=\"1.5\" stroke-dasharray=\"4,3\"/><circle cx=\"20\" cy=\"70\" r=\"10\" fill=\"var(--redpen)\"/><line x1=\"20\" y1=\"55\" x2=\"20\" y2=\"85\" stroke=\"var(--ink)\" stroke-width=\"2\" transform=\"rotate(-23.5 20 70)\"/><circle cx=\"200\" cy=\"70\" r=\"10\" fill=\"var(--bluepen)\"/><line x1=\"200\" y1=\"55\" x2=\"200\" y2=\"85\" stroke=\"var(--ink)\" stroke-width=\"2\" transform=\"rotate(-23.5 200 70)\"/><circle cx=\"110\" cy=\"35\" r=\"14\" fill=\"var(--redpen)\" opacity=\"0.3\"/><text x=\"90\" y=\"20\" font-size=\"10\" fill=\"var(--ink-soft)\">태양</text><text x=\"5\" y=\"95\" font-size=\"9\" fill=\"var(--ink-soft)\">여름(북반구)</text><text x=\"170\" y=\"95\" font-size=\"9\" fill=\"var(--ink-soft)\">겨울(북반구)</text></svg>",
+   "figcap": "자전축이 23.5도 기운 채 공전해서, 위치에 따라 태양 빛을 받는 각도가 달라집니다"
   },
   {
    "id": "se_h2",

@@ -60,7 +60,9 @@
    "stage": "ug",
    "title": "암석의 순환",
    "body": "세 종류의 암석은 지구 내부의 열과 지표의 풍화·침식을 원동력으로 서로 전환됩니다. 암석이 풍화되어 퇴적물이 되고, 묻혀 굳어 퇴적암이 되며, 열·압력으로 변성암이 되고, 녹았다가 다시 굳어 화성암이 됩니다. 이 전체 흐름을 암석 순환이라 합니다.",
-   "example": "<b>원동력</b> 지구 내부의 열 + 태양·중력에 의한 풍화·침식."
+   "example": "<b>원동력</b> 지구 내부의 열 + 태양·중력에 의한 풍화·침식.",
+   "fig": "<svg viewBox=\"0 0 220 130\" xmlns=\"http://www.w3.org/2000/svg\"><text x=\"85\" y=\"20\" font-size=\"11\" fill=\"var(--redpen)\">화성암</text><text x=\"20\" y=\"90\" font-size=\"11\" fill=\"var(--bluepen)\">퇴적암</text><text x=\"150\" y=\"90\" font-size=\"11\" fill=\"var(--good)\">변성암</text><path d=\"M95 25 Q 50 55 60 82\" fill=\"none\" stroke=\"var(--ink-soft)\" stroke-width=\"1.5\"/><polygon points=\"55,78 58,90 68,82\" fill=\"var(--ink-soft)\"/><path d=\"M55 92 Q 100 115 145 92\" fill=\"none\" stroke=\"var(--ink-soft)\" stroke-width=\"1.5\"/><polygon points=\"140,86 152,90 143,98\" fill=\"var(--ink-soft)\"/><path d=\"M155 82 Q 145 45 105 25\" fill=\"none\" stroke=\"var(--ink-soft)\" stroke-width=\"1.5\"/><polygon points=\"108,17 98,25 110,30\" fill=\"var(--ink-soft)\"/></svg>",
+   "figcap": "세 암석은 열·압력·풍화를 거치며 서로 돌고 돌아 전환됩니다"
   },
   {
    "id": "rk_u3",
