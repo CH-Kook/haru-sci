@@ -39,7 +39,9 @@
    "stage": "hs",
    "title": "명반응과 암반응",
    "body": "광합성은 두 단계로 나뉩니다. 명반응은 빛을 직접 이용해 물을 분해하고 산소를 내놓으며 에너지 물질(ATP, NADPH)을 만듭니다. 암반응은 이 에너지 물질과 이산화탄소를 이용해 포도당을 만듭니다.",
-   "example": "<b>흐름</b> 명반응(빛→에너지 물질·산소) → 암반응(CO₂→포도당)."
+   "example": "<b>흐름</b> 명반응(빛→에너지 물질·산소) → 암반응(CO₂→포도당).",
+   "fig": "<svg viewBox=\"0 0 260 100\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"15\" y=\"20\" width=\"90\" height=\"55\" fill=\"var(--redpen)\" opacity=\"0.15\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><text x=\"35\" y=\"45\" font-size=\"11\" fill=\"var(--redpen)\">명반응</text><text x=\"22\" y=\"62\" font-size=\"9\" fill=\"var(--ink-soft)\">빛+물→ATP·NADPH·O₂</text><line x1=\"105\" y1=\"47\" x2=\"140\" y2=\"47\" stroke=\"var(--ink)\" stroke-width=\"2.5\"/><polygon points=\"135,42 148,47 135,52\" fill=\"var(--ink)\"/><rect x=\"150\" y=\"20\" width=\"95\" height=\"55\" fill=\"var(--good)\" opacity=\"0.15\" stroke=\"var(--good)\" stroke-width=\"2\"/><text x=\"175\" y=\"45\" font-size=\"11\" fill=\"var(--good)\">암반응</text><text x=\"158\" y=\"62\" font-size=\"9\" fill=\"var(--ink-soft)\">ATP+CO₂→포도당</text></svg>",
+   "figcap": "명반응이 만든 ATP·NADPH를 암반응이 받아 포도당을 만듭니다"
   },
   {
    "id": "ph_h3",

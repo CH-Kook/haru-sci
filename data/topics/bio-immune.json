@@ -39,7 +39,9 @@
    "stage": "hs",
    "title": "항원과 항체",
    "body": "몸이 이물질로 인식하는 것을 항원, 그 항원에 맞서 만들어지는 단백질을 항체라 합니다. 항원과 항체는 열쇠-자물쇠처럼 특이적으로 결합합니다. B 림프구가 항체를 만들고, T 림프구도 면역에 관여합니다.",
-   "example": "<b>특이성</b> 한 항체는 대체로 한 항원에만 맞습니다."
+   "example": "<b>특이성</b> 한 항체는 대체로 한 항원에만 맞습니다.",
+   "fig": "<svg viewBox=\"0 0 220 100\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M50 20 L70 50 L50 80 L30 50 Z\" fill=\"var(--redpen)\" opacity=\"0.25\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><text x=\"20\" y=\"95\" font-size=\"9\" fill=\"var(--ink-soft)\">항원</text><path d=\"M120 50 L150 20 M120 50 L150 80\" stroke=\"var(--bluepen)\" stroke-width=\"3\" fill=\"none\"/><path d=\"M150 20 L165 12 M150 80 L165 88\" stroke=\"var(--bluepen)\" stroke-width=\"3\" fill=\"none\"/><path d=\"M85 50 L110 50\" stroke=\"var(--ink-faint)\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"/><text x=\"120\" y=\"95\" font-size=\"9\" fill=\"var(--ink-soft)\">항체(Y자형)</text></svg>",
+   "figcap": "항체는 Y자 모양으로, 특정 항원 하나에만 열쇠처럼 딱 맞습니다"
   },
   {
    "id": "im_h3",

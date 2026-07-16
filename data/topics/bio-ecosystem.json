@@ -39,7 +39,9 @@
    "stage": "hs",
    "title": "에너지 피라미드",
    "body": "먹이 단계가 올라갈수록 전달되는 에너지는 크게 줄어듭니다. 대체로 각 단계에서 다음 단계로는 약 10%만 전해지고 나머지는 생활과 열로 쓰입니다. 그래서 상위 포식자일수록 개체 수가 적습니다.",
-   "example": "<b>10% 법칙</b> 다음 단계로 약 10%만 전달 → 위로 갈수록 에너지·개체 수 급감."
+   "example": "<b>10% 법칙</b> 다음 단계로 약 10%만 전달 → 위로 갈수록 에너지·개체 수 급감.",
+   "fig": "<svg viewBox=\"0 0 220 110\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"110,10 130,35 90,35\" fill=\"var(--redpen)\" opacity=\"0.3\" stroke=\"var(--redpen)\"/><text x=\"98\" y=\"28\" font-size=\"8\" fill=\"var(--ink)\">최상위</text><polygon points=\"110,10 150,60 70,60\" fill=\"none\" stroke=\"var(--ink-faint)\"/><text x=\"88\" y=\"52\" font-size=\"8\" fill=\"var(--ink)\">2차 소비자</text><polygon points=\"110,10 170,85 50,85\" fill=\"none\" stroke=\"var(--ink-faint)\"/><text x=\"78\" y=\"78\" font-size=\"8\" fill=\"var(--ink)\">1차 소비자</text><polygon points=\"110,10 190,105 30,105\" fill=\"none\" stroke=\"var(--ink-faint)\"/><text x=\"85\" y=\"100\" font-size=\"8\" fill=\"var(--ink)\">생산자</text></svg>",
+   "figcap": "위로 갈수록 폭이 좁아지듯, 전달되는 에너지와 개체 수도 줄어듭니다"
   },
   {
    "id": "ec_h3",

@@ -60,7 +60,9 @@
    "stage": "ug",
    "title": "전자전달계와 산소의 역할",
    "body": "앞 단계에서 모은 고에너지 전자운반체(NADH, FADH₂)가 내막의 전자전달계에 전자를 넘기면, 그 에너지로 수소 이온이 막 사이로 퍼올려집니다. 이 이온 기울기를 따라 ATP 합성효소가 ATP를 만듭니다(화학삼투). 이때 산소는 전자를 최종적으로 받아 물이 됩니다.",
-   "example": "<b>핵심</b> 산소는 전자전달계의 최종 전자 수용체 — 산소가 없으면 이 단계가 멈춥니다."
+   "example": "<b>핵심</b> 산소는 전자전달계의 최종 전자 수용체 — 산소가 없으면 이 단계가 멈춥니다.",
+   "fig": "<svg viewBox=\"0 0 260 110\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"10\" y=\"40\" width=\"240\" height=\"20\" fill=\"var(--ink-faint)\" opacity=\"0.3\"/><text x=\"100\" y=\"35\" font-size=\"9\" fill=\"var(--ink-soft)\">막(전자전달계)</text><circle cx=\"50\" cy=\"20\" r=\"5\" fill=\"var(--redpen)\"/><line x1=\"50\" y1=\"25\" x2=\"50\" y2=\"38\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><circle cx=\"120\" cy=\"20\" r=\"5\" fill=\"var(--redpen)\"/><line x1=\"120\" y1=\"25\" x2=\"120\" y2=\"38\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><text x=\"140\" y=\"24\" font-size=\"9\" fill=\"var(--redpen)\">H⁺ 퍼올림</text><circle cx=\"70\" cy=\"90\" r=\"5\" fill=\"var(--bluepen)\"/><circle cx=\"90\" cy=\"90\" r=\"5\" fill=\"var(--bluepen)\"/><line x1=\"80\" y1=\"85\" x2=\"80\" y2=\"62\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><polygon points=\"75,66 80,58 85,66\" fill=\"var(--bluepen)\"/><text x=\"95\" y=\"95\" font-size=\"9\" fill=\"var(--bluepen)\">H⁺ 흐름 → ATP 합성</text><text x=\"185\" y=\"20\" font-size=\"9\" fill=\"var(--good)\">O₂ + 전자 → H₂O</text></svg>",
+   "figcap": "전자가 흐르며 H⁺를 퍼올리고, 그 H⁺가 다시 흘러들며 ATP를 만듭니다"
   },
   {
    "id": "rs_u3",

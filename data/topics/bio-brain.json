@@ -32,7 +32,9 @@
    "stage": "hs",
    "title": "뉴런의 구조",
    "body": "뉴런은 세 부분으로 나뉩니다. 가지돌기는 다른 뉴런에서 신호를 받아들이고, 신경세포체는 핵이 있는 중심부이며, 축삭은 신호를 다음 세포로 내보냅니다. 자극을 받으면 뉴런 안에서 전기 신호가 만들어져 축삭을 따라 전달됩니다.",
-   "example": "<b>흐름</b> 가지돌기(입력) → 세포체 → 축삭(출력)."
+   "example": "<b>흐름</b> 가지돌기(입력) → 세포체 → 축삭(출력).",
+   "fig": "<svg viewBox=\"0 0 260 100\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"20\" x2=\"45\" y2=\"45\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><line x1=\"20\" y1=\"35\" x2=\"45\" y2=\"48\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><line x1=\"20\" y1=\"55\" x2=\"45\" y2=\"52\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><text x=\"5\" y=\"75\" font-size=\"9\" fill=\"var(--ink-soft)\">가지돌기</text><circle cx=\"55\" cy=\"50\" r=\"18\" fill=\"var(--ink)\" opacity=\"0.15\" stroke=\"var(--ink)\" stroke-width=\"2\"/><text x=\"38\" y=\"90\" font-size=\"9\" fill=\"var(--ink-soft)\">신경세포체</text><line x1=\"73\" y1=\"50\" x2=\"220\" y2=\"50\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><polygon points=\"215,45 228,50 215,55\" fill=\"var(--redpen)\"/><text x=\"120\" y=\"40\" font-size=\"9\" fill=\"var(--redpen)\">축삭(신호 출력)</text></svg>",
+   "figcap": "가지돌기(입력) → 신경세포체 → 축삭(출력) 순서로 신호가 전달됩니다"
   },
   {
    "id": "br_h2",
@@ -53,7 +55,9 @@
    "stage": "ug",
    "title": "활동전위",
    "body": "뉴런의 전기 신호는 활동전위입니다. 자극이 어떤 문턱(역치)을 넘으면 나트륨 이온이 밀려 들어와 막전위가 순간 뒤집혔다가(탈분극), 칼륨 이온이 나가며 원래대로 돌아옵니다(재분극). 활동전위는 역치를 넘으면 크기가 일정한 실무율을 따릅니다.",
-   "example": "<b>실무율</b> 역치 미만이면 반응 없음, 넘으면 항상 같은 크기의 신호가 발생합니다."
+   "example": "<b>실무율</b> 역치 미만이면 반응 없음, 넘으면 항상 같은 크기의 신호가 발생합니다.",
+   "fig": "<svg viewBox=\"0 0 260 120\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"90\" x2=\"240\" y2=\"90\" stroke=\"var(--ink-faint)\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/><text x=\"1\" y=\"93\" font-size=\"8\" fill=\"var(--ink-faint)\">휴지</text><path d=\"M20 90 L70 90 L90 15 L110 100 L150 92 L240 90\" fill=\"none\" stroke=\"var(--redpen)\" stroke-width=\"2.5\"/><text x=\"70\" y=\"12\" font-size=\"9\" fill=\"var(--redpen)\">탈분극(Na⁺ 유입)</text><text x=\"120\" y=\"112\" font-size=\"9\" fill=\"var(--bluepen)\">재분극(K⁺ 유출)</text></svg>",
+   "figcap": "역치를 넘으면 막전위가 급격히 치솟았다(탈분극) 다시 내려옵니다(재분극)"
   },
   {
    "id": "br_u2",

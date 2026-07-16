@@ -32,7 +32,9 @@
    "stage": "hs",
    "title": "전사와 번역",
    "body": "유전자 발현은 두 단계로 진행됩니다. 전사는 핵에서 DNA의 정보를 mRNA로 옮겨 적는 과정이고, 번역은 리보솜에서 mRNA의 정보를 읽어 아미노산을 이어 단백질을 만드는 과정입니다.",
-   "example": "<b>흐름</b> DNA →(전사)→ mRNA →(번역)→ 단백질."
+   "example": "<b>흐름</b> DNA →(전사)→ mRNA →(번역)→ 단백질.",
+   "fig": "<svg viewBox=\"0 0 260 80\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"10\" y=\"25\" width=\"55\" height=\"30\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"2\"/><text x=\"22\" y=\"45\" font-size=\"12\" fill=\"var(--ink)\">DNA</text><line x1=\"65\" y1=\"40\" x2=\"100\" y2=\"40\" stroke=\"var(--bluepen)\" stroke-width=\"2.5\"/><polygon points=\"95,35 108,40 95,45\" fill=\"var(--bluepen)\"/><text x=\"62\" y=\"20\" font-size=\"9\" fill=\"var(--bluepen)\">전사</text><rect x=\"110\" y=\"25\" width=\"55\" height=\"30\" fill=\"none\" stroke=\"var(--good)\" stroke-width=\"2\"/><text x=\"118\" y=\"45\" font-size=\"11\" fill=\"var(--good)\">mRNA</text><line x1=\"165\" y1=\"40\" x2=\"200\" y2=\"40\" stroke=\"var(--redpen)\" stroke-width=\"2.5\"/><polygon points=\"195,35 208,40 195,45\" fill=\"var(--redpen)\"/><text x=\"162\" y=\"20\" font-size=\"9\" fill=\"var(--redpen)\">번역</text><rect x=\"210\" y=\"25\" width=\"45\" height=\"30\" fill=\"none\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><text x=\"213\" y=\"45\" font-size=\"10\" fill=\"var(--redpen)\">단백질</text></svg>",
+   "figcap": "DNA → (전사) → mRNA → (번역) → 단백질 순서로 정보가 흐릅니다"
   },
   {
    "id": "ge_h2",
@@ -74,7 +76,9 @@
    "stage": "ug",
    "title": "젖당 오페론: 원핵생물의 스위치",
    "body": "대장균은 여러 유전자를 한 번에 켜고 끄는 오페론 구조를 씁니다. 젖당 오페론(lac operon)에서는 억제인자(repressor)가 평소 오퍼레이터에 붙어 전사를 막습니다. 젖당이 있으면 젖당의 대사산물(알로락토스)이 억제인자에 결합해 억제인자의 구조를 바꾸고, 그 결과 억제인자가 오퍼레이터에서 떨어져 나가야 RNA 중합효소가 젖당 분해에 필요한 유전자들을 전사할 수 있습니다.",
-   "example": "<b>원리</b> 평소엔 억제인자가 막아 OFF → 젖당(알로락토스)이 억제인자를 무력화 → 전사 개시(ON)."
+   "example": "<b>원리</b> 평소엔 억제인자가 막아 OFF → 젖당(알로락토스)이 억제인자를 무력화 → 전사 개시(ON).",
+   "fig": "<svg viewBox=\"0 0 260 100\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"10\" y1=\"30\" x2=\"250\" y2=\"30\" stroke=\"var(--ink)\" stroke-width=\"3\"/><rect x=\"60\" y=\"18\" width=\"40\" height=\"24\" fill=\"var(--redpen)\" opacity=\"0.3\" stroke=\"var(--redpen)\"/><text x=\"63\" y=\"14\" font-size=\"9\" fill=\"var(--redpen)\">억제인자(막음)</text><text x=\"10\" y=\"55\" font-size=\"10\" fill=\"var(--ink-soft)\">젖당 없음 → 억제인자가 자리 차지 → 전사 OFF</text><line x1=\"10\" y1=\"85\" x2=\"250\" y2=\"85\" stroke=\"var(--ink)\" stroke-width=\"3\"/><circle cx=\"80\" cy=\"73\" r=\"6\" fill=\"var(--good)\"/><line x1=\"120\" y1=\"73\" x2=\"200\" y2=\"73\" stroke=\"var(--good)\" stroke-width=\"2.5\"/><polygon points=\"195,68 208,73 195,78\" fill=\"var(--good)\"/><text x=\"10\" y=\"100\" font-size=\"10\" fill=\"var(--ink-soft)\">젖당 있음 → 억제인자 떨어짐 → 전사 ON</text></svg>",
+   "figcap": "억제인자가 자리를 막으면 OFF, 젖당이 억제인자를 치우면 ON입니다"
   },
   {
    "id": "ge_u5",

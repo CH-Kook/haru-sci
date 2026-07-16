@@ -90,7 +90,9 @@
    "stage": "ug",
    "title": "삼투압과 등장액·고장액·저장액",
    "body": "삼투는 물이 반투과성 막을 통해 농도가 낮은 쪽(용질이 적은 쪽)에서 높은 쪽(용질이 많은 쪽)으로 이동하는 확산입니다. 세포 안 용질 농도와 바깥 용액의 농도를 비교해 세 상황으로 나눕니다. 등장액에서는 안팎 농도가 같아 물의 순이동이 없어 세포 크기가 그대로 유지됩니다. 고장액(바깥 용질 농도가 더 높음)에서는 물이 세포 밖으로 빠져나가 세포가 쪼그라듭니다. 저장액(바깥 용질 농도가 더 낮음)에서는 물이 세포 안으로 들어와 세포가 부풀며, 세포벽이 없는 동물세포는 저장액에서 심하면 터질 수도 있습니다.",
-   "example": "<b>예</b> 적혈구를 순수한 물(저장액)에 넣으면 물이 들어와 부풀다 터지지만, 진한 소금물(고장액)에 넣으면 쪼그라듭니다."
+   "example": "<b>예</b> 적혈구를 순수한 물(저장액)에 넣으면 물이 들어와 부풀다 터지지만, 진한 소금물(고장액)에 넣으면 쪼그라듭니다.",
+   "fig": "<svg viewBox=\"0 0 260 100\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"45\" cy=\"50\" r=\"22\" fill=\"var(--bluepen)\" opacity=\"0.2\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><text x=\"25\" y=\"85\" font-size=\"9\" fill=\"var(--ink-soft)\">고장액: 쪼그라듦</text><circle cx=\"130\" cy=\"50\" r=\"28\" fill=\"var(--good)\" opacity=\"0.2\" stroke=\"var(--good)\" stroke-width=\"2\"/><text x=\"105\" y=\"90\" font-size=\"9\" fill=\"var(--ink-soft)\">등장액: 그대로</text><circle cx=\"210\" cy=\"50\" r=\"34\" fill=\"var(--redpen)\" opacity=\"0.2\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><text x=\"185\" y=\"95\" font-size=\"9\" fill=\"var(--ink-soft)\">저장액: 부풀음</text></svg>",
+   "figcap": "바깥 용액의 농도에 따라 물이 세포 안팎으로 이동해 크기가 달라집니다"
   },
   {
    "id": "bc_u5",

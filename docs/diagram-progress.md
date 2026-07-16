@@ -36,17 +36,18 @@
 - [x] chem-battery: (−)극과 (+)극(th2)
 - [x] chem-carbon: 탄화수소 사슬 구조(ch2)
 
-## 생명과학 (대기)
+## 생명과학 (완료 · 2026-07-16)
 
-- [ ] bio-cell: 세포 구조, 삼투
-- [ ] bio-dna: 이중나선, 복제 과정
-- [ ] bio-expression: 전사·번역, 오페론
-- [ ] bio-photosynthesis/bio-respiration: 소기관 구조, 전자전달계
-- [ ] bio-brain: 뉴런 구조, 시냅스, 활동전위 그래프
-- [ ] bio-immune: 항원-항체, 면역 반응 과정
-- [ ] bio-hormone: 시상하부-뇌하수체 축
-- [ ] bio-ecosystem: 먹이그물, 에너지 피라미드
-- [ ] bio-evidence: 상동기관, 계통수
+- [x] bio-cell: 삼투압(bc_u4) — bc4(소기관)는 기존에 이미 있었음
+- [x] bio-dna: 염기쌍 상보성(dh2), 반보존적 복제(dh3)
+- [x] bio-expression: 전사·번역(ge_h1), 젖당 오페론(ge_u4)
+- [x] bio-photosynthesis: 명반응·암반응(ph_h2)
+- [x] bio-respiration: 전자전달계(rs_u2)
+- [x] bio-brain: 뉴런 구조(br_h1), 활동전위 그래프(br_u1)
+- [x] bio-immune: 항원-항체(im_h2)
+- [x] bio-hormone: 음성 피드백(hm_h2), 시상하부-뇌하수체 축(hm_u2)
+- [x] bio-ecosystem: 에너지 피라미드(ec_h2)
+- [x] bio-evidence: 상동기관(evd_h1), 계통수(evd_u5)
 
 ## 지구과학 (대기)
 

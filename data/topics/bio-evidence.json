@@ -32,7 +32,9 @@
    "stage": "hs",
    "title": "상동기관",
    "body": "사람의 팔, 박쥐의 날개, 고래의 지느러미는 하는 일은 다르지만 발생 과정과 뼈대 구조가 같습니다. 이렇게 구조가 같고 기능이 다른 기관을 상동기관이라 하며, 공통 조상의 강력한 증거입니다.",
-   "example": "<b>정의</b> 구조는 같고 기능은 다르다 → 상동기관 → 공통 조상."
+   "example": "<b>정의</b> 구조는 같고 기능은 다르다 → 상동기관 → 공통 조상.",
+   "fig": "<svg viewBox=\"0 0 260 90\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"30\" y1=\"20\" x2=\"30\" y2=\"70\" stroke=\"var(--redpen)\" stroke-width=\"4\"/><text x=\"12\" y=\"85\" font-size=\"9\" fill=\"var(--ink-soft)\">사람 팔</text><path d=\"M110 20 L140 25 L160 40\" stroke=\"var(--redpen)\" stroke-width=\"4\" fill=\"none\"/><text x=\"100\" y=\"85\" font-size=\"9\" fill=\"var(--ink-soft)\">박쥐 날개</text><path d=\"M200 20 Q 215 45 205 70\" stroke=\"var(--redpen)\" stroke-width=\"4\" fill=\"none\"/><text x=\"180\" y=\"85\" font-size=\"9\" fill=\"var(--ink-soft)\">고래 지느러미</text></svg>",
+   "figcap": "생김새와 쓰임은 달라도 뼈대의 기본 구조(빨간선)는 같습니다"
   },
   {
    "id": "evd_h2",
@@ -81,7 +83,9 @@
    "stage": "ug",
    "title": "계통수와 공유파생형질",
    "body": "계통수는 생물 사이의 진화적 유연관계를 나뭇가지 모양으로 나타낸 그림입니다. 계통수를 만들 때는 조상에게서 물려받았지만 여러 무리가 공통으로 갖는 오래된 형질(공유조상형질)이 아니라, 특정 무리에서 새로 나타나 그 무리를 하나로 묶어주는 파생형질(공유파생형질)을 기준으로 삼습니다. 가지가 갈라지는 점(마디)은 공통 조상에서 두 계통이 분기한 시점을 뜻하며, 가지 길이는 서열 차이나 시간의 크기를 나타내기도 합니다.",
-   "example": "<b>예</b> '척추가 있다'는 척추동물 전체가 공유하는 오래된 형질이라 세부 분류에는 못 쓰지만, '깃털이 있다'는 새 계통을 묶는 파생형질로 쓸 수 있습니다."
+   "example": "<b>예</b> '척추가 있다'는 척추동물 전체가 공유하는 오래된 형질이라 세부 분류에는 못 쓰지만, '깃털이 있다'는 새 계통을 묶는 파생형질로 쓸 수 있습니다.",
+   "fig": "<svg viewBox=\"0 0 220 100\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"85\" x2=\"70\" y2=\"50\" stroke=\"var(--ink)\" stroke-width=\"2\"/><line x1=\"70\" y1=\"50\" x2=\"110\" y2=\"20\" stroke=\"var(--ink)\" stroke-width=\"2\"/><line x1=\"70\" y1=\"50\" x2=\"110\" y2=\"80\" stroke=\"var(--ink)\" stroke-width=\"2\"/><line x1=\"110\" y1=\"80\" x2=\"150\" y2=\"55\" stroke=\"var(--ink)\" stroke-width=\"2\"/><line x1=\"110\" y1=\"80\" x2=\"150\" y2=\"95\" stroke=\"var(--ink)\" stroke-width=\"2\"/><circle cx=\"70\" cy=\"50\" r=\"3\" fill=\"var(--redpen)\"/><circle cx=\"110\" cy=\"80\" r=\"3\" fill=\"var(--redpen)\"/><text x=\"105\" y=\"15\" font-size=\"9\" fill=\"var(--ink-soft)\">종 A</text><text x=\"155\" y=\"58\" font-size=\"9\" fill=\"var(--ink-soft)\">종 B</text><text x=\"155\" y=\"98\" font-size=\"9\" fill=\"var(--ink-soft)\">종 C</text><text x=\"5\" y=\"80\" font-size=\"9\" fill=\"var(--ink-soft)\">공통조상</text></svg>",
+   "figcap": "가지가 갈라지는 마디(빨간 점)는 공통 조상에서 두 계통이 나뉜 지점입니다"
   }
  ],
  "questions": [

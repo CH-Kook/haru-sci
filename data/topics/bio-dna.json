@@ -39,14 +39,18 @@
    "stage": "hs",
    "title": "염기쌍의 상보성",
    "body": "두 가닥을 잇는 사다리의 '가로대'는 염기끼리의 결합입니다. 이때 A는 반드시 T와, G는 반드시 C와만 짝을 이룹니다(상보적 결합). 그래서 한 가닥의 염기 순서를 알면 반대편 가닥의 순서가 저절로 정해집니다.",
-   "example": "<b>규칙</b> A—T, G—C. 예를 들어 한 가닥이 A-G-C면 짝가닥은 T-C-G입니다."
+   "example": "<b>규칙</b> A—T, G—C. 예를 들어 한 가닥이 A-G-C면 짝가닥은 T-C-G입니다.",
+   "fig": "<svg viewBox=\"0 0 220 110\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"10\" x2=\"20\" y2=\"100\" stroke=\"var(--ink)\" stroke-width=\"3\"/><line x1=\"200\" y1=\"10\" x2=\"200\" y2=\"100\" stroke=\"var(--ink)\" stroke-width=\"3\"/><line x1=\"20\" y1=\"25\" x2=\"200\" y2=\"25\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><text x=\"95\" y=\"20\" font-size=\"11\" fill=\"var(--redpen)\">A — T</text><line x1=\"20\" y1=\"50\" x2=\"200\" y2=\"50\" stroke=\"var(--bluepen)\" stroke-width=\"3\"/><text x=\"95\" y=\"45\" font-size=\"11\" fill=\"var(--bluepen)\">G — C</text><line x1=\"20\" y1=\"75\" x2=\"200\" y2=\"75\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><text x=\"95\" y=\"70\" font-size=\"11\" fill=\"var(--redpen)\">T — A</text></svg>",
+   "figcap": "사다리처럼 두 가닥을 잇는 염기는 항상 A-T, G-C로만 짝을 이룹니다"
   },
   {
    "id": "dh3",
    "stage": "hs",
    "title": "DNA 복제: 반보존적",
    "body": "세포가 나뉘기 전 DNA는 똑같이 두 벌로 복제됩니다. 두 가닥이 지퍼처럼 풀리고, 각 가닥이 틀(주형)이 되어 상보성 규칙대로 새 가닥을 붙입니다. 그 결과 만들어진 딸 DNA는 '옛 가닥 1 + 새 가닥 1'로 이루어집니다. 이를 반보존적 복제라고 합니다.",
-   "example": "<b>핵심</b> 완전히 새로 만드는 게 아니라, 옛 가닥 한 줄을 항상 물려받습니다."
+   "example": "<b>핵심</b> 완전히 새로 만드는 게 아니라, 옛 가닥 한 줄을 항상 물려받습니다.",
+   "fig": "<svg viewBox=\"0 0 260 110\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"20\" x2=\"90\" y2=\"20\" stroke=\"var(--ink)\" stroke-width=\"3\"/><line x1=\"20\" y1=\"35\" x2=\"90\" y2=\"35\" stroke=\"var(--ink)\" stroke-width=\"3\"/><text x=\"15\" y=\"12\" font-size=\"9\" fill=\"var(--ink-soft)\">원래 DNA</text><line x1=\"110\" y1=\"20\" x2=\"250\" y2=\"20\" stroke=\"var(--ink)\" stroke-width=\"3\"/><line x1=\"110\" y1=\"35\" x2=\"250\" y2=\"35\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><text x=\"195\" y=\"12\" font-size=\"9\" fill=\"var(--ink-soft)\">옛 가닥 + 새 가닥</text><line x1=\"110\" y1=\"75\" x2=\"250\" y2=\"75\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><line x1=\"110\" y1=\"90\" x2=\"250\" y2=\"90\" stroke=\"var(--ink)\" stroke-width=\"3\"/><text x=\"195\" y=\"105\" font-size=\"9\" fill=\"var(--ink-soft)\">새 가닥 + 옛 가닥</text></svg>",
+   "figcap": "두 가닥이 풀려 각각 틀이 되고, 딸 DNA마다 옛 가닥 1개 + 새 가닥 1개가 섞입니다"
   },
   {
    "id": "dh4",
