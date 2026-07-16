@@ -39,7 +39,9 @@
    "stage": "hs",
    "title": "(−)극과 (+)극",
    "body": "전자가 나오는 쪽이 (−)극(산화가 일어남), 전자가 들어가는 쪽이 (+)극(환원이 일어남)입니다. 전자는 (−)극에서 (+)극으로 도선을 따라 흐릅니다.",
-   "example": "<b>암기</b> (−)극 = 산화, (+)극 = 환원."
+   "example": "<b>암기</b> (−)극 = 산화, (+)극 = 환원.",
+   "fig": "<svg viewBox=\"0 0 260 100\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"30\" y=\"20\" width=\"40\" height=\"60\" fill=\"var(--bluepen)\" opacity=\"0.2\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><text x=\"40\" y=\"55\" font-size=\"14\" fill=\"var(--bluepen)\">(−)</text><text x=\"20\" y=\"92\" font-size=\"9\" fill=\"var(--ink-soft)\">산화(전자 나감)</text><rect x=\"190\" y=\"20\" width=\"40\" height=\"60\" fill=\"var(--redpen)\" opacity=\"0.2\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><text x=\"200\" y=\"55\" font-size=\"14\" fill=\"var(--redpen)\">(+)</text><text x=\"175\" y=\"92\" font-size=\"9\" fill=\"var(--ink-soft)\">환원(전자 들어옴)</text><line x1=\"70\" y1=\"30\" x2=\"190\" y2=\"30\" stroke=\"var(--ink)\" stroke-width=\"2.5\"/><polygon points=\"180,25 192,30 180,35\" fill=\"var(--ink)\"/><text x=\"95\" y=\"22\" font-size=\"9\" fill=\"var(--ink)\">전자 흐름</text></svg>",
+   "figcap": "전자는 (−)극(산화)에서 나와 도선을 지나 (+)극(환원)으로 들어갑니다"
   },
   {
    "id": "th3",

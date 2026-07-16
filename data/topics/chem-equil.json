@@ -39,7 +39,9 @@
    "stage": "hs",
    "title": "르샤틀리에 원리",
    "body": "평형에 변화(농도·온도·압력)를 주면, 그 변화를 줄이는 방향으로 평형이 이동합니다. 이것이 르샤틀리에 원리입니다.",
-   "example": "<b>예</b> 반응물을 더 넣으면 그것을 소모하는 정반응 쪽으로 평형이 이동합니다."
+   "example": "<b>예</b> 반응물을 더 넣으면 그것을 소모하는 정반응 쪽으로 평형이 이동합니다.",
+   "fig": "<svg viewBox=\"0 0 260 90\" xmlns=\"http://www.w3.org/2000/svg\"><text x=\"20\" y=\"30\" font-size=\"13\" fill=\"var(--ink)\">A + B</text><line x1=\"80\" y1=\"25\" x2=\"130\" y2=\"25\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><polygon points=\"130,21 142,25 130,29\" fill=\"var(--redpen)\"/><line x1=\"130\" y1=\"40\" x2=\"80\" y2=\"40\" stroke=\"var(--ink-faint)\" stroke-width=\"1.5\"/><polygon points=\"80,37 70,40 80,43\" fill=\"var(--ink-faint)\"/><text x=\"150\" y=\"30\" font-size=\"13\" fill=\"var(--ink)\">C</text><text x=\"20\" y=\"70\" font-size=\"9\" fill=\"var(--redpen)\">A를 더 넣으면 → 소모하는 방향(오른쪽)으로 평형 이동</text></svg>",
+   "figcap": "가해진 변화를 상쇄하는 방향으로 평형이 이동합니다"
   },
   {
    "id": "eh3",

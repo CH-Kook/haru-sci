@@ -39,7 +39,9 @@
    "stage": "hs",
    "title": "족과 원자가전자",
    "body": "같은 족(세로줄) 원소들은 가장 바깥 껍질의 전자(원자가전자) 수가 같습니다. 화학적 성질은 이 원자가전자가 결정하므로, 같은 족은 성질이 비슷합니다.",
-   "example": "<b>예</b> 1족(리튬·나트륨·칼륨)은 원자가전자가 1개라 모두 반응성이 큽니다."
+   "example": "<b>예</b> 1족(리튬·나트륨·칼륨)은 원자가전자가 1개라 모두 반응성이 큽니다.",
+   "fig": "<svg viewBox=\"0 0 220 110\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"20\" y=\"10\" width=\"30\" height=\"30\" fill=\"var(--redpen)\" opacity=\"0.2\" stroke=\"var(--redpen)\"/><text x=\"28\" y=\"30\" font-size=\"12\" fill=\"var(--redpen)\">Li</text><rect x=\"20\" y=\"45\" width=\"30\" height=\"30\" fill=\"var(--redpen)\" opacity=\"0.2\" stroke=\"var(--redpen)\"/><text x=\"25\" y=\"65\" font-size=\"12\" fill=\"var(--redpen)\">Na</text><rect x=\"20\" y=\"80\" width=\"30\" height=\"30\" fill=\"var(--redpen)\" opacity=\"0.2\" stroke=\"var(--redpen)\"/><text x=\"27\" y=\"100\" font-size=\"12\" fill=\"var(--redpen)\">K</text><text x=\"65\" y=\"30\" font-size=\"9\" fill=\"var(--ink-soft)\">1족: 원자가전자 1개</text><text x=\"65\" y=\"65\" font-size=\"9\" fill=\"var(--ink-soft)\">→ 세로로 같은 족</text><text x=\"65\" y=\"100\" font-size=\"9\" fill=\"var(--ink-soft)\">→ 성질도 비슷</text></svg>",
+   "figcap": "같은 세로줄(족)에 있는 원소끼리 원자가전자 수와 화학적 성질이 비슷합니다"
   },
   {
    "id": "ph3",
@@ -53,7 +55,9 @@
    "stage": "ug",
    "title": "오비탈 채움과 주기율표 구획",
    "body": "주기율표의 모양은 전자가 오비탈을 채우는 순서를 그대로 반영합니다. s·p·d·f 오비탈이 채워지는 영역에 따라 s-구역, p-구역, d-구역(전이금속), f-구역으로 나뉩니다.",
-   "example": "<b>핵심</b> 주기율표의 블록 구조 = 오비탈이 채워지는 순서의 그림입니다."
+   "example": "<b>핵심</b> 주기율표의 블록 구조 = 오비탈이 채워지는 순서의 그림입니다.",
+   "fig": "<svg viewBox=\"0 0 260 100\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"20\" y=\"15\" width=\"25\" height=\"70\" fill=\"var(--bluepen)\" opacity=\"0.25\"/><text x=\"22\" y=\"95\" font-size=\"9\" fill=\"var(--bluepen)\">s구역</text><rect x=\"55\" y=\"40\" width=\"90\" height=\"45\" fill=\"var(--good)\" opacity=\"0.25\"/><text x=\"85\" y=\"95\" font-size=\"9\" fill=\"var(--good)\">d구역(전이금속)</text><rect x=\"155\" y=\"15\" width=\"75\" height=\"70\" fill=\"var(--redpen)\" opacity=\"0.25\"/><text x=\"175\" y=\"95\" font-size=\"9\" fill=\"var(--redpen)\">p구역</text></svg>",
+   "figcap": "주기율표는 전자가 채워지는 오비탈 종류에 따라 s·p·d 구역으로 나뉩니다"
   },
   {
    "id": "pu2",

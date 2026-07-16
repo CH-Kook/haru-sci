@@ -39,7 +39,9 @@
    "stage": "hs",
    "title": "pH 척도",
    "body": "용액의 산성·염기성 정도를 0~14의 숫자로 나타낸 것이 pH입니다. pH 7이 중성이고, 7보다 작으면 산성, 크면 염기성입니다. 숫자가 작을수록 더 강한 산성입니다.",
-   "example": "<b>주의</b> pH는 1 차이가 산성도 10배 차이입니다. pH 3은 pH 5보다 100배 강한 산성입니다."
+   "example": "<b>주의</b> pH는 1 차이가 산성도 10배 차이입니다. pH 3은 pH 5보다 100배 강한 산성입니다.",
+   "fig": "<svg viewBox=\"0 0 280 60\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"10\" y=\"15\" width=\"260\" height=\"20\" fill=\"url(#phgrad)\" stroke=\"var(--ink-faint)\"/><defs><linearGradient id=\"phgrad\" x1=\"0\" x2=\"1\"><stop offset=\"0\" stop-color=\"var(--redpen)\"/><stop offset=\"0.5\" stop-color=\"var(--good)\"/><stop offset=\"1\" stop-color=\"var(--bluepen)\"/></linearGradient></defs><line x1=\"140\" y1=\"12\" x2=\"140\" y2=\"38\" stroke=\"var(--ink)\" stroke-width=\"1.5\"/><text x=\"10\" y=\"52\" font-size=\"9\" fill=\"var(--ink-soft)\">0(강산)</text><text x=\"128\" y=\"52\" font-size=\"9\" fill=\"var(--ink-soft)\">7(중성)</text><text x=\"240\" y=\"52\" font-size=\"9\" fill=\"var(--ink-soft)\">14(강염기)</text></svg>",
+   "figcap": "pH 척도: 0~14, 숫자가 작을수록 강한 산성, 클수록 강한 염기성"
   },
   {
    "id": "ah3",
@@ -88,7 +90,9 @@
    "stage": "ug",
    "title": "적정곡선과 다양성자산",
    "body": "산-염기 적정에서 넣어준 염기의 몰수가 산의 몰수와 같아지는 지점이 당량점입니다. 당량점의 절반 지점(half-equivalence point)에서는 $[\\mathrm{HA}]=[\\mathrm{A^-}]$가 되어 헨더슨-하셀바흐 식의 로그항이 0이 되므로 $\\mathrm{pH}=\\mathrm{p}K_a$가 성립합니다. 인산처럼 H⁺를 여러 개 내놓는 다양성자산은 한 번에 다 이온화되지 않고 단계적으로 이온화되며, 뒤로 갈수록 이온화 상수가 급격히 작아집니다($K_{a1}>K_{a2}>K_{a3}$).",
-   "example": "<b>예</b> 인산 $\\mathrm{H_3PO_4}$는 $K_{a1}\\approx7.5\\times10^{-3}$, $K_{a2}\\approx6.2\\times10^{-8}$, $K_{a3}\\approx4.2\\times10^{-13}$로 3단계에 걸쳐 이온화됩니다. 각 단계 사이에 적정곡선의 당량점이 하나씩 나타납니다."
+   "example": "<b>예</b> 인산 $\\mathrm{H_3PO_4}$는 $K_{a1}\\approx7.5\\times10^{-3}$, $K_{a2}\\approx6.2\\times10^{-8}$, $K_{a3}\\approx4.2\\times10^{-13}$로 3단계에 걸쳐 이온화됩니다. 각 단계 사이에 적정곡선의 당량점이 하나씩 나타납니다.",
+   "fig": "<svg viewBox=\"0 0 260 130\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"110\" x2=\"240\" y2=\"110\" stroke=\"var(--ink-faint)\" stroke-width=\"2\"/><line x1=\"20\" y1=\"110\" x2=\"20\" y2=\"15\" stroke=\"var(--ink-faint)\" stroke-width=\"2\"/><text x=\"195\" y=\"125\" font-size=\"10\" fill=\"var(--ink-faint)\">염기 부피</text><text x=\"3\" y=\"18\" font-size=\"10\" fill=\"var(--ink-faint)\">pH</text><path d=\"M20 95 Q 60 90 80 75 Q 100 30 105 25 Q 110 30 130 75 Q 150 90 200 92\" fill=\"none\" stroke=\"var(--redpen)\" stroke-width=\"2.5\"/><line x1=\"105\" y1=\"110\" x2=\"105\" y2=\"25\" stroke=\"var(--bluepen)\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/><text x=\"108\" y=\"22\" font-size=\"9\" fill=\"var(--bluepen)\">당량점(급격히 변함)</text></svg>",
+   "figcap": "당량점 부근에서 pH가 급격히 변하는 S자 곡선이 적정곡선입니다"
   }
  ],
  "questions": [

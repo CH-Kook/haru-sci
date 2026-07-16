@@ -32,14 +32,18 @@
    "stage": "hs",
    "title": "이온 결합: 전자를 주고받기",
    "body": "금속 원자가 전자를 잃고 비금속 원자가 그 전자를 얻으면, 서로 반대 전하를 띤 이온이 되어 전기적으로 끌어당깁니다. 이 결합이 이온 결합입니다.",
-   "example": "<b>예</b> 소금(NaCl)은 Na가 전자를 잃고 Cl이 얻어 Na⁺와 Cl⁻이 끌어당긴 것입니다."
+   "example": "<b>예</b> 소금(NaCl)은 Na가 전자를 잃고 Cl이 얻어 Na⁺와 Cl⁻이 끌어당긴 것입니다.",
+   "fig": "<svg viewBox=\"0 0 260 100\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"60\" cy=\"50\" r=\"28\" fill=\"none\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><text x=\"48\" y=\"55\" font-size=\"14\" fill=\"var(--bluepen)\">Na</text><circle cx=\"150\" cy=\"38\" r=\"5\" fill=\"var(--redpen)\"/><line x1=\"85\" y1=\"48\" x2=\"140\" y2=\"40\" stroke=\"var(--redpen)\" stroke-width=\"2\" stroke-dasharray=\"3,2\"/><polygon points=\"135,35 148,38 135,44\" fill=\"var(--redpen)\"/><circle cx=\"200\" cy=\"50\" r=\"32\" fill=\"none\" stroke=\"var(--good)\" stroke-width=\"2\"/><text x=\"186\" y=\"55\" font-size=\"14\" fill=\"var(--good)\">Cl</text><text x=\"40\" y=\"90\" font-size=\"10\" fill=\"var(--ink-soft)\">Na⁺(전자 잃음) ↔ Cl⁻(전자 얻음): 반대 전하로 끌어당김</text></svg>",
+   "figcap": "Na가 전자 하나를 Cl에게 내주면, Na⁺와 Cl⁻이 서로 끌어당깁니다"
   },
   {
    "id": "bh2",
    "stage": "hs",
    "title": "공유 결합: 전자를 나눠 갖기",
    "body": "비금속 원자끼리는 전자를 서로 내놓아 공유하면서 결합합니다. 이 결합이 공유 결합이며, 물·이산화탄소 같은 분자가 이렇게 만들어집니다.",
-   "example": "<b>예</b> 물(H₂O)에서 산소와 수소는 전자쌍을 공유합니다."
+   "example": "<b>예</b> 물(H₂O)에서 산소와 수소는 전자쌍을 공유합니다.",
+   "fig": "<svg viewBox=\"0 0 240 100\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"70\" cy=\"50\" r=\"30\" fill=\"none\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><text x=\"58\" y=\"55\" font-size=\"13\" fill=\"var(--bluepen)\">H</text><circle cx=\"170\" cy=\"50\" r=\"30\" fill=\"none\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><text x=\"152\" y=\"55\" font-size=\"13\" fill=\"var(--redpen)\">Cl</text><circle cx=\"112\" cy=\"46\" r=\"4\" fill=\"var(--ink)\"/><circle cx=\"112\" cy=\"56\" r=\"4\" fill=\"var(--ink)\"/><text x=\"75\" y=\"90\" font-size=\"10\" fill=\"var(--ink-soft)\">겹치는 부분(전자쌍)을 두 원자가 함께 공유</text></svg>",
+   "figcap": "두 원자가 서로 다가와 전자쌍을 함께 나눠 가지며 결합합니다"
   },
   {
    "id": "bh3",
@@ -81,7 +85,9 @@
    "stage": "ug",
    "title": "혼성궤도: sp, sp², sp³",
    "body": "탄소 같은 원자가 결합을 만들 때는 순수한 s, p 오비탈이 아니라 서로 섞인 혼성궤도를 씁니다. s오비탈 1개와 p오비탈 3개가 모두 섞이면 sp³(정사면체, 결합각 109.5°), p오비탈 2개만 섞이면 sp²(평면삼각형, 120°), p오비탈 1개만 섞이면 sp(직선형, 180°)가 됩니다. 혼성궤도의 수는 중심 원자에 붙은 원자 수와 비공유 전자쌍 수를 더한 값과 같습니다.",
-   "example": "<b>예</b> 메테인(CH₄)의 탄소는 sp³ 혼성(109.5°, 정사면체), 에틸렌(C₂H₄)의 탄소는 sp² 혼성(120°, 평면), 아세틸렌(C₂H₂)의 탄소는 sp 혼성(180°, 직선)입니다."
+   "example": "<b>예</b> 메테인(CH₄)의 탄소는 sp³ 혼성(109.5°, 정사면체), 에틸렌(C₂H₄)의 탄소는 sp² 혼성(120°, 평면), 아세틸렌(C₂H₂)의 탄소는 sp 혼성(180°, 직선)입니다.",
+   "fig": "<svg viewBox=\"0 0 260 100\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"40\" cy=\"50\" r=\"5\" fill=\"var(--ink)\"/><line x1=\"40\" y1=\"50\" x2=\"20\" y2=\"25\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><line x1=\"40\" y1=\"50\" x2=\"62\" y2=\"25\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><line x1=\"40\" y1=\"50\" x2=\"20\" y2=\"75\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><line x1=\"40\" y1=\"50\" x2=\"62\" y2=\"75\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><text x=\"15\" y=\"92\" font-size=\"9\" fill=\"var(--ink-soft)\">sp³ 109.5°</text><circle cx=\"140\" cy=\"50\" r=\"5\" fill=\"var(--ink)\"/><line x1=\"140\" y1=\"50\" x2=\"115\" y2=\"30\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><line x1=\"140\" y1=\"50\" x2=\"165\" y2=\"30\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><line x1=\"140\" y1=\"50\" x2=\"140\" y2=\"78\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><text x=\"115\" y=\"92\" font-size=\"9\" fill=\"var(--ink-soft)\">sp² 120°</text><circle cx=\"220\" cy=\"50\" r=\"5\" fill=\"var(--ink)\"/><line x1=\"220\" y1=\"50\" x2=\"195\" y2=\"50\" stroke=\"var(--good)\" stroke-width=\"2\"/><line x1=\"220\" y1=\"50\" x2=\"245\" y2=\"50\" stroke=\"var(--good)\" stroke-width=\"2\"/><text x=\"200\" y=\"92\" font-size=\"9\" fill=\"var(--ink-soft)\">sp 180°</text></svg>",
+   "figcap": "섞이는 오비탈 수가 많을수록 결합 각도가 좁아지고 입체적이 됩니다"
   },
   {
    "id": "bu5",

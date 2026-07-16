@@ -83,7 +83,9 @@
    "stage": "ug",
    "title": "오비탈의 모양과 개수",
    "body": "ℓ=0인 s오비탈은 구형, ℓ=1인 p오비탈은 아령 모양으로 3개(px, py, pz), ℓ=2인 d오비탈은 대부분 네잎클로버 모양으로 5개입니다. 주양자수 n인 껍질에는 오비탈이 총 n²개 있고, 오비탈 하나에 전자가 2개씩 들어가므로 그 껍질이 채울 수 있는 전자는 최대 2n²개입니다.",
-   "example": "<b>계산</b> n=4 껍질은 오비탈이 4²=16개(4s 1개+4p 3개+4d 5개+4f 7개), 최대 전자 수는 2×16=32개입니다."
+   "example": "<b>계산</b> n=4 껍질은 오비탈이 4²=16개(4s 1개+4p 3개+4d 5개+4f 7개), 최대 전자 수는 2×16=32개입니다.",
+   "fig": "<svg viewBox=\"0 0 260 100\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"40\" cy=\"55\" r=\"25\" fill=\"var(--bluepen)\" opacity=\"0.25\"/><text x=\"25\" y=\"92\" font-size=\"10\" fill=\"var(--ink-soft)\">s(구형)</text><ellipse cx=\"130\" cy=\"40\" rx=\"12\" ry=\"25\" fill=\"var(--redpen)\" opacity=\"0.3\"/><ellipse cx=\"130\" cy=\"70\" rx=\"12\" ry=\"25\" fill=\"var(--redpen)\" opacity=\"0.3\"/><text x=\"110\" y=\"92\" font-size=\"10\" fill=\"var(--ink-soft)\">p(아령형)</text><ellipse cx=\"210\" cy=\"55\" rx=\"28\" ry=\"10\" fill=\"var(--good)\" opacity=\"0.3\" transform=\"rotate(45 210 55)\"/><ellipse cx=\"210\" cy=\"55\" rx=\"28\" ry=\"10\" fill=\"var(--good)\" opacity=\"0.3\" transform=\"rotate(-45 210 55)\"/><text x=\"188\" y=\"92\" font-size=\"10\" fill=\"var(--ink-soft)\">d(네잎클로버형)</text></svg>",
+   "figcap": "오비탈 종류마다 전자가 있을 확률구름의 모양이 다릅니다"
   },
   {
    "id": "ca_ug4",

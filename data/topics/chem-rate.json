@@ -53,7 +53,9 @@
    "stage": "ug",
    "title": "활성화 에너지",
    "body": "반응이 일어나려면 넘어야 할 최소한의 에너지 장벽이 있는데, 이를 활성화 에너지라 합니다. 이 장벽이 낮을수록 반응이 빠릅니다.",
-   "example": "<b>핵심</b> 촉매는 이 활성화 에너지 장벽을 낮춰 반응을 빠르게 합니다."
+   "example": "<b>핵심</b> 촉매는 이 활성화 에너지 장벽을 낮춰 반응을 빠르게 합니다.",
+   "fig": "<svg viewBox=\"0 0 260 130\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"110\" x2=\"240\" y2=\"110\" stroke=\"var(--ink-faint)\" stroke-width=\"2\"/><path d=\"M20 85 Q 100 15 140 30 Q 180 45 240 95\" fill=\"none\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><line x1=\"20\" y1=\"85\" x2=\"20\" y2=\"22\" stroke=\"var(--bluepen)\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"/><line x1=\"20\" y1=\"22\" x2=\"105\" y2=\"22\" stroke=\"var(--bluepen)\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"/><text x=\"25\" y=\"20\" font-size=\"10\" fill=\"var(--bluepen)\">활성화 에너지</text><text x=\"5\" y=\"100\" font-size=\"9\" fill=\"var(--ink-soft)\">반응물</text><text x=\"215\" y=\"108\" font-size=\"9\" fill=\"var(--ink-soft)\">생성물</text></svg>",
+   "figcap": "반응물이 생성물이 되려면 이 언덕(활성화 에너지)을 넘어야 합니다"
   },
   {
    "id": "ru2",

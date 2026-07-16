@@ -39,7 +39,9 @@
    "stage": "hs",
    "title": "탄화수소",
    "body": "탄소와 수소로만 이루어진 물질을 탄화수소라 합니다. 메테인·프로페인처럼 연료로 쓰이며, 석유의 주성분입니다.",
-   "example": "<b>예</b> 메테인(CH₄)은 가장 간단한 탄화수소입니다."
+   "example": "<b>예</b> 메테인(CH₄)은 가장 간단한 탄화수소입니다.",
+   "fig": "<svg viewBox=\"0 0 240 90\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"40\" cy=\"45\" r=\"4\" fill=\"var(--ink)\"/><circle cx=\"90\" cy=\"45\" r=\"4\" fill=\"var(--ink)\"/><circle cx=\"140\" cy=\"45\" r=\"4\" fill=\"var(--ink)\"/><line x1=\"40\" y1=\"45\" x2=\"90\" y2=\"45\" stroke=\"var(--ink)\" stroke-width=\"2\"/><line x1=\"90\" y1=\"45\" x2=\"140\" y2=\"45\" stroke=\"var(--ink)\" stroke-width=\"2\"/><line x1=\"40\" y1=\"45\" x2=\"40\" y2=\"20\" stroke=\"var(--bluepen)\" stroke-width=\"1.5\"/><line x1=\"40\" y1=\"45\" x2=\"20\" y2=\"60\" stroke=\"var(--bluepen)\" stroke-width=\"1.5\"/><line x1=\"90\" y1=\"45\" x2=\"90\" y2=\"20\" stroke=\"var(--bluepen)\" stroke-width=\"1.5\"/><line x1=\"90\" y1=\"45\" x2=\"90\" y2=\"70\" stroke=\"var(--bluepen)\" stroke-width=\"1.5\"/><line x1=\"140\" y1=\"45\" x2=\"140\" y2=\"20\" stroke=\"var(--bluepen)\" stroke-width=\"1.5\"/><line x1=\"140\" y1=\"45\" x2=\"160\" y2=\"60\" stroke=\"var(--bluepen)\" stroke-width=\"1.5\"/><text x=\"25\" y=\"85\" font-size=\"9\" fill=\"var(--ink-soft)\">탄소(●)가 사슬을 이루고 나머지 자리는 수소가 채웁니다</text></svg>",
+   "figcap": "탄소끼리 사슬로 이어지고, 남은 결합 자리마다 수소가 붙습니다"
   },
   {
    "id": "ch3",

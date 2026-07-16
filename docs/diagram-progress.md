@@ -24,16 +24,17 @@
 - [x] phy-semicon: 띠 이론(ugc1) · pn접합과 다이오드(ugc3)
 - [x] phy-thermo: 카르노 효율(ugc5) — t2는 기존에 이미 있었음
 
-## 화학 (대기)
+## 화학 (완료 · 2026-07-16)
 
-- [ ] chem-atom: 원자 구조, 오비탈 모양
-- [ ] chem-bond: 이온/공유 결합, 분자 모양, 혼성궤도
-- [ ] chem-periodic: 오비탈 채움 순서
-- [ ] chem-gas: 보일·샤를 법칙 그래프
-- [ ] chem-rate/chem-equil: 에너지 다이어그램, 평형 이동
-- [ ] chem-acid: pH 척도, 적정곡선
-- [ ] chem-battery: 전지 구조
-- [ ] chem-carbon: 탄화수소 구조식
+- [x] chem-atom: 오비탈 모양(ca_ug3) — ca2(원자 구조)는 기존에 이미 있었음
+- [x] chem-bond: 이온 결합(bh1), 공유 결합(bh2), 혼성궤도(bu4)
+- [x] chem-periodic: 족과 원자가전자(ph2), 오비탈 채움 구획(pu1)
+- [x] chem-gas: 보일 법칙(gh1), 샤를 법칙(gh2)
+- [x] chem-rate: 활성화 에너지(ru1)
+- [x] chem-equil: 르샤틀리에 원리(eh2)
+- [x] chem-acid: pH 척도(ah2), 적정곡선(au5)
+- [x] chem-battery: (−)극과 (+)극(th2)
+- [x] chem-carbon: 탄화수소 사슬 구조(ch2)
 
 ## 생명과학 (대기)
 

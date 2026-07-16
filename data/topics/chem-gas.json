@@ -32,7 +32,9 @@
    "stage": "hs",
    "title": "보일 법칙",
    "body": "온도가 일정할 때 기체의 압력과 부피는 반비례합니다. 압력을 2배로 하면 부피는 절반이 됩니다.",
-   "example": "<b>식</b> 압력 × 부피 = 일정 (온도 일정)."
+   "example": "<b>식</b> 압력 × 부피 = 일정 (온도 일정).",
+   "fig": "<svg viewBox=\"0 0 240 130\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"30\" y1=\"110\" x2=\"220\" y2=\"110\" stroke=\"var(--ink-faint)\" stroke-width=\"2\"/><line x1=\"30\" y1=\"110\" x2=\"30\" y2=\"15\" stroke=\"var(--ink-faint)\" stroke-width=\"2\"/><text x=\"195\" y=\"125\" font-size=\"10\" fill=\"var(--ink-faint)\">부피</text><text x=\"6\" y=\"18\" font-size=\"10\" fill=\"var(--ink-faint)\">압력</text><path d=\"M40 20 Q 60 30 90 55 T 150 90 T 210 105\" fill=\"none\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><text x=\"110\" y=\"45\" font-size=\"10\" fill=\"var(--redpen)\">압력↑ → 부피↓</text></svg>",
+   "figcap": "압력과 부피는 반비례 관계라 그래프가 곡선(쌍곡선)을 그립니다"
   },
   {
    "id": "gh3",
@@ -46,7 +48,9 @@
    "stage": "hs",
    "title": "샤를 법칙",
    "body": "압력이 일정할 때 기체의 부피는 절대온도에 비례합니다. 온도가 오르면 부피도 비례해 커집니다.",
-   "example": "<b>식</b> 부피 ÷ 절대온도 = 일정 (압력 일정)."
+   "example": "<b>식</b> 부피 ÷ 절대온도 = 일정 (압력 일정).",
+   "fig": "<svg viewBox=\"0 0 240 130\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"30\" y1=\"110\" x2=\"220\" y2=\"110\" stroke=\"var(--ink-faint)\" stroke-width=\"2\"/><line x1=\"30\" y1=\"110\" x2=\"30\" y2=\"15\" stroke=\"var(--ink-faint)\" stroke-width=\"2\"/><text x=\"185\" y=\"125\" font-size=\"10\" fill=\"var(--ink-faint)\">온도(K)</text><text x=\"3\" y=\"18\" font-size=\"10\" fill=\"var(--ink-faint)\">부피</text><line x1=\"30\" y1=\"100\" x2=\"200\" y2=\"30\" stroke=\"var(--bluepen)\" stroke-width=\"3\"/><text x=\"90\" y=\"55\" font-size=\"10\" fill=\"var(--bluepen)\">온도↑ → 부피↑(직선 비례)</text></svg>",
+   "figcap": "온도와 부피는 비례 관계라 그래프가 원점을 지나는 직선입니다"
   },
   {
    "id": "gu1",
