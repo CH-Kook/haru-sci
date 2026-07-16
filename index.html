@@ -517,7 +517,7 @@ function stageComplete(topicId, stage){
   const qs = (QUESTIONS[topicId]||[]).filter(q=>q.stage===stage);
   const cs = (CARDS[topicId]||[]).filter(c=>c.stage===stage);
   if(!qs.length && !cs.length) return false;
-  return qs.every(q=>S.attempts[q.id]) && cs.every(c=>S.seenCards[c.id]);
+  return qs.every(q=>S.attempts[nsKey(topicId,q.id)]) && cs.every(c=>S.seenCards[nsKey(topicId,c.id)]);
 }
 /* 단계 완주 시 다음 단계로 승급, 전공까지 끝났으면 주제 완료 처리 */
 function checkAndPromote(topicId){
@@ -589,6 +589,35 @@ S.readStories = S.readStories || {};
 S.qMeta = S.qMeta || {};
 S.studyDates = S.studyDates || {};
 function save(){ Storage.save(S); }
+
+/* 예전 저장본 마이그레이션: attempts·srs·qMeta·reports가 "주제id::원래id" 없이
+   bare id로만 저장돼 있던 시절 데이터를, 같이 저장된 qMeta의 topic 정보를 이용해
+   네임스페이스된 키로 옮긴다. topic을 알 수 없는 항목은 건드리지 않는다
+   (findQ의 레거시 폴백이 처리). */
+function migrateNamespacedKeys(){
+  const topicOf = {};
+  Object.keys(S.qMeta).forEach(k => {
+    if(k.indexOf('::')===-1 && S.qMeta[k] && S.qMeta[k].topic) topicOf[k] = S.qMeta[k].topic;
+  });
+  if(!Object.keys(topicOf).length) return;
+
+  ['attempts','srs','qMeta'].forEach(field => {
+    const obj = S[field];
+    Object.keys(obj).forEach(key => {
+      if(key.indexOf('::') !== -1) return;
+      const topic = topicOf[key];
+      if(!topic) return;
+      const newKey = nsKey(topic, key);
+      if(!(newKey in obj)) obj[newKey] = obj[key];
+      delete obj[key];
+    });
+  });
+  (S.reports||[]).forEach(r => {
+    if(r.qId && r.qId.indexOf('::')===-1 && topicOf[r.qId]) r.qId = nsKey(topicOf[r.qId], r.qId);
+  });
+  save();
+}
+migrateNamespacedKeys();
 
 /* ── 출석(실제 달력 날짜 기반) ─────────────────────────────── */
 function ymd(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
@@ -710,7 +739,21 @@ function triggerMathRender(target) {
   }
 }
 
+/* 카드/문제 id는 파일마다 msc1·ugq3처럼 짧게 재사용돼서 주제 간에 충돌한다
+   (예: p1-motion과 phy-newton이 둘 다 "msc1"을 씀). 그래서 진도 기록(attempts·srs·
+   seenCards·qMeta)은 항상 "주제id::원래id" 형태의 네임스페이스된 키로 저장한다. */
+function nsKey(unitId, localId){ return unitId + '::' + localId; }
+
 function findQ(qId){
+  const sep = qId.indexOf('::');
+  if(sep !== -1){
+    const unit = qId.slice(0, sep), local = qId.slice(sep+2);
+    const arr = QUESTIONS[unit];
+    const f = arr && arr.find(q=>q.id===local);
+    if(f) return {...f, unit};
+  }
+  // 네임스페이스 되기 전(마이그레이션 이전) bare id 호환용 폴백 — 주제 간 충돌 가능성이 있으니
+  // 새 코드에서는 항상 nsKey로 저장된 id를 넘겨야 한다.
   for(const u in QUESTIONS){ const f = QUESTIONS[u].find(q=>q.id===qId); if(f) return {...f, unit:u}; }
   return null;
 }
@@ -799,15 +842,15 @@ function buildSession(unitId){
   const usedQ = new Set();
   const steps = [];
 
-  const nextCard = allC.find(c => c.stage===stage && !S.seenCards[c.id]);
+  const nextCard = allC.find(c => c.stage===stage && !S.seenCards[nsKey(unitId,c.id)]);
   if(nextCard){
     steps.push({type:'card', id:nextCard.id});
-    allQ.filter(q => q.card===nextCard.id && q.stage===stage && !S.attempts[q.id] && !usedQ.has(q.id))
-      .forEach(q => { steps.push({type:'q', id:q.id}); usedQ.add(q.id); });
+    allQ.filter(q => q.card===nextCard.id && q.stage===stage && !S.attempts[nsKey(unitId,q.id)] && !usedQ.has(q.id))
+      .forEach(q => { steps.push({type:'q', id:nsKey(unitId,q.id)}); usedQ.add(q.id); });
   } else {
-    allQ.filter(q => q.stage===stage && !S.attempts[q.id] && !usedQ.has(q.id))
+    allQ.filter(q => q.stage===stage && !S.attempts[nsKey(unitId,q.id)] && !usedQ.has(q.id))
       .slice(0, SESSION_Q)
-      .forEach(q => { steps.push({type:'q', id:q.id}); usedQ.add(q.id); });
+      .forEach(q => { steps.push({type:'q', id:nsKey(unitId,q.id)}); usedQ.add(q.id); });
   }
 
   return { unitId, isDrill:false, isReview:false, stage, topics:[unitId], steps, idx: 0, correct: 0, answered: false, phase: steps.length ? 'run' : 'done' };
@@ -907,7 +950,7 @@ async function startDrill(opts){
   let pool = [];
   bankIds.forEach(uid=>{
     (QUESTIONS[uid]||[]).forEach(q=>{
-      if(drillStage==='all' || q.stage===drillStage) pool.push(q.id);
+      if(drillStage==='all' || q.stage===drillStage) pool.push(nsKey(uid,q.id));
     });
   });
   if(!pool.length){ toast('조건에 맞는 문제가 없어요. 다른 조건으로 시도해보세요'); return; }
@@ -1322,7 +1365,7 @@ function renderSession(){
 
 function nextCard(){
   const step = sess.steps[sess.idx];
-  S.seenCards[step.id] = true; save();
+  S.seenCards[nsKey(sess.unitId, step.id)] = true; save();
   advanceStep();
 }
 
@@ -1494,7 +1537,7 @@ function unitProgress(uid){
   const stage = currentStage(uid);
   const stageQs = qs.filter(q=>q.stage===stage);
   if(!stageQs.length) return topicStarted(uid) ? 1 : 0;
-  const done = stageQs.filter(q=>S.attempts[q.id]).length;
+  const done = stageQs.filter(q=>S.attempts[nsKey(uid,q.id)]).length;
   return Math.round(100*done/stageQs.length);
 }
 function domainProgress(did){
@@ -1902,6 +1945,7 @@ function applyImportedBackup(raw){
   if(!S.topicStage) S.topicStage = {};
   S.pendingSession = null;   // 기기 이동 직후엔 진행 중이던 세션을 이어할 수 없으니 비운다
   if(!S.qMeta) S.qMeta = {}; if(!S.diagDone) S.diagDone={}; if(!S.graduatedTopics) S.graduatedTopics={}; if(!S.storyReports) S.storyReports=[]; if(!S.readStories) S.readStories={}; if(!S.studyDates) S.studyDates={};
+  migrateNamespacedKeys();
   save(); render();
   toast('진도를 가져왔어요');
   return true;
