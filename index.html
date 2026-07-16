@@ -554,9 +554,8 @@ const Storage = (() => {
    ============================================================ */
 const RELEARN_INTERVALS = [1, 3, 7, 21]; // 한 번이라도 틀린 뒤 다시 신뢰를 얻기까지 밟는 계단(일)
 const REVIEW_CORRECT_DAYS = 180;         // 처음부터 맞혔거나 계단을 다 밟으면 6개월 뒤 재복습
-const SESSION_Q = 12;                   // 세션당 문제 총 상한(복습 + 카드별 확인문제 + 남는 자리 채움)
-const SESSION_C = 3;                    // 세션당 새 카드 수
-const CARD_Q_CAP = 4;                   // 카드 하나당 바로 뒤에 붙는 확인 문제 수
+const SESSION_Q = 8;                    // 카드를 다 배운 뒤(후반부) 문제만으로 채우는 세션의 문제 수
+const DUE_IN_SESSION_CAP = 10;          // 세션에 섞어 넣는 복습 문제 상한
 const REVIEW_BATCH = 10;                // '지금 복습하기' 한 번에 나오는 문제 수 (남으면 이어서 더 할 수 있음)
 const DEV_MODE = new URLSearchParams(location.search).get('dev') === '0919';
 
@@ -783,28 +782,29 @@ armExitGuard();
 
 /* 세션은 그 주제의 현재 단계(topicStage)에서만 채운다 — 다른 단계로 섞이지 않는다.
    그 단계를 완주하면(=새로 낼 카드·문제가 하나도 안 남으면) 세션 종료 시 자동 승급된다.
-   순서는 [복습 문제] → [카드1 → 카드1의 확인 문제(최대 CARD_Q_CAP개) → 카드2 → ...] → [남는 자리는 같은 단계의 다른 문제로 채움]
-   이렇게 '카드 다음엔 반드시 그 카드에 대한 문제'가 오도록 해, 세션이 개념 설명 없이 문제부터 시작하지 않게 한다. */
+
+   한 세션 = 한 개념: 아직 안 본 카드가 있으면 딱 1장만 꺼내고, 그 카드에 딸린 확인
+   문제를 (개수 상관없이) 그대로 뒤에 붙인다. 카드마다 딸린 문제 수가 달라도 억지로
+   맞추지 않는다 — 세션 길이가 카드마다 달라지는 걸 받아들이는 대신, 개념 하나를
+   온전히 끝내고 그 확인까지 한 호흡에 마치게 한다.
+   그 단계의 카드를 모두 다 봤으면(개념 학습 끝) 그다음부터는 '후반부'로 넘어가서
+   카드 없이 그 단계에 남은 문제만으로 세션을 채운다(SESSION_Q개씩). */
 function buildSession(unitId){
   const stage = ensureTopicStage(unitId);
   const allQ = QUESTIONS[unitId] || [];
   const allC = CARDS[unitId] || [];
-  const due = shuffle(dueQuestions()).slice(0, SESSION_Q);
+  const due = shuffle(dueQuestions()).slice(0, DUE_IN_SESSION_CAP);
   const usedQ = new Set(due);
   const steps = due.map(id => ({type:'q', id}));
 
-  const pickedCards = allC.filter(c => c.stage===stage && !S.seenCards[c.id]).slice(0, SESSION_C);
-  pickedCards.forEach(c => {
-    steps.push({type:'card', id:c.id});
-    allQ.filter(q => q.card===c.id && q.stage===stage && !S.attempts[q.id] && !usedQ.has(q.id))
-      .slice(0, CARD_Q_CAP)
+  const nextCard = allC.find(c => c.stage===stage && !S.seenCards[c.id]);
+  if(nextCard){
+    steps.push({type:'card', id:nextCard.id});
+    allQ.filter(q => q.card===nextCard.id && q.stage===stage && !S.attempts[q.id] && !usedQ.has(q.id))
       .forEach(q => { steps.push({type:'q', id:q.id}); usedQ.add(q.id); });
-  });
-
-  const qSoFar = steps.filter(s=>s.type==='q').length;
-  if(qSoFar < SESSION_Q){
+  } else {
     allQ.filter(q => q.stage===stage && !S.attempts[q.id] && !usedQ.has(q.id))
-      .slice(0, SESSION_Q - qSoFar)
+      .slice(0, SESSION_Q)
       .forEach(q => { steps.push({type:'q', id:q.id}); usedQ.add(q.id); });
   }
 
@@ -1273,11 +1273,9 @@ function renderSession(){
 
   if(step.type === 'card'){
     const c = findCard(sess.unitId, step.id);
-    const cardNum = sess.steps.slice(0, sess.idx+1).filter(s=>s.type==='card').length;
-    const cardTotal = sess.steps.filter(s=>s.type==='card').length;
     el.innerHTML = head + `
       <div class="sess-body">
-        <span class="eyebrow concept-tag">CONCEPT ${cardNum} / ${cardTotal}</span>
+        <span class="eyebrow concept-tag">CONCEPT</span>
         <div class="card concept-card">
           <h2>${c.title}</h2>
           <p>${c.body}</p>
