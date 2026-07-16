@@ -18,7 +18,9 @@
    "stage": "hs",
    "title": "분산: 색마다 다르게 꺾인다",
    "body": "빛이 유리나 물을 지날 때 색마다 굴절되는 정도가 조금씩 다릅니다. 보라색이 가장 많이, 빨간색이 가장 적게 꺾입니다. 이 차이가 색을 갈라놓는 분산입니다.",
-   "example": "<b>핵심</b> 색이 갈라지는 이유는 색마다 굴절률이 다르기 때문입니다."
+   "example": "<b>핵심</b> 색이 갈라지는 이유는 색마다 굴절률이 다르기 때문입니다.",
+   "fig": "<svg viewBox=\"0 0 240 120\" xmlns=\"http://www.w3.org/2000/svg\"><polygon points=\"70,20 100,20 85,90\" fill=\"none\" stroke=\"var(--ink-faint)\" stroke-width=\"2\"/><line x1=\"20\" y1=\"40\" x2=\"78\" y2=\"48\" stroke=\"var(--ink)\" stroke-width=\"2.5\"/><line x1=\"90\" y1=\"55\" x2=\"230\" y2=\"35\" stroke=\"#8B00FF\" stroke-width=\"2\"/><line x1=\"90\" y1=\"58\" x2=\"230\" y2=\"55\" stroke=\"#3B82F6\" stroke-width=\"2\"/><line x1=\"90\" y1=\"61\" x2=\"230\" y2=\"75\" stroke=\"#22C55E\" stroke-width=\"2\"/><line x1=\"90\" y1=\"64\" x2=\"230\" y2=\"95\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><text x=\"205\" y=\"30\" font-size=\"9\" fill=\"#8B00FF\">보라(많이 꺾임)</text><text x=\"205\" y=\"108\" font-size=\"9\" fill=\"var(--redpen)\">빨강(적게 꺾임)</text></svg>",
+   "figcap": "프리즘을 지나며 보라색이 가장 많이, 빨간색이 가장 적게 꺾여 색이 갈라집니다"
   },
   {
    "id": "r3",
@@ -102,7 +104,9 @@
    "stage": "ug",
    "title": "2차 무지개: 색이 뒤집힌다",
    "body": "물방울 안에서 빛이 두 번 내부 반사되면 2차 무지개가 생깁니다. 1차보다 바깥쪽(약 50~53도)에 더 흐리게 나타나고, 색 순서가 반대(안쪽 빨강, 바깥쪽 보라)로 뒤집힙니다.",
-   "example": "<b>비교</b> 1차: 안쪽 보라·바깥쪽 빨강 / 2차: 안쪽 빨강·바깥쪽 보라."
+   "example": "<b>비교</b> 1차: 안쪽 보라·바깥쪽 빨강 / 2차: 안쪽 빨강·바깥쪽 보라.",
+   "fig": "<svg viewBox=\"0 0 240 130\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 120 A 100 100 0 0 1 220 120\" fill=\"none\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><path d=\"M5 120 A 115 115 0 0 1 235 120\" fill=\"none\" stroke=\"#8B00FF\" stroke-width=\"3\" opacity=\"0.7\"/><text x=\"95\" y=\"25\" font-size=\"9\" fill=\"var(--redpen)\">1차: 안쪽 빨강</text><text x=\"75\" y=\"12\" font-size=\"9\" fill=\"#8B00FF\">2차: 바깥쪽 보라(순서 반전)</text></svg>",
+   "figcap": "2차 무지개는 1차보다 바깥에 생기고 색 순서가 뒤집힙니다"
   },
   {
    "id": "ugc5",

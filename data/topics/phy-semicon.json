@@ -83,7 +83,9 @@
    "stage": "ug",
    "title": "띠 이론",
    "body": "고체의 전자는 에너지 띠에 있습니다. 전자가 찬 가전자대와 빈 전도대 사이의 '띠틈'이 좁으면 반도체, 넓으면 절연체, 없으면 도체입니다.",
-   "example": "<b>핵심</b> 띠틈의 크기가 도체·반도체·절연체를 가릅니다."
+   "example": "<b>핵심</b> 띠틈의 크기가 도체·반도체·절연체를 가릅니다.",
+   "fig": "<svg viewBox=\"0 0 260 120\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"20\" y=\"20\" width=\"50\" height=\"15\" fill=\"var(--ink-faint)\"/><rect x=\"20\" y=\"55\" width=\"50\" height=\"15\" fill=\"var(--redpen)\"/><text x=\"15\" y=\"78\" font-size=\"9\" fill=\"var(--ink-soft)\">도체(띠틈 없음)</text><rect x=\"100\" y=\"15\" width=\"50\" height=\"15\" fill=\"var(--ink-faint)\"/><rect x=\"100\" y=\"55\" width=\"50\" height=\"15\" fill=\"var(--redpen)\"/><text x=\"98\" y=\"78\" font-size=\"9\" fill=\"var(--ink-soft)\">반도체(좁은 띠틈)</text><rect x=\"180\" y=\"10\" width=\"50\" height=\"15\" fill=\"var(--ink-faint)\"/><rect x=\"180\" y=\"55\" width=\"50\" height=\"15\" fill=\"var(--redpen)\"/><text x=\"178\" y=\"78\" font-size=\"9\" fill=\"var(--ink-soft)\">절연체(넓은 띠틈)</text><text x=\"10\" y=\"100\" font-size=\"9\" fill=\"var(--ink)\">위: 전도대(비어 있음) · 아래: 가전자대(전자로 참)</text></svg>",
+   "figcap": "띠틈(가전자대-전도대 사이 간격)이 클수록 전기가 잘 안 통합니다"
   },
   {
    "id": "ugc2",
@@ -97,7 +99,9 @@
    "stage": "ug",
    "title": "pn 접합과 다이오드",
    "body": "n형과 p형을 붙이면 한 방향으로만 전류를 흘리는 다이오드가 됩니다. 이 pn 접합이 트랜지스터·태양전지·LED의 기본입니다.",
-   "example": "<b>응용</b> pn 접합이 현대 전자소자의 토대입니다."
+   "example": "<b>응용</b> pn 접합이 현대 전자소자의 토대입니다.",
+   "fig": "<svg viewBox=\"0 0 260 110\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"30\" y=\"25\" width=\"90\" height=\"55\" fill=\"var(--bluepen)\" opacity=\"0.15\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><text x=\"55\" y=\"57\" font-size=\"14\" fill=\"var(--bluepen)\">n형</text><rect x=\"120\" y=\"25\" width=\"90\" height=\"55\" fill=\"var(--redpen)\" opacity=\"0.15\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><text x=\"150\" y=\"57\" font-size=\"14\" fill=\"var(--redpen)\">p형</text><text x=\"20\" y=\"95\" font-size=\"9\" fill=\"var(--ink-soft)\">전자 많음(n) + 양공 많음(p) → 경계에서 한쪽으로만 전류 통과</text></svg>",
+   "figcap": "n형(전자 과잉)과 p형(양공 과잉)을 붙이면 한 방향으로만 전류가 흐릅니다"
   },
   {
    "id": "ugc4",

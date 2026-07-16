@@ -97,7 +97,9 @@
    "stage": "ug",
    "title": "렌츠 법칙",
    "body": "유도 전류는 자기 선속의 변화를 방해하는 방향으로 흐릅니다. 식의 음(−) 부호가 이 방향을 나타냅니다.",
-   "example": "<b>핵심</b> 변화를 거스르는 방향으로 유도됩니다."
+   "example": "<b>핵심</b> 변화를 거스르는 방향으로 유도됩니다.",
+   "fig": "<svg viewBox=\"0 0 260 120\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"20\" y1=\"20\" x2=\"20\" y2=\"100\" stroke=\"var(--ink)\" stroke-width=\"6\"/><text x=\"6\" y=\"18\" font-size=\"10\" fill=\"var(--ink)\">N</text><polygon points=\"55,55 75,60 55,65\" fill=\"var(--redpen)\"/><text x=\"40\" y=\"45\" font-size=\"9\" fill=\"var(--redpen)\">자석이 다가옴</text><ellipse cx=\"160\" cy=\"60\" rx=\"55\" ry=\"35\" fill=\"none\" stroke=\"var(--bluepen)\" stroke-width=\"2.5\"/><path d=\"M 180 30 A 40 40 0 0 1 195 60\" fill=\"none\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><polygon points=\"190,52 198,60 186,64\" fill=\"var(--bluepen)\"/><text x=\"110\" y=\"110\" font-size=\"9\" fill=\"var(--bluepen)\">유도 전류는 자석의 접근을 밀어내는 방향으로 흐름</text></svg>",
+   "figcap": "자석이 가까이 오면, 유도 전류는 그 변화를 막는(밀어내는) 방향으로 흐릅니다"
   },
   {
    "id": "ugc3",

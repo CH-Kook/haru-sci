@@ -111,7 +111,9 @@
    "stage": "ug",
    "title": "2차원 충돌: 성분별로 나눠 보존한다",
    "body": "물체가 충돌 후 서로 다른 방향으로 튕겨 나가는 2차원 충돌에서도 운동량은 보존되지만, 벡터이므로 x성분과 y성분을 각각 따로 보존시켜야 합니다. 한쪽 방향만 보고 판단하면 틀립니다.",
-   "example": "<b>식</b> Σpₓ(전) = Σpₓ(후), Σpᵧ(전) = Σpᵧ(후)."
+   "example": "<b>식</b> Σpₓ(전) = Σpₓ(후), Σpᵧ(전) = Σpᵧ(후).",
+   "fig": "<svg viewBox=\"0 0 280 160\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"70\" cy=\"80\" r=\"5\" fill=\"var(--ink)\"/><line x1=\"70\" y1=\"80\" x2=\"140\" y2=\"80\" stroke=\"var(--ink-soft)\" stroke-width=\"3\" stroke-dasharray=\"4,3\"/><polygon points=\"140,75 152,80 140,85\" fill=\"var(--ink-soft)\"/><circle cx=\"140\" cy=\"80\" r=\"5\" fill=\"var(--ink)\"/><line x1=\"140\" y1=\"80\" x2=\"195\" y2=\"45\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><polygon points=\"188,49 200,44 193,55\" fill=\"var(--redpen)\"/><text x=\"200\" y=\"45\" font-size=\"10\" fill=\"var(--redpen)\">x성분</text><line x1=\"140\" y1=\"80\" x2=\"195\" y2=\"120\" stroke=\"var(--bluepen)\" stroke-width=\"3\"/><polygon points=\"188,116 200,121 193,110\" fill=\"var(--bluepen)\"/><text x=\"200\" y=\"128\" font-size=\"10\" fill=\"var(--bluepen)\">y성분</text></svg>",
+   "figcap": "충돌 후 튕겨 나가는 방향을 x·y 성분으로 각각 나눠서 보존시킵니다"
   },
   {
    "id": "ugc5",

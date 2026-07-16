@@ -118,7 +118,9 @@
    "stage": "ug",
    "title": "카르노 효율",
    "body": "두 열원(온도 Th, Tc) 사이 열기관의 이론적 최대 효율은 1−Tc/Th입니다. 온도 차가 클수록 효율이 높습니다.",
-   "example": "<b>식</b> 최대 효율 = 1 − Tc/Th (절대온도)."
+   "example": "<b>식</b> 최대 효율 = 1 − Tc/Th (절대온도).",
+   "fig": "<svg viewBox=\"0 0 260 130\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"20\" y=\"15\" width=\"220\" height=\"22\" fill=\"var(--redpen)\" opacity=\"0.15\" stroke=\"var(--redpen)\" stroke-width=\"1.5\"/><text x=\"100\" y=\"30\" font-size=\"11\" fill=\"var(--redpen)\">고온 Th</text><rect x=\"110\" y=\"50\" width=\"40\" height=\"30\" fill=\"none\" stroke=\"var(--ink)\" stroke-width=\"2\"/><text x=\"118\" y=\"70\" font-size=\"10\" fill=\"var(--ink)\">열기관</text><line x1=\"130\" y1=\"37\" x2=\"130\" y2=\"50\" stroke=\"var(--redpen)\" stroke-width=\"2.5\"/><polygon points=\"125,48 130,58 135,48\" fill=\"var(--redpen)\"/><line x1=\"150\" y1=\"65\" x2=\"200\" y2=\"65\" stroke=\"var(--ink-soft)\" stroke-width=\"2.5\"/><polygon points=\"198,60 208,65 198,70\" fill=\"var(--ink-soft)\"/><text x=\"155\" y=\"58\" font-size=\"9\" fill=\"var(--ink-soft)\">일 W</text><line x1=\"130\" y1=\"80\" x2=\"130\" y2=\"93\" stroke=\"var(--bluepen)\" stroke-width=\"2.5\"/><polygon points=\"125,91 130,101 135,91\" fill=\"var(--bluepen)\"/><rect x=\"20\" y=\"93\" width=\"220\" height=\"22\" fill=\"var(--bluepen)\" opacity=\"0.15\" stroke=\"var(--bluepen)\" stroke-width=\"1.5\"/><text x=\"100\" y=\"108\" font-size=\"11\" fill=\"var(--bluepen)\">저온 Tc</text></svg>",
+   "figcap": "고온에서 열을 받아 일부는 일로, 나머지는 저온으로 버립니다"
   },
   {
    "id": "ugc6",

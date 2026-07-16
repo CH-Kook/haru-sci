@@ -84,7 +84,9 @@
    "stage": "ug",
    "title": "구심 가속도",
    "body": "원을 도는 물체는 중심 쪽으로 v²/r의 구심 가속도를 가집니다. 이 가속을 만드는 알짜힘이 구심력입니다.",
-   "example": "<b>식</b> 구심 가속도 = v²/r."
+   "example": "<b>식</b> 구심 가속도 = v²/r.",
+   "fig": "<svg viewBox=\"0 0 280 160\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"140\" cy=\"85\" r=\"55\" fill=\"none\" stroke=\"var(--ink-faint)\" stroke-width=\"2\" stroke-dasharray=\"4,3\"/><circle cx=\"140\" cy=\"30\" r=\"6\" fill=\"var(--ink)\"/><line x1=\"140\" y1=\"30\" x2=\"140\" y2=\"70\" stroke=\"var(--redpen)\" stroke-width=\"3\"/><polygon points=\"135,70 140,82 145,70\" fill=\"var(--redpen)\"/><text x=\"146\" y=\"55\" font-size=\"10\" fill=\"var(--redpen)\">구심 가속도(중심 방향)</text></svg>",
+   "figcap": "루프 꼭대기에서도 구심 가속도는 항상 중심(원 안쪽)을 향합니다"
   },
   {
    "id": "ugc2",

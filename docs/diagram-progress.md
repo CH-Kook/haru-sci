@@ -7,21 +7,22 @@
 작업 순서: 물리 → 화학 → 생명과학 → 지구과학. 한 과목이 끝날 때마다 커밋 + 배포.
 다른 세션에서 이어서 작업할 때는 이 파일에서 미완료 항목부터 시작하면 됨.
 
-## 물리 (진행 중)
+## 물리 (완료 · 2026-07-16)
 
-- [ ] p1-motion: 그래프가 말해주는 것(c6) — 위치-시간/속도-시간 그래프
-- [ ] p1-motion: 2차원 운동(ugc5) — 포물선 운동 성분분해
-- [ ] phy-newton: 자유물체도와 힘 분석(ugc2)
-- [ ] phy-newton: 원운동과 구심력(ugc6)
-- [ ] phy-momentum: 2차원 충돌(ugc4) — 성분별 보존
-- [ ] phy-coaster: 롤러코스터 에너지 시소(cc4/msc2)
-- [ ] phy-coaster: 구심 가속도(ugc1)
-- [ ] phy-wave: 파장·진폭(w2), 중첩과 간섭(ugc3), 정상파(ugc5), 도플러 효과(ugc6)
-- [ ] phy-light: 반사·굴절(l2/l3), 전반사(l5), 이중슬릿 간섭(ugc4)
-- [ ] phy-rainbow: 분산(r2), 2차 무지개(ugc4)
-- [ ] phy-current/phy-induction: 회로도, 패러데이/렌츠 법칙
-- [ ] phy-semicon: 띠 이론(ugc1), pn접합(ugc3)
-- [ ] phy-thermo: 카르노 사이클(ugc5/ugc6)
+- [x] p1-motion: 그래프가 말해주는 것(c6) — 위치-시간/속도-시간 그래프
+- [x] p1-motion: 2차원 운동(ugc5) — 포물선 운동 성분분해
+- [x] phy-newton: 자유물체도와 힘 분석(ugc2)
+- [x] phy-newton: 원운동과 구심력(ugc6)
+- [x] phy-momentum: 2차원 충돌(ugc4) — 성분별 보존
+- [x] phy-coaster: 롤러코스터 에너지 시소(cc4) — 기존에 이미 있었음
+- [x] phy-coaster: 구심 가속도(ugc1)
+- [x] phy-wave: 파장·진폭(w2, 기존) · 중첩과 간섭(ugc3) · 정상파(ugc5) · 도플러 효과(ugc6)
+- [x] phy-light: 반사(l2) · 굴절(l3, 기존) · 전반사(l5) · 이중슬릿 간섭(ugc4)
+- [x] phy-rainbow: 분산(r2) · 2차 무지개(ugc4)
+- [x] phy-current: 직렬·병렬 회로도(ugc2) — c1은 기존에 이미 있었음
+- [x] phy-induction: 렌츠 법칙(ugc2) — d1은 기존에 이미 있었음
+- [x] phy-semicon: 띠 이론(ugc1) · pn접합과 다이오드(ugc3)
+- [x] phy-thermo: 카르노 효율(ugc5) — t2는 기존에 이미 있었음
 
 ## 화학 (대기)
 

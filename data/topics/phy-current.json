@@ -97,7 +97,9 @@
    "stage": "ug",
    "title": "직렬과 병렬",
    "body": "저항을 직렬로 이으면 합저항은 커지고(R=R₁+R₂), 병렬로 이으면 작아집니다(1/R=1/R₁+1/R₂).",
-   "example": "<b>식</b> 직렬 R₁+R₂, 병렬 1/R=1/R₁+1/R₂."
+   "example": "<b>식</b> 직렬 R₁+R₂, 병렬 1/R=1/R₁+1/R₂.",
+   "fig": "<svg viewBox=\"0 0 260 140\" xmlns=\"http://www.w3.org/2000/svg\"><text x=\"10\" y=\"15\" font-size=\"10\" fill=\"var(--ink-soft)\">직렬</text><line x1=\"20\" y1=\"35\" x2=\"50\" y2=\"35\" stroke=\"var(--ink)\" stroke-width=\"2\"/><rect x=\"50\" y=\"25\" width=\"35\" height=\"20\" fill=\"none\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><line x1=\"85\" y1=\"35\" x2=\"110\" y2=\"35\" stroke=\"var(--ink)\" stroke-width=\"2\"/><rect x=\"110\" y=\"25\" width=\"35\" height=\"20\" fill=\"none\" stroke=\"var(--redpen)\" stroke-width=\"2\"/><line x1=\"145\" y1=\"35\" x2=\"175\" y2=\"35\" stroke=\"var(--ink)\" stroke-width=\"2\"/><text x=\"10\" y=\"85\" font-size=\"10\" fill=\"var(--ink-soft)\">병렬</text><line x1=\"20\" y1=\"90\" x2=\"40\" y2=\"90\" stroke=\"var(--ink)\" stroke-width=\"2\"/><line x1=\"40\" y1=\"75\" x2=\"40\" y2=\"115\" stroke=\"var(--ink)\" stroke-width=\"2\"/><rect x=\"50\" y=\"65\" width=\"40\" height=\"18\" fill=\"none\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><line x1=\"40\" y1=\"74\" x2=\"50\" y2=\"74\" stroke=\"var(--ink)\" stroke-width=\"2\"/><line x1=\"90\" y1=\"74\" x2=\"140\" y2=\"74\" stroke=\"var(--ink)\" stroke-width=\"2\"/><rect x=\"50\" y=\"97\" width=\"40\" height=\"18\" fill=\"none\" stroke=\"var(--bluepen)\" stroke-width=\"2\"/><line x1=\"40\" y1=\"106\" x2=\"50\" y2=\"106\" stroke=\"var(--ink)\" stroke-width=\"2\"/><line x1=\"90\" y1=\"106\" x2=\"140\" y2=\"106\" stroke=\"var(--ink)\" stroke-width=\"2\"/><line x1=\"140\" y1=\"74\" x2=\"140\" y2=\"106\" stroke=\"var(--ink)\" stroke-width=\"2\"/><line x1=\"140\" y1=\"90\" x2=\"160\" y2=\"90\" stroke=\"var(--ink)\" stroke-width=\"2\"/></svg>",
+   "figcap": "직렬은 한 줄로, 병렬은 여러 갈래로 갈라져 이어집니다"
   },
   {
    "id": "ugc3",
