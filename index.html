@@ -781,6 +781,7 @@ function dueQuestions(){
    규칙: 복습 예정 문제 우선 → 부족분은 해당 단원의 새 문제
    ============================================================ */
 let sess = null;
+let cardBrowse = null; // {unitId, cardId} — 완주한 주제에서 개념 카드 하나를 골라 다시 보는 모드
 
 /* ── 모바일 뒤로가기(TWA) 대응 ─────────────────────────────
    세션/진단/이야기 모달을 열 때 히스토리에 더미 상태를 쌓아두면,
@@ -794,7 +795,7 @@ function openModalHistory(){
 /* 세션을 닫은 직후 한 번만 실행할 후속 동작(주제 완주 시 탐색 탭으로 이동 등) */
 let postCloseAction = null;
 function finishCloseModal(){
-  sess = null; diag = null;
+  sess = null; diag = null; cardBrowse = null;
   $('#session').classList.remove('open');
   render();
   if(postCloseAction){ const fn = postCloseAction; postCloseAction = null; fn(); }
@@ -941,35 +942,63 @@ function setCardsPerSession(n){
   render();
 }
 
-/* 이미 완주한 주제를 다시 학습하고 싶을 때 — 그 주제의 완주·진행 기록을 초기화하고 처음부터 다시 시작한다 */
-function restartTopicConfirm(unitId){
-  showConfirm(`
-    <h3>이 주제를 다시 학습할까요?</h3>
-    <p>${esc(unitName(unitId))}의 완주 기록과 지금까지 푼 문제 기록이 초기화되고, 처음부터 다시 시작해요.</p>
-    <div class="confirm-actions">
-      <button class="btn btn-ghost" style="flex:1" onclick="hideConfirm()">취소</button>
-      <button class="btn btn-primary" style="flex:1" onclick="restartTopic('${unitId}')">다시 학습하기</button>
-    </div>`);
-}
-async function restartTopic(unitId){
-  hideConfirm();
+/* 이미 완주한 주제 — 진행 기록은 그대로 두고, 개념 카드 목록에서 다시 보고 싶은 걸 골라서 훑어본다 */
+async function openCardBrowser(unitId){
   try { await ensureLoaded([unitId]); }
   catch(e){ toast('콘텐츠를 불러오지 못했어요'); return; }
-  (QUESTIONS[unitId]||[]).forEach(q=>{
-    const key = nsKey(unitId,q.id);
-    const at = S.attempts[key];
-    if(at){
-      S.stats.answered = Math.max(0, S.stats.answered - at.tries);
-      S.stats.correct = Math.max(0, S.stats.correct - at.correct);
-    }
-    delete S.attempts[key];
-    delete S.srs[key];
-  });
-  (CARDS[unitId]||[]).forEach(c=>{ delete S.seenCards[nsKey(unitId,c.id)]; });
-  delete S.graduatedTopics[unitId];
-  delete S.topicStage[unitId];
-  save();
-  startSession(unitId, {skipResumeCheck:true, confirmedRestart:true});
+  cardBrowse = { unitId, cardId: null };
+  openModalHistory();
+  $('#session').classList.add('open');
+  renderCardBrowse();
+}
+function pickBrowseCard(cardId){
+  cardBrowse.cardId = cardId;
+  renderCardBrowse();
+}
+function backToBrowseList(){
+  cardBrowse.cardId = null;
+  renderCardBrowse();
+}
+function renderCardBrowse(){
+  const el = $('#session');
+  const unitId = cardBrowse.unitId;
+  const head = `
+    <div class="sess-top">
+      <button class="sess-close" onclick="closeModal()" aria-label="닫기">×</button>
+      <span class="mono" style="font-size:11px;color:var(--ink-faint)">${esc(unitName(unitId))} · 개념 다시보기</span>
+    </div>`;
+
+  if(cardBrowse.cardId){
+    const c = findCard(unitId, cardBrowse.cardId);
+    el.innerHTML = head + `
+      <div class="sess-body">
+        <span class="eyebrow concept-tag">CONCEPT</span>
+        <div class="card concept-card">
+          <h2>${c.title}</h2>
+          <p>${c.body}</p>
+          ${c.fig ? `<figure class="figure">${c.fig}${c.figcap?`<figcaption>${c.figcap}</figcaption>`:''}</figure>` : ''}
+          ${c.example ? `<div class="example">${c.example}</div>` : ''}
+        </div>
+      </div>
+      <div class="sess-foot"><button class="btn btn-primary" onclick="backToBrowseList()">목록으로</button></div>`;
+    triggerMathRender(el);
+    return;
+  }
+
+  const bystage = {};
+  (CARDS[unitId]||[]).forEach(c=>{ (bystage[c.stage] = bystage[c.stage]||[]).push(c); });
+  const listHtml = STAGE_ORDER.filter(s=>bystage[s] && bystage[s].length).map(s => `
+    <div class="section-label" style="margin-top:14px">${STAGE_LABEL[s]}</div>
+    ${bystage[s].map(c=>`<div class="unit-item" style="cursor:pointer" onclick="pickBrowseCard('${c.id}')">
+      <span class="u-name">${esc(c.title)}</span>
+    </div>`).join('')}
+  `).join('');
+
+  el.innerHTML = head + `
+    <div class="sess-body">
+      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:10px">다시 보고 싶은 개념을 골라보세요.</p>
+      ${listHtml || '<p style="color:var(--ink-faint);font-size:13px">등록된 개념 카드가 없어요.</p>'}
+    </div>`;
 }
 
 async function startSession(unitId, opts){
@@ -979,7 +1008,7 @@ async function startSession(unitId, opts){
   /* 지난 세션이 마지막 문제를 풀고도 앱이 닫혀 승급 체크를 못 받았을 경우의 안전망 */
   const promo = checkAndPromote(unitId);
   if(promo){ save(); if(promo.type==='promote') toast(`${STAGE_LABEL[promo.to]} 단계로 승급했어요!`); }
-  if(S.graduatedTopics[unitId]){ if(!(opts && opts.confirmedRestart)) restartTopicConfirm(unitId); return; }
+  if(S.graduatedTopics[unitId]){ openCardBrowser(unitId); return; }
   const s = buildSession(unitId);
   if(!s.steps.length){
     const stage = currentStage(unitId);
