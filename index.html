@@ -996,9 +996,33 @@ function renderCardBrowse(){
 
   el.innerHTML = head + `
     <div class="sess-body">
+      <button class="btn btn-red" style="margin-bottom:16px" onclick="startTopicRetry('${unitId}')">이 주제 문제 다시 풀기</button>
       <p style="font-size:13px;color:var(--ink-soft);margin-bottom:10px">다시 보고 싶은 개념을 골라보세요.</p>
       ${listHtml || '<p style="color:var(--ink-faint);font-size:13px">등록된 개념 카드가 없어요.</p>'}
     </div>`;
+}
+
+/* 완주한 주제의 문제를 다시 풀기 — 정답 기록과 무관하게 해당 단계의 문제를 전부 다시 출제 */
+function buildRetrySession(unitId){
+  const stage = ensureTopicStage(unitId);
+  const allQ = (QUESTIONS[unitId]||[]).filter(q=>q.stage===stage);
+  const allC = (CARDS[unitId]||[]).filter(c=>c.stage===stage);
+  const steps = [];
+  const usedQ = new Set();
+  allC.forEach(card=>{
+    steps.push({type:'card', id:card.id});
+    allQ.filter(q=>q.card===card.id && !usedQ.has(q.id)).forEach(q=>{ steps.push({type:'q', id:nsKey(unitId,q.id)}); usedQ.add(q.id); });
+  });
+  allQ.filter(q=>!usedQ.has(q.id)).forEach(q=>{ steps.push({type:'q', id:nsKey(unitId,q.id)}); usedQ.add(q.id); });
+  return { unitId, isDrill:false, isReview:false, stage, topics:[unitId], steps, idx:0, correct:0, answered:false, phase: steps.length ? 'run' : 'done' };
+}
+async function startTopicRetry(unitId){
+  try { await ensureLoaded([unitId]); } catch(e){ toast('콘텐츠를 불러오지 못했어요'); return; }
+  sess = buildRetrySession(unitId);
+  if(!sess.steps.length){ toast('이 주제에 등록된 문제가 없어요'); sess = null; return; }
+  openModalHistory();
+  $('#session').classList.add('open');
+  renderSession();
 }
 
 async function startSession(unitId, opts){
