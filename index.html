@@ -795,14 +795,18 @@ function buildSession(unitId){
   const allC = CARDS[unitId] || [];
   const due = shuffle(dueQuestions()).slice(0, DUE_IN_SESSION_CAP);
   const usedQ = new Set(due);
-  const steps = due.map(id => ({type:'q', id}));
+  const steps = [];
 
+  /* 새 개념 카드가 있으면 반드시 세션 맨 앞에 온다 — 복습 문제 때문에
+     카드 없이 문제부터 시작하는 일이 없도록, 복습은 카드+그 확인문제 뒤로 미룬다. */
   const nextCard = allC.find(c => c.stage===stage && !S.seenCards[c.id]);
   if(nextCard){
     steps.push({type:'card', id:nextCard.id});
     allQ.filter(q => q.card===nextCard.id && q.stage===stage && !S.attempts[q.id] && !usedQ.has(q.id))
       .forEach(q => { steps.push({type:'q', id:q.id}); usedQ.add(q.id); });
+    due.forEach(id => steps.push({type:'q', id}));
   } else {
+    due.forEach(id => steps.push({type:'q', id}));
     allQ.filter(q => q.stage===stage && !S.attempts[q.id] && !usedQ.has(q.id))
       .slice(0, SESSION_Q)
       .forEach(q => { steps.push({type:'q', id:q.id}); usedQ.add(q.id); });
