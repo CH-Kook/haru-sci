@@ -835,6 +835,7 @@ function offerResumeOrProceed(proceedFn){
       <button class="btn btn-ghost" style="flex:1" onclick="discardPendingAndProceed()">처음부터</button>
       <button class="btn btn-primary" style="flex:1" onclick="resumePendingSession()">이어하기</button>
     </div>`);
+  return true;
 }
 function discardPendingAndProceed(){
   S.pendingSession = null; save(); hideConfirm();
