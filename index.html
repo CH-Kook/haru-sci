@@ -493,8 +493,36 @@ function topicDomain(topicId){
   return null;
 }
 function currentStage(topicId){
+  if(S.topicStage && S.topicStage[topicId]) return S.topicStage[topicId];
   const dom = topicDomain(topicId);
   return (dom && S.subjectStage[dom]) || 'ms';
+}
+/* 이 주제를 처음 시작하는 순간의 단계를 고정한다(그 뒤 진단을 다시 받아도
+   이미 진행 중인 주제는 영향받지 않고, 앞으로 새로 시작하는 주제만 새 진단을 따른다). */
+function ensureTopicStage(topicId){
+  if(!S.topicStage[topicId]) S.topicStage[topicId] = currentStage(topicId);
+  return S.topicStage[topicId];
+}
+/* 그 단계의 카드·문제를 전부 봤는지(=그 단계를 완주했는지) 판정 */
+function stageComplete(topicId, stage){
+  const qs = (QUESTIONS[topicId]||[]).filter(q=>q.stage===stage);
+  const cs = (CARDS[topicId]||[]).filter(c=>c.stage===stage);
+  if(!qs.length && !cs.length) return false;
+  return qs.every(q=>S.attempts[q.id]) && cs.every(c=>S.seenCards[c.id]);
+}
+/* 단계 완주 시 다음 단계로 승급, 전공까지 끝났으면 주제 완료 처리 */
+function checkAndPromote(topicId){
+  if(S.graduatedTopics[topicId]) return null;
+  const stage = ensureTopicStage(topicId);
+  if(!stageComplete(topicId, stage)) return null;
+  const idx = STAGE_ORDER.indexOf(stage);
+  if(idx < STAGE_ORDER.length - 1){
+    const next = STAGE_ORDER[idx+1];
+    S.topicStage[topicId] = next;
+    return {type:'promote', uid:topicId, from:stage, to:next};
+  }
+  S.graduatedTopics[topicId] = true;
+  return {type:'graduate', uid:topicId, from:stage};
 }
 
 /* ============================================================
@@ -533,15 +561,17 @@ let S = Storage.load() || {
   reports: [],          // {qId, day}
   storyReports: [],      // {storyId, day}
   qMeta: {},            // qId -> {q, topic}  미로딩 주제 표시·복습 로드용 스냅샷
-  subjectStage: {physics:'ms', chem:'ms', bio:'ms', earth:'ms'},  // 과목별 현재 학습 단계(진단 전 기본값은 입문)
+  subjectStage: {physics:'ms', chem:'ms', bio:'ms', earth:'ms'},  // 과목별 진단 시작 단계(아직 시작 안 한 주제의 기본값)
+  topicStage: {},        // topicId -> 'ms'|'hs'|'ug' (그 주제에서 현재 학습 중인 단계, 완주하면 자동 승급)
   diagDone: {},         // subject -> true (진단 완료 여부)
   diagBannerDismissed: false,  // 홈 진단 추천 배너를 건너뛰기로 닫았는지
-  graduatedTopics: {},  // topicId -> true (해당 주제 문제 전체를 한 번씩 다 푼 완주 여부)
+  graduatedTopics: {},  // topicId -> true (전공 단계까지, 또는 전공으로 시작했으면 전공만 완료한 경우)
   readStories: {},      // storyId -> true
   studyDates: {},       // 'YYYY-MM-DD' -> true  (실제 달력 출석 기록)
 };
 /* 예전 저장본 마이그레이션(신규 필드 보강) */
 S.subjectStage = Object.assign({physics:'ms',chem:'ms',bio:'ms',earth:'ms'}, S.subjectStage||{});
+S.topicStage = S.topicStage || {};
 S.diagDone = S.diagDone || {};
 S.graduatedTopics = S.graduatedTopics || {};
 S.storyReports = S.storyReports || [];
@@ -730,44 +760,18 @@ window.addEventListener('popstate', () => {
 });
 armExitGuard();
 
-function stageFillOrder(cur){
-  // 현재 단계 우선 → 쉬운 단계(아래) 먼저 → 그다음 어려운 단계(위)
-  const idx = STAGE_ORDER.indexOf(cur);
-  const order = [cur];
-  for(let i=idx-1;i>=0;i--) order.push(STAGE_ORDER[i]);   // 아래쪽(쉬움)
-  for(let i=idx+1;i<STAGE_ORDER.length;i++) order.push(STAGE_ORDER[i]); // 위쪽(어려움)
-  return order;
-}
-function cardFillOrder(cur){
-  // 카드(개념 설명)는 쉬운 단계로 내려가지 않는다 — 전공 단계 세션 중간에
-  // 건너뛴 중등 개념 카드가 뜬금없이 끼어드는 것을 방지. 현재 단계부터 어려운 단계로만 보충.
-  const idx = STAGE_ORDER.indexOf(cur);
-  const order = [cur];
-  for(let i=idx+1;i<STAGE_ORDER.length;i++) order.push(STAGE_ORDER[i]);
-  return order;
-}
+/* 세션은 그 주제의 현재 단계(topicStage)에서만 채운다 — 다른 단계로 섞이지 않는다.
+   그 단계를 완주하면(=새로 낼 카드·문제가 하나도 안 남으면) 세션 종료 시 자동 승급된다. */
 function buildSession(unitId){
-  const stage = currentStage(unitId);
+  const stage = ensureTopicStage(unitId);
   const allQ = QUESTIONS[unitId] || [];
   const allC = CARDS[unitId] || [];
-  const order = stageFillOrder(stage);
   const due = shuffle(dueQuestions()).slice(0, SESSION_Q);   // 복습은 단계 무관
 
-  // 새 문제: 현재 단계부터 채우고, 모자라면 인접 단계로 보충
-  let fresh = [];
-  for(const st of order){
-    if(due.length + fresh.length >= SESSION_Q) break;
-    fresh = fresh.concat(allQ.filter(q => q.stage===st && !S.attempts[q.id] && !due.includes(q.id) && !fresh.includes(q)));
-  }
-  const qIds = [...due, ...fresh.slice(0, Math.max(0, SESSION_Q - due.length)).map(q=>q.id)];
+  const freshPool = allQ.filter(q => q.stage===stage && !S.attempts[q.id] && !due.includes(q.id));
+  const qIds = [...due, ...freshPool.slice(0, Math.max(0, SESSION_Q - due.length)).map(q=>q.id)];
 
-  // 카드는 현재 단계 이상에서만 채움(쉬운 단계로 내려가지 않음)
-  let cards = [];
-  for(const st of cardFillOrder(stage)){
-    if(cards.length >= SESSION_C) break;
-    cards = cards.concat(allC.filter(c => c.stage===st && !S.seenCards[c.id]));
-  }
-  cards = cards.slice(0, SESSION_C);
+  const cards = allC.filter(c => c.stage===stage && !S.seenCards[c.id]).slice(0, SESSION_C);
 
   return { unitId, stage, cards, qIds, idx: 0, phase: cards.length ? 'card' : 'quiz', qIdx: 0, correct: 0, answered: false };
 }
@@ -777,6 +781,10 @@ async function startSession(unitId){
   const dueTopics = dueQuestions().map(qId => (S.qMeta[qId]||{}).topic);
   try { await ensureLoaded([unitId, ...dueTopics]); }
   catch(e){ toast('콘텐츠를 불러오지 못했어요'); return; }
+  /* 지난 세션이 마지막 문제를 풀고도 앱이 닫혀 승급 체크를 못 받았을 경우의 안전망 */
+  const promo = checkAndPromote(unitId);
+  if(promo){ save(); if(promo.type==='promote') toast(`${STAGE_LABEL[promo.to]} 단계로 승급했어요!`); }
+  if(S.graduatedTopics[unitId]){ toast('이미 완료한 주제예요. 복습은 계속 챙겨드릴게요'); return; }
   const s = buildSession(unitId);
   if(!s.qIds.length && !s.cards.length){
     const stage = currentStage(unitId);
@@ -1146,7 +1154,7 @@ function sessLabel(){
     const topic = (S.qMeta[qId]||{}).topic;
     return topic ? `복습 · ${unitName(topic)}` : '복습';
   }
-  return unitName(sess.unitId);
+  return `${unitName(sess.unitId)} · ${STAGE_LABEL[sess.stage]}`;
 }
 
 function renderSession(){
@@ -1281,12 +1289,20 @@ function nextQ(){
     sess.phase = 'done';
     markAttendance();                 // 실제 달력 날짜로 출석 기록
     S.streak = attendanceStreak();    // 표시용 스트릭도 실제 날짜 기준
-    /* 이 세션으로 주제의 모든 문제를 처음 다 풀었다면 완주 표시(문제풀기·복습은 여러 주제를 오갈 수 있어 전부 검사) */
+    /* 이 세션으로 현재 단계를 완주했는지 검사 → 다음 단계로 승급, 전공이면 주제 완료
+       (문제풀기·복습은 여러 주제를 오갈 수 있어 전부 검사) */
     const touchedTopics = (sess.isDrill || sess.isReview)
       ? [...new Set(sess.qIds.map(id => (S.qMeta[id]||{}).topic).filter(Boolean))]
       : [sess.unitId];
-    sess.justGraduatedTopics = touchedTopics.filter(uid => unitProgress(uid) >= 100 && !S.graduatedTopics[uid]);
-    sess.justGraduatedTopics.forEach(uid => { S.graduatedTopics[uid] = true; });
+    sess.promotions = [];
+    sess.justGraduatedTopics = [];
+    touchedTopics.forEach(uid => {
+      if(!uid) return;
+      const result = checkAndPromote(uid);
+      if(!result) return;
+      if(result.type==='promote') sess.promotions.push(result);
+      else sess.justGraduatedTopics.push(uid);
+    });
     save();
   }
   renderSession();
@@ -1295,15 +1311,22 @@ function nextQ(){
 function renderResult(el){
   const total = sess.qIds.length;
   const pct = total ? Math.round(100*sess.correct/total) : 100;
+  const promoBanner = (sess.promotions||[]).map(p => `
+      <div class="card" style="margin-bottom:14px;border-color:var(--coral);background:var(--coral-soft);text-align:center">
+        <div class="eyebrow" style="color:var(--coral-active)">LEVEL UP</div>
+        <div style="font-family:var(--serif);font-size:19px;font-weight:700;margin-top:4px">축하합니다! 이제 ${STAGE_LABEL[p.to]} 단계를 공부하실 수 있어요</div>
+        <p style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">${esc(unitName(p.uid))} 주제의 ${STAGE_LABEL[p.from]} 단계를 완주했어요.</p>
+      </div>`).join('');
   const gradBanner = (sess.justGraduatedTopics||[]).map(uid => `
       <div class="card" style="margin-bottom:14px;border-color:var(--coral);background:var(--coral-soft);text-align:center">
         <div class="eyebrow" style="color:var(--coral-active)">TOPIC COMPLETE</div>
         <div style="font-family:var(--serif);font-size:19px;font-weight:700;margin-top:4px">${esc(unitName(uid))} 완주를 축하합니다!</div>
-        <p style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">이 주제의 모든 문제를 한 번씩 풀었어요. 복습은 계속 이어집니다.</p>
+        <p style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">${STAGE_LABEL[S.topicStage[uid]||'ug']} 단계까지 모두 마쳤어요. 복습은 계속 이어집니다.</p>
       </div>`).join('');
   el.innerHTML = `
     <div class="sess-top"><button class="sess-close" onclick="closeSession()" aria-label="닫기">×</button><div class="sess-track"><i style="width:100%"></i></div></div>
     <div class="sess-body">
+      ${promoBanner}
       ${gradBanner}
       <div class="result-hero">
         <div class="big">${sess.correct}<span style="font-size:26px;color:var(--ink-faint)">/${total}</span></div>
@@ -1335,11 +1358,17 @@ function topicStarted(topicId){
   for(const qId in S.qMeta){ if((S.qMeta[qId]||{}).topic===topicId) return true; }
   return false;
 }
+/* 현재 학습 중인 단계 안에서의 진행률(%) — 완주하면 자동 승급되므로
+   '전체 100%'가 아니라 '지금 단계 100%'가 그 단계 완주를 뜻한다. */
 function unitProgress(uid){
   const qs = QUESTIONS[uid];
   if(!qs || !qs.length) return topicStarted(uid) ? 1 : 0;   // 미로딩: 시작 여부만
-  const done = qs.filter(q=>S.attempts[q.id]).length;
-  return Math.round(100*done/qs.length);
+  if(S.graduatedTopics[uid]) return 100;
+  const stage = currentStage(uid);
+  const stageQs = qs.filter(q=>q.stage===stage);
+  if(!stageQs.length) return topicStarted(uid) ? 1 : 0;
+  const done = stageQs.filter(q=>S.attempts[q.id]).length;
+  return Math.round(100*done/stageQs.length);
 }
 function domainProgress(did){
   const ready = allTopics(did).filter(t=>t.ready);
@@ -1420,12 +1449,13 @@ function renderHome(){
       <span class="eyebrow">TODAY'S SESSION</span>
       ${spotlight && spotlight.info && !spotlight.info.done ? (() => {
         const tid = spotlight.info.topic.id;
+        const tStage = currentStage(tid);
         const pct = (QUESTIONS[tid] && QUESTIONS[tid].length) ? unitProgress(tid) : null;
         return `
         <div class="today-topic">
-          <span class="today-topic-domain" style="color:${spotlight.d.color}">${spotlight.d.name}</span>
+          <span class="today-topic-domain" style="color:${spotlight.d.color}">${spotlight.d.name} · ${STAGE_LABEL[tStage]}</span>
           <div class="today-topic-title">${spotlight.info.topic.title}</div>
-          <span class="today-topic-chapter">${spotlight.info.chapter}/${spotlight.info.total}차시${pct!=null?` · 이 차시 진행 ${pct}%`:''}</span>
+          <span class="today-topic-chapter">${spotlight.info.chapter}/${spotlight.info.total}차시${pct!=null?` · 이 단계 진행 ${pct}%`:''}</span>
           ${pct!=null ? `<div class="progress-bar" style="margin-top:6px"><div class="progress-fill" style="width:${pct}%;background:${spotlight.d.color}"></div></div>` : ''}
         </div>
         <button class="btn btn-red" onclick="startSession('${tid}')">오늘의 세션 시작 · 5분</button>
@@ -1444,7 +1474,7 @@ function renderHome(){
     <div class="domain-list">
       ${domainSpots.map(({d,info})=>{
         const p = domainProgress(d.id);
-        const stage = S.subjectStage[d.id] || 'ms';
+        const stage = (info && !info.done) ? currentStage(info.topic.id) : (S.subjectStage[d.id] || 'ms');
         const nextLabel = !info ? '' : info.done ? '모든 차시 완주 🎉' : `${info.topic.title} · ${info.chapter}/${info.total}차시`;
         return `<div class="domain-row">
           <span class="domain-dot" style="background:${d.color}"></span>
@@ -1481,7 +1511,7 @@ function domainMeta(did){ return DOMAINS.find(x=>x.id===did); }
 
 function topicCard(t){
   const d = domainMeta(t.domain);
-  const cur = S.subjectStage[t.domain] || 'ms';
+  const cur = currentStage(t.id);
   const tagHtml = t.tags.map(tag=>`<span onclick="event.stopPropagation();pickTag('${tag}')" style="cursor:pointer;font-size:12px;color:${exploreTag===tag?'#fff':'var(--ink-faint)'};background:${exploreTag===tag?d.color:'var(--paper)'};border:1px solid var(--line);border-radius:99px;padding:1px 8px">#${tag}</span>`).join(' ');
   const stageBadges = (t.stages||[]).map(s=>`<span style="font-size:11px;padding:0 6px;border-radius:99px;border:1px solid ${s===cur?d.color:'var(--line)'};color:${s===cur?'#fff':'var(--ink-faint)'};background:${s===cur?d.color:'transparent'}">${STAGE_LABEL[s]}</span>`).join(' ');
   /* 진행 상황: 완주 여부는 항상 정확(로컬 저장), 진행률(%)은 이 주제 문제가 이미 로드된 경우에만 실측치 표시 */
@@ -1497,7 +1527,7 @@ function topicCard(t){
     : graduated
       ? `<span class="chip" style="background:var(--good-soft);color:var(--good)">완주 ✓</span>`
       : started
-        ? `<span class="chip badge-ready">학습 중${pct!=null?` · ${pct}%`:''}</span>`
+        ? `<span class="chip badge-ready">${STAGE_LABEL[cur]} 학습 중${pct!=null?` · ${pct}%`:''}</span>`
         : `<span class="chip badge-ready">학습</span>`;
   return `<div ${head}>
     <div style="display:flex;align-items:center;gap:10px;width:100%">
@@ -1516,7 +1546,6 @@ function topicCard(t){
 }
 
 function pickTag(tag){ exploreTag = (exploreTag===tag)?null:tag; render(); }
-function pickStage(subject, stage){ S.subjectStage[subject]=stage; save(); render(); toast(`${STAGE_LABEL[stage]} 단계로 학습해요`); }
 
 function renderExplore(){
   let topics = allTopics(exploreDomain);
@@ -1530,14 +1559,14 @@ function renderExplore(){
     `<button class="chip" style="cursor:pointer;flex-shrink:0;border:1px solid ${exploreTag===tag?'var(--redpen)':'var(--line)'};background:${exploreTag===tag?'var(--redpen)':'var(--card)'};color:${exploreTag===tag?'#fff':'var(--ink-faint)'}" onclick="pickTag('${tag}')">#${tag}</button>`
   ).join('');
 
-  /* 특정 과목 선택 시 단계 전환 바 */
+  /* 특정 과목 선택 시 안내 바 — 단계는 더 이상 수동으로 고르지 않는다.
+     진단이 시작 단계를 정하고, 주제마다 완주하면 자동으로 다음 단계로 승급된다. */
   let stageBar = '';
   if(exploreDomain!=='all'){
-    const d = domainMeta(exploreDomain); const cur = S.subjectStage[exploreDomain]||'ms';
-    stageBar = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
-      <span style="font-size:12px;color:var(--ink-soft)">학습 단계</span>
-      <div style="display:flex;gap:5px">${STAGE_ORDER.map(s=>`<button class="chip" style="cursor:pointer;border:1px solid ${s===cur?d.color:'var(--line)'};background:${s===cur?d.color:'var(--card)'};color:${s===cur?'#fff':'var(--ink-soft)'}" onclick="pickStage('${exploreDomain}','${s}')">${STAGE_LABEL[s]}</button>`).join('')}</div>
-      <button class="chip" style="cursor:pointer;margin-left:auto;border:1px solid var(--line);background:var(--card);color:var(--ink-soft)" onclick="startDiagnostic('${exploreDomain}')">진단</button>
+    const startStage = S.subjectStage[exploreDomain]||'ms';
+    stageBar = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:12px;color:var(--ink-soft)">
+      <span>진단 시작 단계 <b style="color:var(--ink)">${STAGE_LABEL[startStage]}</b> · 주제별로 완주하면 자동 승급돼요</span>
+      <button class="chip" style="cursor:pointer;margin-left:auto;border:1px solid var(--line);background:var(--card);color:var(--ink-soft)" onclick="startDiagnostic('${exploreDomain}')">다시 진단</button>
     </div>`;
   }
 
@@ -1735,10 +1764,11 @@ function applyImportedBackup(raw){
   }
   /* 누락 필드 기본값 보강 */
   S = Object.assign(
-    {day:0,streak:0,lastStudyDay:-1,seenCards:{},srs:{},attempts:{},stats:{answered:0,correct:0},reports:[],storyReports:[],qMeta:{},subjectStage:{physics:'ms',chem:'ms',bio:'ms',earth:'ms'},diagDone:{},diagBannerDismissed:false,graduatedTopics:{},readStories:{},studyDates:{}},
+    {day:0,streak:0,lastStudyDay:-1,seenCards:{},srs:{},attempts:{},stats:{answered:0,correct:0},reports:[],storyReports:[],qMeta:{},subjectStage:{physics:'ms',chem:'ms',bio:'ms',earth:'ms'},topicStage:{},diagDone:{},diagBannerDismissed:false,graduatedTopics:{},readStories:{},studyDates:{}},
     incoming
   );
   S.subjectStage = Object.assign({physics:'ms',chem:'ms',bio:'ms',earth:'ms'}, S.subjectStage||{});
+  if(!S.topicStage) S.topicStage = {};
   if(!S.qMeta) S.qMeta = {}; if(!S.diagDone) S.diagDone={}; if(!S.graduatedTopics) S.graduatedTopics={}; if(!S.storyReports) S.storyReports=[]; if(!S.readStories) S.readStories={}; if(!S.studyDates) S.studyDates={};
   save(); render();
   toast('진도를 가져왔어요');
