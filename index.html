@@ -1584,7 +1584,7 @@ function renderHome(){
         <div class="today-topic">
           <span class="today-topic-domain" style="color:${spotlight.d.color}">${spotlight.d.name} · ${STAGE_LABEL[tStage]}</span>
           <div class="today-topic-title">${spotlight.info.topic.title}</div>
-          ${pct!=null ? `<span class="today-topic-chapter">이 단계 진행 ${pct}%</span>` : ''}
+          ${pct!=null ? `<span class="today-topic-chapter">진행률 ${pct}%</span>` : ''}
           ${pct!=null ? `<div class="progress-bar" style="margin-top:6px"><div class="progress-fill" style="width:${pct}%;background:${spotlight.d.color}"></div></div>` : ''}
         </div>
         <button class="btn btn-red" onclick="startSession('${tid}')">오늘의 세션 시작 · 5분</button>
