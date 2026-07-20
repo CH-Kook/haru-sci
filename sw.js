@@ -1,6 +1,6 @@
 /* 하루사이 서비스워커 — 앱 셸 프리캐시 + 데이터 stale-while-revalidate.
    버전을 바꾸면(v1 -> v2) 이전 캐시가 자동 정리된다. */
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const SHELL_CACHE = `haru-sci-shell-${CACHE_VERSION}`;
 const DATA_CACHE = `haru-sci-data-${CACHE_VERSION}`;
 
