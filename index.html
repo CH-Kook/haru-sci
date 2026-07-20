@@ -282,9 +282,16 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
   fill:none;stroke:var(--redpen);stroke-width:7;stroke-linecap:round;
   filter:drop-shadow(0 1px 1px rgba(214,69,61,.25));
 }
-/* 동그라미는 손으로 두 번 겹쳐 그린 것처럼 살짝 어긋난 획 2겹으로 색연필 느낌을 낸다 */
-.draw-o{stroke-dasharray:480;stroke-dashoffset:480;animation:draw .5s ease-out forwards}
-.draw-o2{stroke-dasharray:460;stroke-dashoffset:460;stroke-width:5;opacity:.5;animation:draw .45s ease-out .12s both}
+/* 동그라미는 손으로 두 번 겹쳐 그린 것처럼 삐뚤빼뚤한 획 2겹 + 거친 질감 필터로 색연필 느낌을 낸다 */
+.grade-mark path.draw-o{
+  stroke-dasharray:480;stroke-dashoffset:480;animation:draw .5s ease-out forwards;
+  filter:url(#pencilTex) drop-shadow(0 1px 1px rgba(214,69,61,.25));
+}
+.grade-mark path.draw-o2{
+  stroke-dasharray:460;stroke-dashoffset:460;stroke-width:4.5;opacity:.6;
+  animation:draw .45s ease-out .12s both;
+  filter:url(#pencilTex2) drop-shadow(0 1px 1px rgba(214,69,61,.2));
+}
 .draw-x{stroke-dasharray:200;stroke-dashoffset:200;animation:draw .35s ease-out forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
 @media (prefers-reduced-motion:reduce){
@@ -1297,7 +1304,16 @@ function answerDiag(picked){
   });
 
   $('#gradeMark').innerHTML = isUnknown ? '' : (ok
-    ? `<svg viewBox="0 0 100 100"><path class="draw-o" d="M52 8 C74 7 91 24 92 47 C93 68 77 90 54 92 C31 94 9 78 8 54 C7 32 23 11 45 8 C47 7.7 49 7.8 51 8 L59 13"/><path class="draw-o2" d="M48 11 C28 13 13 30 13 51 C13 72 30 89 51 89 C73 89 90 71 89 49 C88 28 71 12 50 11 C48.5 10.9 47 11 46 11.5"/></svg>`
+    ? `<svg viewBox="0 0 100 100"><defs>
+        <filter id="pencilTex" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" seed="3" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="pencilTex2" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="9" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs><path class="draw-o" d="M50 12 C70 9 84 20 85 38 C86 52 84 66 74 76 C64 87 45 92 32 85 C18 78 11 62 13 46 C15 30 25 16 42 13 C45 12.3 47 12 50 12 L57 16"/><path class="draw-o2" d="M46 16 C30 15 17 28 15 45 C14 58 20 70 31 78 C44 87 62 86 73 76 C83 67 87 52 83 39 C79 26 66 15 51 15 C49.5 15 48 15.5 47 16"/></svg>`
     : `<svg viewBox="0 0 100 100"><path class="draw-x" d="M78 18 L22 86"/></svg>`);
 
   const verdictClass = isUnknown ? 'unknown' : (ok ? 'ok' : 'no');
@@ -1658,7 +1674,16 @@ function answer(picked){
 
   /* 빨간펜 채점 마크 */
   $('#gradeMark').innerHTML = ok
-    ? `<svg viewBox="0 0 100 100"><path class="draw-o" d="M52 8 C74 7 91 24 92 47 C93 68 77 90 54 92 C31 94 9 78 8 54 C7 32 23 11 45 8 C47 7.7 49 7.8 51 8 L59 13"/><path class="draw-o2" d="M48 11 C28 13 13 30 13 51 C13 72 30 89 51 89 C73 89 90 71 89 49 C88 28 71 12 50 11 C48.5 10.9 47 11 46 11.5"/></svg>`
+    ? `<svg viewBox="0 0 100 100"><defs>
+        <filter id="pencilTex" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" seed="3" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="pencilTex2" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="9" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs><path class="draw-o" d="M50 12 C70 9 84 20 85 38 C86 52 84 66 74 76 C64 87 45 92 32 85 C18 78 11 62 13 46 C15 30 25 16 42 13 C45 12.3 47 12 50 12 L57 16"/><path class="draw-o2" d="M46 16 C30 15 17 28 15 45 C14 58 20 70 31 78 C44 87 62 86 73 76 C83 67 87 52 83 39 C79 26 66 15 51 15 C49.5 15 48 15.5 47 16"/></svg>`
     : `<svg viewBox="0 0 100 100"><path class="draw-x" d="M78 18 L22 86"/></svg>`;
   ok ? SFX.correct() : SFX.wrong();
 
