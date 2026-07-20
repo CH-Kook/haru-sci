@@ -1262,7 +1262,7 @@ function renderDiag(){
   }
 
   const it = diag.stageItems[diag.stageIdx];
-  const unknownBtn = `<button class="choice unknown-choice" data-i="-1" onclick="answerDiag(-1)">🤷 잘 모르겠어요</button>`;
+  const unknownBtn = `<button class="choice unknown-choice" data-i="-1" onclick="answerDiag(-1)">잘 모르겠어요</button>`;
   let choices;
   if(it.type==='ox'){
     choices = `<div class="ox-wrap with-unknown">
