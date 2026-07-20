@@ -821,7 +821,7 @@ const SFX = (() => {
     osc.start(t0);
     osc.stop(t0 + dur + 0.02);
   }
-  function scratch(start, dur, peak, filterFreq){
+  function scratch(start, dur, peak, filterFreq, q){
     /* 색연필/사각사각 소리 — 필터를 통과시킨 백색소음 */
     const c = ac();
     const t0 = c.currentTime + start;
@@ -834,7 +834,7 @@ const SFX = (() => {
     const filter = c.createBiquadFilter();
     filter.type = 'bandpass';
     filter.frequency.value = filterFreq;
-    filter.Q.value = 0.9;
+    filter.Q.value = q || 0.9;
     const gain = c.createGain();
     gain.gain.setValueAtTime(0.0001, t0);
     gain.gain.linearRampToValueAtTime(peak, t0 + 0.01);
@@ -844,22 +844,26 @@ const SFX = (() => {
   }
   const on = () => S.soundOn !== false;
   return {
-    click(){ if(!on()) return; try{ tone(680, 0, 0.045, 'sine', 0.05); }catch(e){} },
+    click(){ if(!on()) return; try{ tone(680, 0, 0.05, 'sine', 0.09); }catch(e){} },
     correct(){
-      /* 빨간펜으로 동그라미 치는 느낌: 사각거리는 소리 + 밝게 올라가는 톤 */
+      /* 색연필로 동그라미를 그리는 느낌: 짧은 사각사각 스트로크 3번을 겹쳐서
+         원을 그리는 손동작을 흉내내고, 끝에 살짝 밝은 확인음을 얹는다 */
       if(!on()) return;
       try{
-        scratch(0, 0.15, 0.05, 3000);
-        tone(520, 0.02, 0.14, 'triangle', 0.08, 780);
+        scratch(0,    0.10, 0.22, 2400, 1.1);
+        scratch(0.07, 0.10, 0.24, 3200, 1.1);
+        scratch(0.14, 0.11, 0.22, 2700, 1.1);
+        scratch(0.21, 0.09, 0.18, 3600, 1.3);
+        tone(660, 0.30, 0.14, 'triangle', 0.09, 920);
       }catch(e){}
     },
-    wrong(){ if(!on()) return; try{ tone(200, 0, 0.16, 'sawtooth', 0.045, 130); }catch(e){} },
+    wrong(){ if(!on()) return; try{ tone(200, 0, 0.16, 'sawtooth', 0.08, 130); }catch(e){} },
     complete(){
       if(!on()) return;
       try{
-        tone(523.25, 0, 0.11, 'sine', 0.07);
-        tone(659.25, 0.09, 0.11, 'sine', 0.07);
-        tone(783.99, 0.18, 0.18, 'sine', 0.08);
+        tone(523.25, 0, 0.11, 'sine', 0.09);
+        tone(659.25, 0.09, 0.11, 'sine', 0.09);
+        tone(783.99, 0.18, 0.18, 'sine', 0.10);
       }catch(e){}
     }
   };
