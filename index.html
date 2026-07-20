@@ -274,7 +274,7 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
 /* 빨간펜 채점 마크 — 시그니처 */
 .grade-wrap{position:relative}
 .grade-mark{
-  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  position:absolute;left:0;right:0;top:0;display:flex;justify-content:center;
   pointer-events:none;z-index:5;
 }
 .grade-mark svg{width:130px;height:130px;overflow:visible}
@@ -765,6 +765,18 @@ async function submitReport(type, id){
 }
 
 /* 동적 DOM 교체 시 KaTeX 렌더링을 격발해주는 안전 래퍼 함수 */
+/* 채점 마크(동그라미/X)를 전체 선택지 목록 가운데가 아니라, 실제로 고른 선택지 위에 오도록 위치를 맞춘다 */
+function positionGradeMark(picked){
+  const markEl = $('#gradeMark');
+  const wrap = markEl && markEl.closest('.grade-wrap');
+  const btn = wrap && wrap.querySelector(`.choice[data-i="${picked}"]`);
+  if(!markEl || !wrap || !btn) return;
+  const wrapRect = wrap.getBoundingClientRect();
+  const btnRect = btn.getBoundingClientRect();
+  const centerY = btnRect.top - wrapRect.top + btnRect.height / 2;
+  markEl.style.top = (centerY - 65) + 'px';
+}
+
 function triggerMathRender(target) {
   const el = target || document.getElementById('app');
   if (typeof renderMathInElement !== 'undefined' && el) {
@@ -1315,6 +1327,7 @@ function answerDiag(picked){
         </filter>
       </defs><path class="draw-o" d="M50 12 C70 9 84 20 85 38 C86 52 84 66 74 76 C64 87 45 92 32 85 C18 78 11 62 13 46 C15 30 25 16 42 13 C45 12.3 47 12 50 12 L57 16"/><path class="draw-o2" d="M46 16 C30 15 17 28 15 45 C14 58 20 70 31 78 C44 87 62 86 73 76 C83 67 87 52 83 39 C79 26 66 15 51 15 C49.5 15 48 15.5 47 16"/></svg>`
     : `<svg viewBox="0 0 100 100"><path class="draw-x" d="M78 18 L22 86"/></svg>`);
+  if(!isUnknown) positionGradeMark(picked);
 
   const verdictClass = isUnknown ? 'unknown' : (ok ? 'ok' : 'no');
   const verdictText = isUnknown ? '모름' : (ok ? '정답' : '오답');
@@ -1685,6 +1698,7 @@ function answer(picked){
         </filter>
       </defs><path class="draw-o" d="M50 12 C70 9 84 20 85 38 C86 52 84 66 74 76 C64 87 45 92 32 85 C18 78 11 62 13 46 C15 30 25 16 42 13 C45 12.3 47 12 50 12 L57 16"/><path class="draw-o2" d="M46 16 C30 15 17 28 15 45 C14 58 20 70 31 78 C44 87 62 86 73 76 C83 67 87 52 83 39 C79 26 66 15 51 15 C49.5 15 48 15.5 47 16"/></svg>`
     : `<svg viewBox="0 0 100 100"><path class="draw-x" d="M78 18 L22 86"/></svg>`;
+  positionGradeMark(picked);
   ok ? SFX.correct() : SFX.wrong();
 
   /* 해설 */
