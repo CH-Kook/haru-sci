@@ -282,20 +282,32 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
   fill:none;stroke:var(--redpen);stroke-width:7;stroke-linecap:round;
   filter:drop-shadow(0 1px 1px rgba(214,69,61,.25));
 }
-/* 동그라미는 손으로 두 번 겹쳐 그린 것처럼 삐뚤빼뚤한 획 2겹 + 거친 질감 필터로 색연필 느낌을 낸다 */
+/* 동그라미·사선 모두 같은 획을 손으로 두 번 겹쳐 그린 것처럼 살짝 어긋나게 겹치고,
+   거친 질감 필터로 색연필 느낌을 낸다. 두 번째 획은 같은 경로를 아주 조금만
+   이동·회전·축소해서 "다른 모양의 원"이 아니라 "같은 원을 두 번 그은" 느낌을 유지한다. */
 .grade-mark path.draw-o{
   stroke-dasharray:480;stroke-dashoffset:480;animation:draw .5s ease-out forwards;
   filter:url(#pencilTex) drop-shadow(0 1px 1px rgba(214,69,61,.25));
 }
 .grade-mark path.draw-o2{
-  stroke-dasharray:460;stroke-dashoffset:460;stroke-width:4.5;opacity:.6;
+  stroke-dasharray:480;stroke-dashoffset:480;stroke-width:4.5;opacity:.6;
   animation:draw .45s ease-out .12s both;
   filter:url(#pencilTex2) drop-shadow(0 1px 1px rgba(214,69,61,.2));
+  transform-box:fill-box;transform-origin:50% 50%;transform:translate(2px,-1.5px) rotate(2deg) scale(.98);
 }
-.draw-x{stroke-dasharray:200;stroke-dashoffset:200;animation:draw .35s ease-out forwards}
+.grade-mark path.draw-x{
+  stroke-dasharray:200;stroke-dashoffset:200;animation:draw .35s ease-out forwards;
+  filter:url(#pencilTexX) drop-shadow(0 1px 1px rgba(214,69,61,.25));
+}
+.grade-mark path.draw-x2{
+  stroke-dasharray:200;stroke-dashoffset:200;stroke-width:4.5;opacity:.55;
+  animation:draw .3s ease-out .08s both;
+  filter:url(#pencilTexX) drop-shadow(0 1px 1px rgba(214,69,61,.2));
+  transform-box:fill-box;transform-origin:50% 50%;transform:translate(-2px,1.5px) rotate(-2deg);
+}
 @keyframes draw{to{stroke-dashoffset:0}}
 @media (prefers-reduced-motion:reduce){
-  .draw-o,.draw-o2,.draw-x{animation:none;stroke-dashoffset:0}
+  .draw-o,.draw-o2,.draw-x,.draw-x2{animation:none;stroke-dashoffset:0}
   *{transition:none!important}
 }
 
@@ -1325,8 +1337,13 @@ function answerDiag(picked){
           <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="9" result="n"/>
           <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
         </filter>
-      </defs><path class="draw-o" d="M50 12 C70 9 84 20 85 38 C86 52 84 66 74 76 C64 87 45 92 32 85 C18 78 11 62 13 46 C15 30 25 16 42 13 C45 12.3 47 12 50 12 L57 16"/><path class="draw-o2" d="M46 16 C30 15 17 28 15 45 C14 58 20 70 31 78 C44 87 62 86 73 76 C83 67 87 52 83 39 C79 26 66 15 51 15 C49.5 15 48 15.5 47 16"/></svg>`
-    : `<svg viewBox="0 0 100 100"><path class="draw-x" d="M78 18 L22 86"/></svg>`);
+      </defs><path class="draw-o" d="M50 12 C70 9 84 20 85 38 C86 52 84 66 74 76 C64 87 45 92 32 85 C18 78 11 62 13 46 C15 30 25 16 42 13 C45 12.3 47 12 50 12 L57 16"/><path class="draw-o2" d="M50 12 C70 9 84 20 85 38 C86 52 84 66 74 76 C64 87 45 92 32 85 C18 78 11 62 13 46 C15 30 25 16 42 13 C45 12.3 47 12 50 12 L57 16"/></svg>`
+    : `<svg viewBox="0 0 100 100"><defs>
+        <filter id="pencilTexX" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="5" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs><path class="draw-x" d="M78 18 L22 86"/><path class="draw-x2" d="M78 18 L22 86"/></svg>`);
   if(!isUnknown) positionGradeMark(picked);
 
   const verdictClass = isUnknown ? 'unknown' : (ok ? 'ok' : 'no');
@@ -1696,8 +1713,13 @@ function answer(picked){
           <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="9" result="n"/>
           <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
         </filter>
-      </defs><path class="draw-o" d="M50 12 C70 9 84 20 85 38 C86 52 84 66 74 76 C64 87 45 92 32 85 C18 78 11 62 13 46 C15 30 25 16 42 13 C45 12.3 47 12 50 12 L57 16"/><path class="draw-o2" d="M46 16 C30 15 17 28 15 45 C14 58 20 70 31 78 C44 87 62 86 73 76 C83 67 87 52 83 39 C79 26 66 15 51 15 C49.5 15 48 15.5 47 16"/></svg>`
-    : `<svg viewBox="0 0 100 100"><path class="draw-x" d="M78 18 L22 86"/></svg>`;
+      </defs><path class="draw-o" d="M50 12 C70 9 84 20 85 38 C86 52 84 66 74 76 C64 87 45 92 32 85 C18 78 11 62 13 46 C15 30 25 16 42 13 C45 12.3 47 12 50 12 L57 16"/><path class="draw-o2" d="M50 12 C70 9 84 20 85 38 C86 52 84 66 74 76 C64 87 45 92 32 85 C18 78 11 62 13 46 C15 30 25 16 42 13 C45 12.3 47 12 50 12 L57 16"/></svg>`
+    : `<svg viewBox="0 0 100 100"><defs>
+        <filter id="pencilTexX" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="5" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs><path class="draw-x" d="M78 18 L22 86"/><path class="draw-x2" d="M78 18 L22 86"/></svg>`;
   positionGradeMark(picked);
   ok ? SFX.correct() : SFX.wrong();
 
