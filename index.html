@@ -475,7 +475,6 @@ async function ensureSuenungLoaded(subject){
     return bankId;
   }catch(e){ return null; }
 }
-const LEVEL_LABEL = {1:'쉬움', 2:'보통', 3:'도전'};
 
 /* 커리큘럼 헬퍼 (CURRICULUM이 로드된 뒤 동작) */
 function allTopics(did){
@@ -1122,8 +1121,7 @@ function renderCardBrowse(){
   const listHtml = STAGE_ORDER.filter(s=>bystage[s] && bystage[s].length).map(s => `
     <div class="section-label" style="margin-top:14px">${STAGE_LABEL[s]}</div>
     ${bystage[s].map(c=>{
-      const seen = !!S.seenCards[nsKey(unitId,c.id)];
-      const acc = seen ? cardAccuracy(unitId, c.id, s) : null;
+      const acc = cardAttempted(unitId, c.id, s) ? cardAccuracy(unitId, c.id, s) : null;
       return `<div class="unit-item" style="cursor:pointer" onclick="pickBrowseCard('${c.id}')">
       <span class="u-name" style="flex:1">${esc(c.title)}</span>
       ${acc!=null ? (acc===100
@@ -1842,6 +1840,12 @@ function cardAccuracy(uid, cardId, stage){
   const right = qs.filter(q=>{ const a=S.attempts[nsKey(uid,q.id)]; return a && a.correct>0; }).length;
   return Math.round(100*right/qs.length);
 }
+/* 카드 다시보기 목록에서 정답률을 보여줄지 판단할 때는 seenCards(카드 자체를 봤는지)가
+   아니라 딸린 문제를 실제로 풀어본 적이 있는지로 판단한다 — 예전 버전에서 넘어온
+   진도 데이터는 카드마다 seenCards가 정확히 안 맞아 있을 수 있기 때문이다. */
+function cardAttempted(uid, cardId, stage){
+  return (QUESTIONS[uid]||[]).some(q => q.card===cardId && q.stage===stage && S.attempts[nsKey(uid,q.id)]);
+}
 /* 과목별 '다음 주제': 커리큘럼 순서상 아직 완주하지 않은 첫 주제
    (전체 주제 개수는 일부러 노출하지 않는다 — 콘텐츠가 계속 늘어나는데 'N/18'처럼
    고정된 숫자로 보이면 오히려 주제가 한정돼 보인다. 표시는 주제 내 진행률만.) */
@@ -1995,7 +1999,6 @@ function topicCard(t){
       <span class="domain-dot" style="background:${t.ready?d.color:'var(--line)'}"></span>
       <span class="u-name" style="flex:1">${t.title}</span>
       ${exploreDomain==='all'?`<span class="chip" style="background:var(--paper);color:${d.color};border:1px solid var(--line)">${d.name}</span>`:''}
-      <span class="u-count">${LEVEL_LABEL[t.level]}</span>
       ${statusBadge}
       ${perfectStage ? `<span class="perfect-badge">완벽 · ${STAGE_LABEL[perfectStage]}</span>` : ''}
     </div>
