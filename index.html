@@ -177,6 +177,14 @@ h1.screen-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-s
   font-family:var(--serif);font-weight:800;font-size:21px;color:var(--redpen);
   background:rgba(203,74,59,.05);letter-spacing:.02em;pointer-events:none;
 }
+.perfect-badge{
+  display:inline-flex;align-items:center;flex-shrink:0;
+  font-family:var(--serif);font-size:11px;font-weight:800;letter-spacing:.02em;
+  padding:3px 9px;border-radius:99px;color:#6b4a05;
+  background:linear-gradient(135deg,#fff6d8 0%,#f0c766 35%,#d4a017 55%,#f5d685 75%,#fff6d8 100%);
+  border:1px solid #c99a1f;
+  box-shadow:0 1px 2px rgba(180,130,10,.35), inset 0 1px 0 rgba(255,255,255,.6);
+}
 .badge-ready{background:var(--coral-soft);color:var(--coral-active)}
 .badge-soon{background:var(--paper);color:var(--ink-faint);border:1px solid var(--line)}
 
@@ -595,10 +603,7 @@ const Storage = (() => {
    day: 시뮬레이션 날짜 카운터 (설정의 개발자 도구로 하루씩 넘겨
         간격 반복이 실제로 도는지 확인할 수 있다)
    ============================================================ */
-const RELEARN_INTERVALS = [1, 3, 7, 21]; // 한 번이라도 틀린 뒤 다시 신뢰를 얻기까지 밟는 계단(일)
-const REVIEW_CORRECT_DAYS = 180;         // 처음부터 맞혔거나 계단을 다 밟으면 6개월 뒤 재복습
 const SESSION_Q = 8;                    // 카드를 다 배운 뒤(후반부) 문제만으로 채우는 세션의 문제 수
-const REVIEW_BATCH = 10;                // '지금 복습하기' 한 번에 나오는 문제 수 (남으면 이어서 더 할 수 있음)
 const DEV_MODE = new URLSearchParams(location.search).get('dev') === '0919';
 
 let S = Storage.load() || {
@@ -606,7 +611,6 @@ let S = Storage.load() || {
   streak: 0,
   lastStudyDay: -1,
   seenCards: {},        // cardId -> true
-  srs: {},              // qId -> {step, due, graduated}
   attempts: {},         // qId -> {tries, correct}
   stats: {answered: 0, correct: 0},
   reports: [],          // {qId, day}
@@ -656,7 +660,7 @@ function migrateNamespacedKeys(){
   });
   if(!Object.keys(topicOf).length) return;
 
-  ['attempts','srs','qMeta'].forEach(field => {
+  ['attempts','qMeta'].forEach(field => {
     const obj = S[field];
     Object.keys(obj).forEach(key => {
       if(key.indexOf('::') !== -1) return;
@@ -826,16 +830,8 @@ function unitName(uid){
   for(const d in CURRICULUM){ const t = CURRICULUM[d].find(x=>x.id===uid); if(t) return t.title; }
   return uid;
 }
-function dueQuestions(){
-  /* graduated는 '지금 6개월 대기 중'이라는 상태 표시일 뿐, 6개월 뒤 due가 되면 다시 나와야 하므로 필터에서 제외하지 않는다 */
-  return Object.entries(S.srs)
-    .filter(([id,v]) => v.due <= S.day)
-    .map(([id]) => id);
-}
-
 /* ============================================================
    세션 엔진
-   규칙: 복습 예정 문제 우선 → 부족분은 해당 단원의 새 문제
    ============================================================ */
 let sess = null;
 let cardBrowse = null; // {unitId, cardId} — 완주한 주제에서 개념 카드 하나를 골라 다시 보는 모드
@@ -971,9 +967,8 @@ armExitGuard();
 /* 세션은 그 주제의 현재 단계(topicStage)에서만 채운다 — 다른 단계로 섞이지 않는다.
    그 단계를 완주하면(=새로 낼 카드·문제가 하나도 안 남으면) 세션 종료 시 자동 승급된다.
 
-   학습 세션은 복습을 섞지 않는다 — 복습은 홈 화면의 '지금 복습하기' 전용 플로우
-   (startReview)로만 한다. 학습과 복습을 억지로 한 세션에 합치면 둘 다 애매해지므로
-   완전히 분리한다.
+   틀린 문제를 다시 풀고 싶으면 '카드 다시보기'에서 그 카드를 골라 다시 도전한다
+   (openCardBrowser) — 자동으로 다시 나오는 예약 복습 큐는 없다.
 
    한 세션 = 한 개념: 아직 안 본 카드가 있으면 딱 1장만 꺼내고, 그 카드에 딸린 확인
    문제를 (개수 상관없이) 그대로 뒤에 붙인다. 카드마다 딸린 문제 수가 달라도 억지로
@@ -1001,7 +996,7 @@ function buildSession(unitId){
       .forEach(q => { steps.push({type:'q', id:nsKey(unitId,q.id)}); usedQ.add(q.id); });
   }
 
-  return { unitId, isDrill:false, isReview:false, stage, topics:[unitId], steps, idx: 0, correct: 0, answered: false, phase: steps.length ? 'run' : 'done' };
+  return { unitId, isDrill:false, stage, topics:[unitId], steps, idx: 0, correct: 0, answered: false, phase: steps.length ? 'run' : 'done' };
 }
 
 /* 세션 도중 상태 저장 — 앱을 닫아도 나중에 이어할 수 있게 스냅샷을 남긴다.
@@ -1009,7 +1004,7 @@ function buildSession(unitId){
 function persistSessionSnapshot(){
   if(!sess || sess.phase === 'done'){ S.pendingSession = null; save(); return; }
   S.pendingSession = {
-    unitId: sess.unitId, isDrill: !!sess.isDrill, isReview: !!sess.isReview,
+    unitId: sess.unitId, isDrill: !!sess.isDrill,
     stage: sess.stage, topics: sess.topics, steps: sess.steps, idx: sess.idx, correct: sess.correct
   };
   save();
@@ -1051,7 +1046,6 @@ function revertIncompleteSession(p){
           S.stats.correct = Math.max(0, S.stats.correct - at.correct);
         }
         delete S.attempts[qKey];
-        delete S.srs[qKey];
       }
       break;
     }
@@ -1069,7 +1063,7 @@ async function resumePendingSession(){
   hideConfirm();
   try { await ensureLoaded(p.topics||[]); }
   catch(e){ toast('콘텐츠를 불러오지 못했어요'); return; }
-  sess = { unitId:p.unitId, isDrill:p.isDrill, isReview:p.isReview, stage:p.stage, topics:p.topics, steps:p.steps, idx:p.idx, correct:p.correct, answered:false, phase:'run' };
+  sess = { unitId:p.unitId, isDrill:p.isDrill, stage:p.stage, topics:p.topics, steps:p.steps, idx:p.idx, correct:p.correct, answered:false, phase:'run' };
   pendingProceedAfterDiscard = null;
   openModalHistory();
   $('#session').classList.add('open');
@@ -1082,7 +1076,9 @@ function setCardsPerSession(n){
   render();
 }
 
-/* 이미 완주한 주제 — 진행 기록은 그대로 두고, 개념 카드 목록에서 다시 보고 싶은 걸 골라서 훑어본다 */
+/* 이미 시작한 주제(완주 여부 무관) — 진행 기록은 그대로 두고, 개념 카드 목록에서
+   정답률을 보면서 다시 보고 싶은 걸 골라 훑어본다. 틀렸던 문제를 다시 맞히면
+   그 카드의 정답률이 채워진다. */
 async function openCardBrowser(unitId){
   try { await ensureLoaded([unitId]); }
   catch(e){ toast('콘텐츠를 불러오지 못했어요'); return; }
@@ -1091,15 +1087,18 @@ async function openCardBrowser(unitId){
   $('#session').classList.add('open');
   renderCardBrowse();
 }
-/* 카드 하나를 고르면 그 개념 + 거기 딸린 문제까지 원래 학습 흐름 그대로 이어서 보여준다 */
+/* 카드 하나를 고르면 그 개념 + 거기 딸린 문제까지 원래 학습 흐름 그대로 이어서 보여준다.
+   문제는 그 카드가 속한 단계(카드 자체의 stage)를 기준으로 골라야 한다 — 주제가
+   이미 다음 단계로 넘어간 뒤에 이전 단계 카드를 다시 볼 수도 있기 때문이다. */
 async function pickBrowseCard(cardId){
   const unitId = cardBrowse.unitId;
   try { await ensureLoaded([unitId]); } catch(e){ toast('콘텐츠를 불러오지 못했어요'); return; }
-  const stage = ensureTopicStage(unitId);
+  const card = findCard(unitId, cardId);
+  const stage = card ? card.stage : ensureTopicStage(unitId);
   const steps = [{type:'card', id:cardId}];
   (QUESTIONS[unitId]||[]).filter(q=>q.card===cardId && q.stage===stage)
     .forEach(q => steps.push({type:'q', id:nsKey(unitId,q.id)}));
-  sess = { unitId, isDrill:false, isReview:false, isCardReview:true, stage, topics:[unitId], steps, idx:0, correct:0, answered:false, phase:'run' };
+  sess = { unitId, isDrill:false, isCardReview:true, stage, topics:[unitId], steps, idx:0, correct:0, answered:false, phase:'run' };
   renderSession();
 }
 /* 개념-문제 복습을 마치고 '목록으로'를 누르면 세션을 닫는 대신 개념 목록으로 돌아간다 */
@@ -1122,14 +1121,21 @@ function renderCardBrowse(){
   (CARDS[unitId]||[]).forEach(c=>{ (bystage[c.stage] = bystage[c.stage]||[]).push(c); });
   const listHtml = STAGE_ORDER.filter(s=>bystage[s] && bystage[s].length).map(s => `
     <div class="section-label" style="margin-top:14px">${STAGE_LABEL[s]}</div>
-    ${bystage[s].map(c=>`<div class="unit-item" style="cursor:pointer" onclick="pickBrowseCard('${c.id}')">
-      <span class="u-name">${esc(c.title)}</span>
-    </div>`).join('')}
+    ${bystage[s].map(c=>{
+      const seen = !!S.seenCards[nsKey(unitId,c.id)];
+      const acc = seen ? cardAccuracy(unitId, c.id, s) : null;
+      return `<div class="unit-item" style="cursor:pointer" onclick="pickBrowseCard('${c.id}')">
+      <span class="u-name" style="flex:1">${esc(c.title)}</span>
+      ${acc!=null ? (acc===100
+        ? `<span class="perfect-badge">100%</span>`
+        : `<span class="chip" style="background:var(--paper);border:1px solid var(--line);color:var(--ink-soft)">${acc}%</span>`) : ''}
+    </div>`;
+    }).join('')}
   `).join('');
 
   el.innerHTML = head + `
     <div class="sess-body">
-      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:10px">다시 보고 싶은 개념을 골라보세요. 딸린 문제도 함께 풀 수 있어요.</p>
+      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:10px">다시 보고 싶은 개념을 골라보세요. 딸린 문제를 다시 맞히면 정답률이 채워져요.</p>
       ${listHtml || '<p style="color:var(--ink-faint);font-size:13px">등록된 개념 카드가 없어요.</p>'}
     </div>`;
 }
@@ -1145,7 +1151,7 @@ async function startSession(unitId, opts){
   const s = buildSession(unitId);
   if(!s.steps.length){
     const stage = currentStage(unitId);
-    toast(`${STAGE_LABEL[stage]} 단계의 새 문제를 모두 마쳤어요. 복습은 "지금 복습하기"에서 이어가요`); return;
+    toast(`${STAGE_LABEL[stage]} 단계의 새 문제를 모두 마쳤어요. "카드 다시보기"에서 정답률을 채워보세요`); return;
   }
   sess = s;
   persistSessionSnapshot();
@@ -1191,24 +1197,7 @@ async function startDrill(opts){
   if(!pool.length){ toast('조건에 맞는 문제가 없어요. 다른 조건으로 시도해보세요'); return; }
 
   const steps = shuffle(pool).slice(0, drillCount).map(id => ({type:'q', id}));
-  sess = { unitId:null, isDrill:true, isReview:false, stage:drillStage, topics:bankIds, steps, idx:0, correct:0, answered:false, phase: steps.length ? 'run' : 'done' };
-  persistSessionSnapshot();
-  openModalHistory();
-  $('#session').classList.add('open');
-  renderSession();
-}
-
-/* 복습 전용 세션 — 밀린 복습을 한 번에 다 쏟아내지 않고 REVIEW_BATCH개씩 꺼내고,
-   다 풀면 남은 개수를 보여주며 이어서 더 할지 고를 수 있게 한다. */
-async function startReview(opts){
-  if(!(opts && opts.skipResumeCheck) && offerResumeOrProceed(() => startReview({skipResumeCheck:true}))) return;
-  const due = dueQuestions();
-  if(!due.length){ toast('지금은 밀린 복습이 없어요'); return; }
-  const dueTopics = due.map(qId => (S.qMeta[qId]||{}).topic).filter(Boolean);
-  try { await ensureLoaded(dueTopics); }
-  catch(e){ toast('콘텐츠를 불러오지 못했어요'); return; }
-  const steps = shuffle(due).slice(0, REVIEW_BATCH).map(id => ({type:'q', id}));
-  sess = { unitId:null, isDrill:false, isReview:true, stage:null, topics:dueTopics, steps, idx:0, correct:0, answered:false, phase: steps.length ? 'run' : 'done' };
+  sess = { unitId:null, isDrill:true, stage:drillStage, topics:bankIds, steps, idx:0, correct:0, answered:false, phase: steps.length ? 'run' : 'done' };
   persistSessionSnapshot();
   openModalHistory();
   $('#session').classList.add('open');
@@ -1537,23 +1526,19 @@ function sessProgress(){
 }
 function findCard(unitId, cardId){ return (CARDS[unitId]||[]).find(c=>c.id===cardId); }
 
-/* 세션 상단에 표시할 라벨: 일반 세션은 주제명, 문제풀기/복습(다중 주제)은 현재 문제의 출처 주제명 */
+/* 세션 상단에 표시할 라벨: 일반 세션은 주제명, 문제풀기(다중 주제)는 현재 문제의 출처 주제명 */
 function sessLabel(){
   const step = sess.steps[sess.idx];
   if(sess.isDrill){
     const q = step && findQ(step.id);
     return q ? `문제풀기 · ${unitName(q.unit)}` : '문제풀기';
   }
-  if(sess.isReview){
-    const topic = step && (S.qMeta[step.id]||{}).topic;
-    return topic ? `복습 · ${unitName(topic)}` : '복습';
-  }
   return `${unitName(sess.unitId)} · ${STAGE_LABEL[sess.stage]}`;
 }
 
-/* 일반 주제 학습 세션(양치기·복습·개념 다시보기 제외)에서만 단계를 직접 바꿀 수 있게 한다 */
+/* 일반 주제 학습 세션(양치기·개념 다시보기 제외)에서만 단계를 직접 바꿀 수 있게 한다 */
 function stageSwitcherHtml(){
-  if(sess.isDrill || sess.isReview || sess.isCardReview) return '';
+  if(sess.isDrill || sess.isCardReview) return '';
   const meta = topicMeta(sess.unitId);
   if(!meta || !meta.stages || meta.stages.length<2) return '';
   return `<div style="display:flex;gap:5px;padding:0 18px 10px">
@@ -1618,7 +1603,7 @@ function renderSession(){
   /* quiz */
   const qId = step.id;
   const q = findQ(qId);
-  const isReview = !!S.attempts[qId] && !sess.answered;
+  const isRepeat = !!S.attempts[qId] && !sess.answered;
   let choicesHtml = '';
   if(q.type === 'ox'){
     choicesHtml = `<div class="ox-wrap">
@@ -1634,7 +1619,7 @@ function renderSession(){
       <div style="display:flex;gap:6px;align-items:center" class="q-level">
         <span class="eyebrow">Q${qNum} / ${qTotal}</span>
         <span class="chip badge-ready">${LV[q.level]}</span>
-        ${isReview?'<span class="chip" style="background:var(--redpen-soft);color:var(--redpen)">복습</span>':''}
+        ${isRepeat?'<span class="chip" style="background:var(--redpen-soft);color:var(--redpen)">전에 푼 문제</span>':''}
         ${q.type==='misc'?'<span class="chip badge-soon">오개념 판별</span>':''}
       </div>
       <p class="q-text">${esc(q.q)}</p>
@@ -1675,23 +1660,6 @@ function answer(picked){
   S.attempts[qId] = at;
   S.qMeta[qId] = {q: q.q, topic: q.unit};   // 미로딩 상태에서도 목록에 표시·복습 로드 가능
   S.stats.answered++; if(ok){ S.stats.correct++; sess.correct++; }
-
-  /* 간격 반복 갱신 — 문제풀기(양치기)는 정답률만 기록하고 장기 복습 큐에는 넣지 않는다.
-     처음부터 맞히면 바로 6개월, 한 번이라도 틀리면 1→3→7→21일 계단을 다시 밟아 신뢰를 되찾은 뒤에야 6개월로 간다. */
-  if(!sess.isDrill){
-    const cur = S.srs[qId];
-    if(ok){
-      const inRelearn = cur && Number.isInteger(cur.relearnStep) && cur.relearnStep >= 0;
-      const next = inRelearn ? cur.relearnStep + 1 : -1;
-      if(inRelearn && next < RELEARN_INTERVALS.length){
-        S.srs[qId] = {due:S.day + RELEARN_INTERVALS[next], graduated:false, relearnStep:next};
-      } else {
-        S.srs[qId] = {due:S.day + REVIEW_CORRECT_DAYS, graduated:true, relearnStep:-1};
-      }
-    } else {
-      S.srs[qId] = {due:S.day + RELEARN_INTERVALS[0], graduated:false, relearnStep:0};
-    }
-  }
   save();
 
   /* 선택지 잠금 + 표시 */
@@ -1727,7 +1695,7 @@ function answer(picked){
   const reported = S.reports.some(r=>r.qId===qId);
   $('#explainBox').innerHTML = `
     <div class="explain">
-      <div class="verdict ${ok?'ok':'no'}">${ok?'정답!':'오답'} ${!ok && !sess.isDrill ? '— 내일 복습 큐에 담았어요' : ''}</div>
+      <div class="verdict ${ok?'ok':'no'}">${ok?'정답!':'오답'}</div>
       ${esc(q.ex)}
       <div><button class="report-btn ${reported?'done':''}" data-report-id="${qId}" onclick="${reported?'':`openReportModal('question','${qId}')`}">${reported?'신고 접수됨':'이 문제 신고하기'}</button></div>
     </div>`;
@@ -1746,8 +1714,8 @@ function finishSession(){
   markAttendance();                 // 실제 달력 날짜로 출석 기록
   S.streak = attendanceStreak();    // 표시용 스트릭도 실제 날짜 기준
   /* 이 세션으로 현재 단계를 완주했는지 검사 → 다음 단계로 승급, 전공이면 주제 완료
-     (문제풀기·복습은 여러 주제를 오갈 수 있어 전부 검사) */
-  const touchedTopics = (sess.isDrill || sess.isReview)
+     (문제풀기는 여러 주제를 오갈 수 있어 전부 검사) */
+  const touchedTopics = sess.isDrill
     ? [...new Set(sess.steps.filter(s=>s.type==='q').map(s => (S.qMeta[s.id]||{}).topic).filter(Boolean))]
     : [sess.unitId];
   sess.promotions = [];
@@ -1776,7 +1744,7 @@ function renderResult(el){
       <div class="card" style="margin-bottom:14px;border-color:var(--coral);background:var(--coral-soft);text-align:center">
         <div class="eyebrow" style="color:var(--coral-active)">TOPIC COMPLETE</div>
         <div style="font-family:var(--serif);font-size:19px;font-weight:700;margin-top:4px">${esc(unitName(uid))} 완주를 축하합니다!</div>
-        <p style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">${STAGE_LABEL[S.topicStage[uid]||'ug']} 단계까지 모두 마쳤어요. 복습은 계속 이어집니다.</p>
+        <p style="font-size:12.5px;color:var(--ink-soft);margin-top:6px">${STAGE_LABEL[S.topicStage[uid]||'ug']} 단계까지 모두 마쳤어요. 탐색 탭에서 정답률을 확인해보세요.</p>
       </div>`).join('');
   el.innerHTML = `
     <div class="sess-top"><button class="sess-close" onclick="closeSession()" aria-label="닫기">×</button><div class="sess-track"><i style="width:100%"></i></div></div>
@@ -1785,23 +1753,16 @@ function renderResult(el){
       ${gradBanner}
       <div class="result-hero">
         <div class="big">${sess.correct}<span style="font-size:26px;color:var(--ink-faint)">/${total}</span></div>
-        <div class="sub">${pct>=85?'훌륭해요. 빨간펜이 심심했네요':pct>=60?'좋아요. 틀린 건 내일 다시 만나요':'괜찮아요. 복습이 알아서 챙겨줄 거예요'}</div>
+        <div class="sub">${pct>=85?'훌륭해요. 빨간펜이 심심했네요':pct>=60?'좋아요. 틀린 건 카드 다시보기에서 채워보세요':'괜찮아요. 카드별 정답률을 보면서 다시 도전해보세요'}</div>
       </div>
       <div class="result-list">
         <div class="result-row"><span>연속 학습</span><b>${S.streak}일</b></div>
-        <div class="result-row"><span>내일 복습 예정</span><b>${Object.values(S.srs).filter(v=>v.due===S.day+1).length}문제</b></div>
-        <div class="result-row"><span>6개월 후 복습 예정</span><b>${Object.values(S.srs).filter(v=>v.graduated).length}문제</b></div>
       </div>
     </div>
     <div class="sess-foot">
       ${(() => {
         if(sess.isCardReview){
           return `<button class="btn btn-primary" onclick="backToBrowseList()">다른 개념 보기</button>`;
-        }
-        const remaining = sess.isReview ? dueQuestions().length : 0;
-        if(remaining){
-          return `<button class="btn btn-primary" onclick="startReview()" style="margin-bottom:8px">복습 ${remaining}개 더 남음 · 계속하기</button>
-             <button class="btn btn-ghost" onclick="closeSession()">그만하기</button>`;
         }
         if((sess.justGraduatedTopics||[]).length){
           return `<button class="btn btn-primary" onclick="closeSessionToExplore('${sess.justGraduatedTopics[0]}')">다음 주제 고르기</button>`;
@@ -1849,6 +1810,37 @@ function domainProgress(did){
   if(!ready.length) return 0;
   const started = ready.filter(t=>topicStarted(t.id)).length;
   return Math.round(100*started/ready.length);
+}
+
+/* ── 정답률 ─────────────────────────────────────────────
+   "언젠가 한 번이라도 맞힌 적 있는 문제"의 비율로 정답률을 계산한다.
+   틀렸던 문제도 카드 다시보기에서 다시 맞히면 그 즉시 정답률에 반영되므로,
+   100%를 채우고 싶으면 다시 도전하면 되는 구조다. */
+function stageAccuracy(uid, stage){
+  const qs = (QUESTIONS[uid]||[]).filter(q=>q.stage===stage);
+  if(!qs.length) return null;
+  const right = qs.filter(q=>{ const a=S.attempts[nsKey(uid,q.id)]; return a && a.correct>0; }).length;
+  return Math.round(100*right/qs.length);
+}
+function topicOverallAccuracy(uid){
+  const qs = QUESTIONS[uid]||[];
+  if(!qs.length) return null;
+  const right = qs.filter(q=>{ const a=S.attempts[nsKey(uid,q.id)]; return a && a.correct>0; }).length;
+  return Math.round(100*right/qs.length);
+}
+/* 이 주제가 100% 정답률을 달성한 가장 높은 단계('완벽' 배지에 표시할 단계).
+   전공 수준 학습자가 입문·심화까지 억지로 채울 필요는 없으므로, 완주 여부와
+   무관하게 실제로 도전해서 100%를 낸 단계만 인정한다. */
+function topicPerfectStage(uid){
+  let best = null;
+  STAGE_ORDER.forEach(s=>{ if(stageAccuracy(uid, s) === 100) best = s; });
+  return best;
+}
+function cardAccuracy(uid, cardId, stage){
+  const qs = (QUESTIONS[uid]||[]).filter(q=>q.card===cardId && q.stage===stage);
+  if(!qs.length) return null;
+  const right = qs.filter(q=>{ const a=S.attempts[nsKey(uid,q.id)]; return a && a.correct>0; }).length;
+  return Math.round(100*right/qs.length);
 }
 /* 과목별 '다음 주제': 커리큘럼 순서상 아직 완주하지 않은 첫 주제
    (전체 주제 개수는 일부러 노출하지 않는다 — 콘텐츠가 계속 늘어나는데 'N/18'처럼
@@ -1899,18 +1891,12 @@ function attendanceCalendar(){
 }
 
 function renderHome(){
-  const dueList = dueQuestions();
-  const due = dueList.length;
   const domainSpots = DOMAINS.map(d=>({d, info:nextTopicInfo(d.id)}));
   const spotlight = domainSpots.find(x=>x.info && !x.info.done) || domainSpots.filter(x=>x.info).pop();
   if(spotlight && spotlight.info && !spotlight.info.done){
     const tid = spotlight.info.topic.id;
     if(!QUESTIONS[tid]) ensureLoaded([tid]).then(()=>{ if(tab==='home') render(); });
   }
-  const upcoming = Object.entries(S.srs).filter(([id,v])=>v.due>S.day);
-  const byDay = {};
-  upcoming.forEach(([id,v])=>{ byDay[v.due] = (byDay[v.due]||0)+1; });
-  const wrongIds = Object.keys(S.attempts).filter(id=>{ const a=S.attempts[id]; return a.tries>a.correct; });
 
   return `
     <span class="eyebrow">TODAY</span>
@@ -1942,7 +1928,7 @@ function renderHome(){
         </div>
         <button class="btn btn-red" onclick="startSession('${tid}')">오늘의 세션 시작 · 5분</button>
       `; })() : `
-        <p style="font-size:14.5px;color:var(--ink-soft);margin:8px 0 14px">모든 과목의 주제를 완주했어요 🎉 복습으로 감각을 유지해 보세요.</p>
+        <p style="font-size:14.5px;color:var(--ink-soft);margin:8px 0 14px">모든 과목의 주제를 완주했어요 🎉 탐색 탭에서 카드별 정답률을 채워보세요.</p>
         <button class="btn btn-ghost" onclick="setTab('explore')">주제 둘러보기</button>
       `}
     </div>
@@ -1971,18 +1957,7 @@ function renderHome(){
           <button class="chip" style="cursor:pointer;border:1px solid var(--coral);background:var(--card);color:var(--coral-active);font-weight:600" onclick="event.stopPropagation();startDiagnostic('${d.id}')">진단</button>
         </div>`;
       }).join('')}
-    </div>
-
-    <div class="section-label">복습</div>
-    ${due ? `<button class="btn btn-primary" onclick="startReview()" style="margin-bottom:14px">지금 복습하기 · ${due}개</button>` : ''}
-    ${Object.keys(byDay).length
-      ? `<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">${Object.entries(byDay).sort((a,b)=>a[0]-b[0]).map(([day,n])=>`<div class="result-row"><span>Day ${day} (${day-S.day}일 뒤)</span><b>${n}문제</b></div>`).join('')}</div>`
-      : `<p style="font-size:13.5px;color:var(--ink-faint);margin-bottom:10px">아직 예정된 복습이 없어요. 세션을 시작하면 여기에 쌓입니다.</p>`}
-    ${wrongIds.length ? `<details style="margin-bottom:6px">
-      <summary style="cursor:pointer;font-size:13.5px;color:var(--ink-soft)">틀린 적 있는 문제 ${wrongIds.length}개</summary>
-      <div style="margin-top:8px">${wrongIds.map(id=>{ const v=S.srs[id]||{};
-        return `<div class="wrong-item">${esc(qText(id))}<div class="w-due">${v.due!=null?'다음 복습: Day '+v.due:''}</div></div>`; }).join('')}</div>
-    </details>` : ''}`;
+    </div>`;
 }
 
 let exploreDomain = 'physics';
@@ -2002,6 +1977,8 @@ function topicCard(t){
   const started = topicStarted(t.id);
   const loaded = QUESTIONS[t.id] && QUESTIONS[t.id].length;
   const pct = loaded ? unitProgress(t.id) : null;
+  const acc = graduated && loaded ? topicOverallAccuracy(t.id) : null;
+  const perfectStage = loaded ? topicPerfectStage(t.id) : null;
   const head = t.ready
     ? `onclick="startSession('${t.id}')" class="unit-item" style="flex-wrap:wrap"`
     : `class="unit-item locked" style="flex-wrap:wrap"`;
@@ -2020,11 +1997,14 @@ function topicCard(t){
       ${exploreDomain==='all'?`<span class="chip" style="background:var(--paper);color:${d.color};border:1px solid var(--line)">${d.name}</span>`:''}
       <span class="u-count">${LEVEL_LABEL[t.level]}</span>
       ${statusBadge}
+      ${perfectStage ? `<span class="perfect-badge">완벽 · ${STAGE_LABEL[perfectStage]}</span>` : ''}
     </div>
     ${pct!=null && started && !graduated ? `<div class="progress-bar" style="margin:6px 0 0 20px"><div class="progress-fill" style="width:${pct}%;background:${d.color}"></div></div>` : ''}
+    ${acc!=null ? `<div style="font-size:12px;color:var(--ink-soft);margin:5px 0 0 20px">정답률 ${acc}%</div>` : ''}
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-left:20px;margin-top:7px">
       ${stageBadges?`<span style="display:flex;gap:4px">${stageBadges}</span>`:''}
       <span style="display:flex;gap:5px;flex-wrap:wrap">${tagHtml}</span>
+      ${started?`<span onclick="event.stopPropagation();openCardBrowser('${t.id}')" style="cursor:pointer;font-size:11.5px;color:${d.color};text-decoration:underline;text-underline-offset:2px">카드별 정답률 보기</span>`:''}
     </div>
   </div>`;
 }
@@ -2180,7 +2160,7 @@ function renderStories(){
 
 function renderStats(){
   const acc = S.stats.answered ? Math.round(100*S.stats.correct/S.stats.answered) : 0;
-  const grad = Object.values(S.srs).filter(v=>v.graduated).length;
+  const perfectCount = allTopics().filter(t=>t.ready && QUESTIONS[t.id] && QUESTIONS[t.id].length && topicPerfectStage(t.id)).length;
   return `
     <span class="eyebrow">STATS & SETTINGS</span>
     <h1 class="screen-title">통계</h1>
@@ -2192,7 +2172,7 @@ function renderStats(){
       <div class="stat-cell"><b>${acc}%</b><span>전체 정답률</span></div>
       <div class="stat-cell"><b>${S.stats.answered}</b><span>푼 문제 수</span></div>
       <div class="stat-cell"><b>${S.streak}일</b><span>연속 학습</span></div>
-      <div class="stat-cell"><b>${grad}</b><span>잘 아는 문제</span></div>
+      <div class="stat-cell"><b>${perfectCount}</b><span>완벽 배지</span></div>
     </div>
     <div class="section-label">효과음</div>
     <div class="card" style="display:flex;align-items:center;justify-content:space-between">
@@ -2230,10 +2210,9 @@ function renderStats(){
     </div>
     ${DEV_MODE ? `<div class="section-label">개발자 도구</div>
     <div class="card">
-      <button class="btn btn-ghost" onclick="devNextDay()" style="margin-bottom:8px">하루 넘기기 (현재 Day ${S.day})</button>
       <button class="btn btn-ghost" onclick="devFillAttendance()" style="margin-bottom:8px">출석 달력 예시 채우기</button>
       <button class="btn btn-ghost" onclick="devReset()">모든 데이터 초기화</button>
-      <p class="dev-note">간격 반복이 실제로 작동하는지 확인하는 용도입니다. 하루를 넘기면 복습 예정 문제가 오늘의 세션에 등장합니다. 실제 배포판에서는 이 도구를 제거하고 실제 날짜를 사용합니다.</p>
+      <p class="dev-note">실제 배포판에서는 이 도구를 제거합니다.</p>
     </div>` : ''}`;
 }
 
@@ -2264,12 +2243,12 @@ function applyImportedBackup(raw){
   try { parsed = JSON.parse(raw.trim()); }
   catch(e){ toast('코드 형식이 올바르지 않아요'); return false; }
   const incoming = parsed && parsed.state ? parsed.state : parsed;   // 순수 state도 허용
-  if(!incoming || typeof incoming !== 'object' || !('srs' in incoming) || !('stats' in incoming)){
+  if(!incoming || typeof incoming !== 'object' || !('attempts' in incoming) || !('stats' in incoming)){
     toast('하루사이 백업 코드가 아니에요'); return false;
   }
   /* 누락 필드 기본값 보강 */
   S = Object.assign(
-    {day:0,streak:0,lastStudyDay:-1,seenCards:{},srs:{},attempts:{},stats:{answered:0,correct:0},reports:[],storyReports:[],qMeta:{},subjectStage:{physics:'ms',chem:'ms',bio:'ms',earth:'ms'},topicStage:{},diagDone:{},diagBannerDismissed:false,graduatedTopics:{},readStories:{},studyDates:{}},
+    {day:0,streak:0,lastStudyDay:-1,seenCards:{},attempts:{},stats:{answered:0,correct:0},reports:[],storyReports:[],qMeta:{},subjectStage:{physics:'ms',chem:'ms',bio:'ms',earth:'ms'},topicStage:{},diagDone:{},diagBannerDismissed:false,graduatedTopics:{},readStories:{},studyDates:{}},
     incoming
   );
   S.subjectStage = Object.assign({physics:'ms',chem:'ms',bio:'ms',earth:'ms'}, S.subjectStage||{});
@@ -2330,14 +2309,13 @@ async function receiveBackupCode(){
   }
 }
 
-function devNextDay(){ S.day++; save(); render(); toast(`Day ${S.day} — 복습 ${dueQuestions().length}문제 대기 중`); }
 function devFillAttendance(){
   const today=new Date();
   [0,1,2,3,5,6,9,10,12].forEach(back=>{ const d=new Date(today); d.setDate(today.getDate()-back); S.studyDates[ymd(d)]=true; });
   S.streak=attendanceStreak(); save(); render(); toast('출석 예시를 채웠어요');
 }
 function devReset(){
-  S = {day:0,streak:0,lastStudyDay:-1,seenCards:{},srs:{},attempts:{},stats:{answered:0,correct:0},reports:[],storyReports:[],qMeta:{},subjectStage:{physics:'ms',chem:'ms',bio:'ms',earth:'ms'},diagDone:{},diagBannerDismissed:false,graduatedTopics:{},readStories:{},studyDates:{}};
+  S = {day:0,streak:0,lastStudyDay:-1,seenCards:{},attempts:{},stats:{answered:0,correct:0},reports:[],storyReports:[],qMeta:{},subjectStage:{physics:'ms',chem:'ms',bio:'ms',earth:'ms'},topicStage:{},diagDone:{},diagBannerDismissed:false,graduatedTopics:{},readStories:{},studyDates:{}};
   save(); render(); toast('초기화했어요');
 }
 
